@@ -15,13 +15,21 @@ public class ControladorPartida : MonoBehaviour
     [SerializeField] private GameObject prefabCarta;
     [SerializeField] private List<GameObject> prefabsEnemigos;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
+    [SerializeField] private CinemachinePOVExtension cameraScript;
     [SerializeField] private Transform huecoCartas;
     private bool combateActivo = false;
 
     private void Start()
     {
         IniciarDatos();
+        EmpezarPelea();
     }
+    
+    /*private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            cameraScript.Rotate180Degrees();
+    }*/
 
     private void IniciarDatos()
     {
@@ -46,6 +54,7 @@ public class ControladorPartida : MonoBehaviour
     public void FinalizarTurno()
     {
         DestruirCartas(); // Descartar las cartas no usadas
+        cameraScript.Rotate180Degrees();
         txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
     }
 
@@ -124,7 +133,7 @@ public class ControladorPartida : MonoBehaviour
             if (tiempoAux > tiempoLimite)
             {
                 tiempoAux -= 1;
-                txtContador.text = tiempoAux + " s"; // Actualizar txt del contador
+                txtContador.text = tiempoAux.ToString(); // Actualizar txt del contador
             }
         }
         // Termina contador, resultado del turno
@@ -140,14 +149,16 @@ public class ControladorPartida : MonoBehaviour
         }
     }
 
-    private void EjecutarAccionJugador()
+    private IEnumerator EjecutarAccionJugador()
     {
-       
+        // Tras ejecutar su accion se vuelve a girar
+        yield return new WaitForSeconds(1f);
+        cameraScript.Rotate180Degrees();
     }
 
     private void EjecutarAccionEnemigo()
     {
-        
+
     }
 
     private void ResetearBaraja()

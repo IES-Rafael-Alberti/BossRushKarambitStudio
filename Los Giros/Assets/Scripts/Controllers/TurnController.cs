@@ -63,7 +63,8 @@ public class TurnController : MonoBehaviour
 
     private void ElegirAccionEnemigo()
     {
-
+        Enemy enemy = FindObjectOfType<Enemy>();
+        enemy.ChooseAction();
     }
 
     private IEnumerator RobarCarta()
@@ -169,7 +170,9 @@ public class TurnController : MonoBehaviour
 
     private IEnumerator AccionEnemigo()
     {
-        Debug.Log("El enemigo ataca al jugador.");
+        Enemy enemy = FindObjectOfType<Enemy>();
+        enemy.DoAction();
+        Debug.Log("El enemigo realiza la accion.");
         yield return new WaitForSeconds(1f);
     }
 

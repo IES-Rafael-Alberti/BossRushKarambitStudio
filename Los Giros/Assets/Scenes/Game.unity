@@ -332,7 +332,6 @@ MonoBehaviour:
   cantidadCartasARobar: 3
   tiempoContador: 5
   listaCartasJugador: []
-  txtCantidadCartasBaraja: {fileID: 0}
   txtContador: {fileID: 765017676}
   prefabCarta: {fileID: 0}
   prefabsEnemigos: []
@@ -1061,8 +1060,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1262962949}
   - component: {fileID: 1262962948}
+  - component: {fileID: 1262962950}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1135,6 +1135,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 624204041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1262962950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262962947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e86ed57b6f6adf4892228c59447c796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowedActions: 000000000300000001000000
+  healAmount: 0
+  damage: 0
+  currentHealth: 0
+  maxHealth: 0
+  audioClipDamaged: {fileID: 0}
+  player: {fileID: 0}
+  actionChosen: 0
+  spriteRenderer: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!1 &1349021338
 GameObject:
   m_ObjectHideFlags: 0

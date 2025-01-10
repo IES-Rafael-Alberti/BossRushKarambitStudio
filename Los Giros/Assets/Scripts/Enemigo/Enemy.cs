@@ -5,18 +5,20 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
-    public int healAmount, damage, currentHealth, maxHealth;
+    public int healAmount, damage, maxHealth;
     public AudioClip audioClipDamaged;
     [HideInInspector] public Player player;
     [HideInInspector] public EnemyAction actionChosen;
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public AudioSource audioSource;
+    [HideInInspector] public int currentHealth;
 
     void Start()
     {
         player = FindObjectOfType<Player>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
+        currentHealth = maxHealth;
     }
 
     void Update()

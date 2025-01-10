@@ -13,11 +13,27 @@ MonoBehaviour:
   m_Name: CartasDatos
   m_EditorClassIdentifier: 
   baseDatos:
-  - id: 1
+  - id: 0
     curacion: 0
     "da\xF1o": 1
     proteccion: 0
     esEsquiva: 0
-    spriteCarta: {fileID: 0}
+    spriteCarta: {fileID: 21300000, guid: da7b4b2df24b23543854f38b6bc46e84, type: 3}
     infoES: Dispara
     infoEN: Shoot
+  - id: 1
+    curacion: 1
+    "da\xF1o": 0
+    proteccion: 0
+    esEsquiva: 0
+    spriteCarta: {fileID: 21300000, guid: da7b4b2df24b23543854f38b6bc46e84, type: 3}
+    infoES: Curacion
+    infoEN: Heal
+  - id: 2
+    curacion: 0
+    "da\xF1o": 0
+    proteccion: 0
+    esEsquiva: 1
+    spriteCarta: {fileID: 21300000, guid: da7b4b2df24b23543854f38b6bc46e84, type: 3}
+    infoES: Esquiva
+    infoEN: Dodge

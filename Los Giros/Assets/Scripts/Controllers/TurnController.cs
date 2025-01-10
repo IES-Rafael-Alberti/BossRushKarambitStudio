@@ -4,7 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class ControladorPartida : MonoBehaviour
+public class TurnController : MonoBehaviour
 {
     private int cantidadCartasBaraja, tiempoLimite = 0;
     public static int contResultado = 0;

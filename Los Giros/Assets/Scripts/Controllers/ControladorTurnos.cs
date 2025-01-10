@@ -11,7 +11,7 @@ public class ControladorPartida : MonoBehaviour
     [SerializeField] private int cantidadCartasARobar = 3, tiempoContador = 10;
     public List<DatosCarta> listaCartasJugador = new();
     private List<DatosCarta> listaTemp = new();
-    [SerializeField] private TMP_Text txtCantidadCartasBaraja, txtContador;
+    [SerializeField] private TMP_Text txtContador;
     [SerializeField] private GameObject prefabCarta;
     [SerializeField] private List<GameObject> prefabsEnemigos;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
@@ -21,10 +21,13 @@ public class ControladorPartida : MonoBehaviour
 
     private void Start()
     {
+        cameraScript.OnRotationComplete += EjecutarAccionJugador; // Suscribirse al evento
+        cameraScript.OnRotationComplete += EjecutarAccionEnemigo;
+        cameraScript.onTurnComplete += IniciarTurno;
         IniciarDatos();
         EmpezarPelea();
     }
-    
+
     /*private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -55,7 +58,7 @@ public class ControladorPartida : MonoBehaviour
     {
         DestruirCartas(); // Descartar las cartas no usadas
         cameraScript.Rotate180Degrees();
-        txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
+        // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
     }
 
     private void ElegirAccionEnemigo()
@@ -85,7 +88,7 @@ public class ControladorPartida : MonoBehaviour
                     yield return new WaitForSeconds(0.2f);
                 }
                 cantidadCartasBaraja -= cantidadCartasARobar;
-                txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
+                // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
             }
             else
             {
@@ -116,7 +119,7 @@ public class ControladorPartida : MonoBehaviour
                         index++;
                     }
                     cantidadCartasBaraja -= index;
-                    txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
+                    // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
                     ResetearBaraja();
                     cantidadCartasBaraja = listaCartasJugador.Count;
                 }
@@ -127,16 +130,13 @@ public class ControladorPartida : MonoBehaviour
     private IEnumerator IniciarContador()
     {
         int tiempoAux = tiempoContador;
-        for (int i = 0; i < tiempoContador; i++)
+        while (tiempoAux >= tiempoLimite)
         {
-            yield return new WaitForSeconds(1f);
-            if (tiempoAux > tiempoLimite)
-            {
-                tiempoAux -= 1;
-                txtContador.text = tiempoAux.ToString(); // Actualizar txt del contador
-            }
+            txtContador.text = tiempoAux.ToString(); // Actualizar el texto con el valor actual
+            yield return new WaitForSeconds(1f);    // Esperar un segundo
+            tiempoAux -= 1;                         // Reducir el contador
         }
-        // Termina contador, resultado del turno
+        txtContador.text = tiempoLimite.ToString();
         FinalizarTurno();
     }
 
@@ -149,16 +149,28 @@ public class ControladorPartida : MonoBehaviour
         }
     }
 
-    private IEnumerator EjecutarAccionJugador()
+    private IEnumerator AccionJugador()
     {
+        Debug.Log("El jugador ataca al enemigo.");
         // Tras ejecutar su accion se vuelve a girar
         yield return new WaitForSeconds(1f);
         cameraScript.Rotate180Degrees();
     }
 
+    private void EjecutarAccionJugador()
+    {
+        StartCoroutine(AccionJugador());
+    }
+
     private void EjecutarAccionEnemigo()
     {
+        StartCoroutine(AccionEnemigo());
+    }
 
+    private IEnumerator AccionEnemigo()
+    {
+        Debug.Log("El enemigo ataca al jugador.");
+        yield return new WaitForSeconds(1f);
     }
 
     private void ResetearBaraja()
@@ -170,4 +182,9 @@ public class ControladorPartida : MonoBehaviour
         }
     }
     #endregion
+
+    private void OnDestroy()
+    {
+        cameraScript.OnRotationComplete -= EjecutarAccionJugador; // Desuscribirse para evitar errores
+    }
 }

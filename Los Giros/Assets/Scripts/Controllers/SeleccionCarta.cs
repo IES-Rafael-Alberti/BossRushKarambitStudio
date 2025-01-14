@@ -3,9 +3,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class SeleccionCarta : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
+public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
     private AudioSource audioSource;
+
+
 
     // Animacion cursor por encima
     private readonly float moveTime = 0.1f;
@@ -18,14 +20,30 @@ public class SeleccionCarta : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         audioSource = GetComponent<AudioSource>();
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //Hacer click a un objeto
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Selecciona la carta
+        //if (GetComponent<prefabCarta>().interactable)
+        //{
+        //    eventData.selectedObject = gameObject;
+        //}
+        Debug.Log("Click.");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         // Deselecciona la carta
+        // if(GetComponent<prefabCarta>().interactable)
+        //{
+        //    eventData.selectedObject = null;
+        //}
+        Debug.Log("Clack.");
+
     }
 
     public void OnSelect(BaseEventData eventData)

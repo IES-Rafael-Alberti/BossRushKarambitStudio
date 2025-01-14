@@ -66,7 +66,7 @@ public class ControladorPartida : MonoBehaviour
 
     private IEnumerator RobarCarta()
     {
-        //int ajustePosicion = -340;
+        int ajustePosicion = -20;
         yield return new WaitForSeconds(2f);
         if (combateActivo)
         {
@@ -76,8 +76,8 @@ public class ControladorPartida : MonoBehaviour
                 {
                     int random = Random.Range(0, listaTemp.Count);
                     GameObject go = Instantiate(prefabCarta, huecoCartas);
-                    go.transform.position = new Vector3(huecoCartas.transform.position.x /*+ ajustePosicion*/, huecoCartas.transform.position.y /*+ 30*/, huecoCartas.transform.position.z);
-                    //ajustePosicion += 70;
+                    go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicion, huecoCartas.transform.position.y /*+ 30*/, huecoCartas.transform.position.z);
+                    ajustePosicion += 20;
                     go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                     go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                     go.GetComponent<Carta>().daño = listaCartasJugador[random].daño;
@@ -105,8 +105,8 @@ public class ControladorPartida : MonoBehaviour
                     {
                         int random = Random.Range(0, listaTemp.Count);
                         GameObject go = Instantiate(prefabCarta, huecoCartas);
-                        go.transform.position = new Vector3(huecoCartas.transform.position.x /*+ ajustePosicion*/, huecoCartas.transform.position.y /*+ 30*/, huecoCartas.transform.position.z);
-                        //ajustePosicion += 70;
+                        go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicion, huecoCartas.transform.position.y /*+ 30*/, huecoCartas.transform.position.z);
+                        ajustePosicion += 20;
                         go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                         go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                         go.GetComponent<Carta>().daño = listaCartasJugador[random].daño;

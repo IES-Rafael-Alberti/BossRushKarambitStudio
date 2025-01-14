@@ -225,6 +225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 207602196}
   - component: {fileID: 207602197}
+  - component: {fileID: 207602198}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -300,6 +301,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &207602198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207602195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1def799e350f4064baa001416551af85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
 --- !u!1 &301086367
 GameObject:
   m_ObjectHideFlags: 0
@@ -1148,15 +1162,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowedActions: 000000000300000001000000
-  healAmount: 0
-  damage: 0
-  currentHealth: 0
-  maxHealth: 0
+  healAmount: 2
+  damage: 2
+  maxHealth: 10
   audioClipDamaged: {fileID: 0}
   player: {fileID: 0}
   actionChosen: 0
   spriteRenderer: {fileID: 0}
   audioSource: {fileID: 0}
+  currentHealth: 0
 --- !u!1 &1349021338
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,16 +5,17 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
+    public EnemySpecialAttack specialAttack;
     public int healAmount, damage, maxHealth, maxAmmo, reloadAmount;
     [Range(0f, 1f)] public float accuracy;
     public AudioClip audioClipDamaged;
-    [HideInInspector] public Player player;
-    [HideInInspector] public EnemyAction actionChosen;
-    [HideInInspector] public SpriteRenderer spriteRenderer;
-    [HideInInspector] public AudioSource audioSource;
-    [HideInInspector] public int currentHealth, currentAmmo, currentPlayerHealth;
+    private Player player;
+    private EnemyAction actionChosen;
+    private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
+    private int currentHealth, currentAmmo;
 
-    void Start()
+    private void Start()
     {
         player = FindObjectOfType<Player>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -23,12 +24,12 @@ public class Enemy : MonoBehaviour
         currentAmmo = maxAmmo;
     }
 
-    void Update()
+    private void Update()
     {
 
     }
 
-    public virtual void ChooseAction()
+    public void ChooseAction()
     {
         // Verificar que haya suficientes acciones permitidas
         if (allowedActions.Count < 3)
@@ -66,10 +67,10 @@ public class Enemy : MonoBehaviour
         // Asignar la mejor accion
         actionChosen = bestAction;
 
-        Debug.Log($"Acción elegida: {actionChosen}");
+        Debug.Log($"Accion elegida: {actionChosen}");
     }
 
-    // Método para evaluar la puntuación de una acción
+    // Metodo para evaluar la puntuacion de una accion
     private float EvaluateAction(EnemyAction action)
     {
         float score = 0f;
@@ -99,7 +100,7 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyAction.Dodge:
-                score += 8f; // Prioridad fija por evasión
+                score += 8f; // Prioridad fija por evasion
                 break;
 
             case EnemyAction.Protect:
@@ -118,7 +119,7 @@ public class Enemy : MonoBehaviour
         return score;
     }
 
-    public virtual void DoAction()
+    public void DoAction()
     {
         switch (actionChosen)
         {
@@ -141,7 +142,7 @@ public class Enemy : MonoBehaviour
     }
 
     #region ATACAR
-    public virtual void Attack()
+    private void Attack()
     {
         // Generar un valor aleatorio para determinar si el disparo acierta
         float hitChance = Random.Range(0f, 1f);
@@ -150,25 +151,104 @@ public class Enemy : MonoBehaviour
         {
             // Si acierta, realiza el ataque
             StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
-            Debug.Log("¡Ataque exitoso! El jugador recibió daño.");
+            Debug.Log("¡Ataque exitoso! El jugador recibio daño.");
         }
         else
         {
-            // Si falla, muestra un mensaje de fallo (o realiza otra acción)
-            StartCoroutine(AnimAttack(() => Debug.Log("El ataque falló.")));
+            // Si falla, muestra un mensaje de fallo
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
         }
 
-        // Reducir la munición independientemente de si acierta o falla
+        // Reducir la municion independientemente de si acierta o falla
         currentAmmo -= 1;
     }
 
-    public virtual void SpecialAttack()
+    private void SpecialAttack()
     {
-        StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * 2)));
-        currentAmmo -= 2;
+        switch (specialAttack)
+        {
+            case EnemySpecialAttack.DoubleShot:
+                DoubleShot();
+                break;
+            case EnemySpecialAttack.RifleShot:
+                RifleShot();
+                break;
+            case EnemySpecialAttack.Dynamite:
+                Dynamite();
+                break;
+            default:
+                Debug.LogWarning($"{name} intento ejecutar una accion no permitida: {specialAttack}");
+                break;
+        }
     }
 
-    public virtual IEnumerator AnimAttack(System.Action onAnimationComplete)
+    private void DoubleShot()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            // Generar un valor aleatorio para determinar si el disparo acierta
+            float hitChance = Random.Range(0f, 1f);
+
+            if (hitChance <= accuracy)
+            {
+                // Si acierta, realiza el ataque
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                Debug.Log("¡Doble Ataque exitoso! El jugador recibio daño.");
+            }
+            else
+            {
+                // Si falla, muestra un mensaje de fallo
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+            }
+
+            // Reducir la municion independientemente de si acierta o falla
+            currentAmmo -= 1;
+        }
+    }
+
+    private void RifleShot()
+    {
+        // Generar un valor aleatorio para determinar si el disparo acierta
+        float hitChance = Random.Range(0f, 1f);
+
+        if (hitChance <= 0.90f)
+        {
+            // Si acierta, realiza el ataque
+            StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+            Debug.Log("¡Ataque rifle exitoso! El jugador recibio daño.");
+        }
+        else
+        {
+            // Si falla, muestra un mensaje de fallo
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+        }
+
+        // Reducir la municion independientemente de si acierta o falla
+        currentAmmo -= 1;
+    }
+
+    private void Dynamite()
+    {
+        // Generar un valor aleatorio para determinar si la dinamita acierta
+        float hitChance = Random.Range(0f, 1f);
+
+        if (hitChance <= accuracy)
+        {
+            // Si acierta, realiza el ataque
+            StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+            Debug.Log("¡Ataque dinamita exitoso! El jugador recibio daño.");
+        }
+        else
+        {
+            // Si falla, muestra un mensaje de fallo
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+        }
+
+        // Reducir la municion independientemente de si acierta o falla
+        currentAmmo -= 1;
+    }
+
+    private IEnumerator AnimAttack(System.Action onAnimationComplete)
     {
         // Tamaño original
         Vector3 escalaOriginal = transform.localScale;
@@ -221,7 +301,7 @@ public class Enemy : MonoBehaviour
     #endregion
 
     #region RECIBIR DAÑO
-    public virtual void ReceiveDamage(int damage)
+    private void ReceiveDamage(int damage)
     {
         audioSource.PlayOneShot(audioClipDamaged);
         currentHealth -= damage;
@@ -230,13 +310,13 @@ public class Enemy : MonoBehaviour
             Death();
     }
 
-    public virtual void Death()
+    private void Death()
     {
         // Hacerlo IEnumerator, meterle animacion, desactivar collider y destruir
         Destroy(gameObject);
     }
 
-    public IEnumerator Damaged()
+    private IEnumerator Damaged()
     {
         spriteRenderer.material = GetComponent<Flicker>().flickerMaterial;
         yield return new WaitForSeconds(0.1f);
@@ -262,4 +342,11 @@ public enum EnemyAction
     Reload,
     Protect,
     SpecialAttack
+}
+
+public enum EnemySpecialAttack
+{
+    DoubleShot,
+    RifleShot,
+    Dynamite
 }

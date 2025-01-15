@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
+public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, /*IPointerUpHandler,*/ IPointerDownHandler, ISelectHandler, IDeselectHandler
 {
     private AudioSource audioSource;
 
@@ -33,7 +33,7 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
         //{
         //    eventData.selectedObject = gameObject;
         //}
-        Debug.Log("Carta seleccionada.");
+        Debug.Log("Mirando carta.");
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -43,20 +43,36 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
         //{
         //    eventData.selectedObject = null;
         //}
+        Debug.Log("No mirando carta");
+
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+
         Debug.Log("Carta deseleccionada.");
 
     }
+
+    /*public void OnPointerUp(PointerEventData eventData)
+    {
+
+        Debug.Log("Carta seleccionada.");
+
+    }*/
 
     public void OnSelect(BaseEventData eventData)
     {
        //Animación al seleccionar la carta
         StartCoroutine(AnimarCarta(true));
+        Debug.Log("En Seleccion.");
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         //Animación al deseleccionar la carta
         StartCoroutine(AnimarCarta(false));
+        Debug.Log("En Deseleccion.");
     }
 
     private IEnumerator AnimarCarta(bool startingAnim)

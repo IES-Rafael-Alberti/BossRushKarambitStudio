@@ -49,6 +49,7 @@ public class TurnController : MonoBehaviour
 
     private void IniciarTurno()
     {
+        ResetearBaraja();
         StartCoroutine(RobarCarta()); // Robar Cartas (inicializar, instanciar...)
         ElegirAccionEnemigo();
         StartCoroutine(IniciarContador());
@@ -69,7 +70,7 @@ public class TurnController : MonoBehaviour
 
     private IEnumerator RobarCarta()
     {
-        int ajustePosicion = -340;
+        int ajustePosicion = -20;
         yield return new WaitForSeconds(2f);
         if (combateActivo)
         {
@@ -79,8 +80,8 @@ public class TurnController : MonoBehaviour
                 {
                     int random = Random.Range(0, listaTemp.Count);
                     GameObject go = Instantiate(prefabCarta, huecoCartas);
-                    go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicion, huecoCartas.transform.position.y + 30, 0);
-                    ajustePosicion += 70;
+                    go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicion, huecoCartas.transform.position.y /*+ 30*/, huecoCartas.transform.position.z);
+                    ajustePosicion += 20;
                     go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                     go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                     go.GetComponent<Carta>().daño = listaCartasJugador[random].daño;
@@ -108,8 +109,8 @@ public class TurnController : MonoBehaviour
                     {
                         int random = Random.Range(0, listaTemp.Count);
                         GameObject go = Instantiate(prefabCarta, huecoCartas);
-                        go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicion, huecoCartas.transform.position.y + 30, 0);
-                        ajustePosicion += 70;
+                        go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicion, huecoCartas.transform.position.y /*+ 30*/, huecoCartas.transform.position.z);
+                        ajustePosicion += 20;
                         go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                         go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                         go.GetComponent<Carta>().daño = listaCartasJugador[random].daño;

@@ -23,7 +23,6 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
     public void OnPointerClick(PointerEventData eventData)
     {
         //Hacer click a un objeto
-        Debug.Log("Click.");
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -33,7 +32,7 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
         //{
         //    eventData.selectedObject = gameObject;
         //}
-        Debug.Log("Sobre el ratón");
+        Debug.Log("Click.");
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -43,7 +42,7 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
         //{
         //    eventData.selectedObject = null;
         //}
-        Debug.Log("Fuera del ratón");
+        Debug.Log("Clack.");
 
     }
 
@@ -51,14 +50,12 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
        //Animación al seleccionar la carta
         StartCoroutine(AnimarCarta(true));
-        Debug.Log("Seleccionar");
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         //Animación al deseleccionar la carta
         StartCoroutine(AnimarCarta(false));
-        Debug.Log("Deseleccionar");
     }
 
     private IEnumerator AnimarCarta(bool startingAnim)

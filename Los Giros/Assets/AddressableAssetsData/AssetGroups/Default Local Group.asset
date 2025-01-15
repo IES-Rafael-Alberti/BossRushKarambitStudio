@@ -15,11 +15,16 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: 859141ab6ae686041ad236e282585df8
-  m_SerializeEntries: []
+  m_GUID: cf25c152be931274885f9b247a4d37d8
+  m_SerializeEntries:
+  - m_GUID: 34b2ec4bb52ae6a4794caad74672b1c8
+    m_Address: Assets/Sprites/Cartas/Defecto.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: f87139520656a9544a6f634e135b822d, type: 2}
+  m_Settings: {fileID: 11400000, guid: 259560ccc30a4694bb897e61ffef433b, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: eb386be48f486a444bd0109036afc868, type: 2}
-    - {fileID: 11400000, guid: d7c14319764a38643a8a230d91efe92e, type: 2}
+    - {fileID: 11400000, guid: 4b488f30f9ce3de488f3cbdefcbc2d59, type: 2}
+    - {fileID: 11400000, guid: b1b66aedbeb187549a3a7c60c8cd35c9, type: 2}

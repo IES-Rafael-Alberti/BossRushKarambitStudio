@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int maxHealth;
-    private int currentHealth;
+    public int maxHealth, maxAmmo;
+    [HideInInspector] public int currentHealth, currentAmmo;
 
     void Start()
     {

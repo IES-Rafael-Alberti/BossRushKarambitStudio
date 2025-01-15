@@ -314,6 +314,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
+  maxAmmo: 0
+  currentHealth: 0
+  currentAmmo: 0
 --- !u!1 &301086367
 GameObject:
   m_ObjectHideFlags: 0
@@ -1165,12 +1168,17 @@ MonoBehaviour:
   healAmount: 2
   damage: 2
   maxHealth: 10
+  maxAmmo: 6
+  reloadAmount: 1
+  accuracy: 0.75
   audioClipDamaged: {fileID: 0}
   player: {fileID: 0}
   actionChosen: 0
   spriteRenderer: {fileID: 0}
   audioSource: {fileID: 0}
   currentHealth: 0
+  currentAmmo: 0
+  currentPlayerHealth: 0
 --- !u!1 &1349021338
 GameObject:
   m_ObjectHideFlags: 0

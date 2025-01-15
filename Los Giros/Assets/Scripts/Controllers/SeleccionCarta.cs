@@ -23,6 +23,7 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
     public void OnPointerClick(PointerEventData eventData)
     {
         //Hacer click a un objeto
+        Debug.Log("Click.");
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -32,7 +33,7 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
         //{
         //    eventData.selectedObject = gameObject;
         //}
-        Debug.Log("Click.");
+        Debug.Log("Carta seleccionada.");
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -42,7 +43,7 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
         //{
         //    eventData.selectedObject = null;
         //}
-        Debug.Log("Clack.");
+        Debug.Log("Carta deseleccionada.");
 
     }
 

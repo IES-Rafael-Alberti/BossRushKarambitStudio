@@ -3,11 +3,16 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, /*IPointerUpHandler,*/ IPointerDownHandler, ISelectHandler, IDeselectHandler
+public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, ISelectHandler, IDeselectHandler
 {
+
+    EventSystem system;
+    GameObject lastSelectedGameObject;
+    GameObject currentSelectedGameObject_Recent;
+
+    public Carta cartaInfo;
+
     private AudioSource audioSource;
-
-
 
     // Animacion cursor por encima
     private readonly float moveTime = 0.1f;
@@ -16,56 +21,61 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     void Start()
     {
+        system = EventSystem.current;
+
         startScale = transform.localScale;
         audioSource = GetComponent<AudioSource>();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    void Update()
     {
-        //Hacer click a un objeto
-        Debug.Log("Click.");
+        cartaInfo = GetComponentInChildren<Carta>();
+
+        GetLastGameObjectSelected();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Selecciona la carta
-        //if (GetComponent<prefabCarta>().interactable)
-        //{
-        //    eventData.selectedObject = gameObject;
-        //}
+        // El puntero entra en el objeto
         Debug.Log("Mirando carta.");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Deselecciona la carta
-        // if(GetComponent<prefabCarta>().interactable)
-        //{
-        //    eventData.selectedObject = null;
-        //}
+        // El puntero sale del objeto
         Debug.Log("No mirando carta");
 
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        //El puntero cliquea sobre el objeto
+        Debug.Log(cartaInfo.infoES + " es seleccionado.");
 
-        Debug.Log("Carta deseleccionada.");
+        //Debug.Log(lastSelectedGameObject.name)
+
+        //Reconocer el prefab y su script particular
 
     }
 
-    /*public void OnPointerUp(PointerEventData eventData)
+    private void GetLastGameObjectSelected()
     {
+        //Intento de registrar
 
-        Debug.Log("Carta seleccionada.");
+        if (system.currentSelectedGameObject != currentSelectedGameObject_Recent)
+        {
+            lastSelectedGameObject = currentSelectedGameObject_Recent;
 
-    }*/
+            currentSelectedGameObject_Recent = system.currentSelectedGameObject;
+        }
+    }
 
     public void OnSelect(BaseEventData eventData)
     {
        //Animación al seleccionar la carta
         StartCoroutine(AnimarCarta(true));
         Debug.Log("En Seleccion.");
+        
     }
 
     public void OnDeselect(BaseEventData eventData)
@@ -73,6 +83,7 @@ public class SeleccionCarta : MonoBehaviour, IPointerClickHandler, IPointerEnter
         //Animación al deseleccionar la carta
         StartCoroutine(AnimarCarta(false));
         Debug.Log("En Deseleccion.");
+        
     }
 
     private IEnumerator AnimarCarta(bool startingAnim)

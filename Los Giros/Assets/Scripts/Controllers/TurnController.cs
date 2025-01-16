@@ -25,6 +25,7 @@ public class TurnController : MonoBehaviour
         cameraScript.OnRotationComplete += EjecutarAccionEnemigo;
         cameraScript.onTurnComplete += IniciarTurno;
         IniciarDatos();
+        ResetearBaraja();
         EmpezarPelea();
     }
 
@@ -43,8 +44,8 @@ public class TurnController : MonoBehaviour
     #region PELEA
     public void EmpezarPelea()
     {
-        IniciarTurno();
         combateActivo = true;
+        IniciarTurno();
     }
 
     private void IniciarTurno()
@@ -70,11 +71,13 @@ public class TurnController : MonoBehaviour
     private IEnumerator RobarCarta()
     {
         int ajustePosicion = -340;
-        yield return new WaitForSeconds(2f);
+        // yield return new WaitForSeconds(2f);
         if (combateActivo)
         {
+            Debug.LogWarning("Antes de condicion");
             if (cantidadCartasARobar <= listaTemp.Count)
             {
+                Debug.LogWarning("Entro en condicion");
                 for (int i = 0; i < cantidadCartasARobar; i++)
                 {
                     int random = Random.Range(0, listaTemp.Count);
@@ -83,8 +86,12 @@ public class TurnController : MonoBehaviour
                     ajustePosicion += 70;
                     go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                     go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
-                    go.GetComponent<Carta>().daño = listaCartasJugador[random].daño;
-                    go.GetComponent<Carta>().infoES = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES; // **TRADUCCION**
+                    go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
+                    // go.GetComponent<Carta>().infoES = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES; // **TRADUCCION**
+                    go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
+                    if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
+                        go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
+
                     listaTemp.RemoveAt(random);
                     yield return new WaitForSeconds(0.2f);
                 }
@@ -93,6 +100,7 @@ public class TurnController : MonoBehaviour
             }
             else
             {
+                Debug.LogWarning("AAAA");
                 if (cantidadCartasBaraja == 0)
                 {
                     // Resetear la lista si no hay cartas que robar
@@ -112,8 +120,11 @@ public class TurnController : MonoBehaviour
                         ajustePosicion += 70;
                         go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                         go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
-                        go.GetComponent<Carta>().daño = listaCartasJugador[random].daño;
+                        go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
                         go.GetComponent<Carta>().infoES = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES;
+                        go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
+                        if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
+                            go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
 
                         listaTemp.RemoveAt(random);
                         yield return new WaitForSeconds(0.2f);
@@ -153,9 +164,20 @@ public class TurnController : MonoBehaviour
     private IEnumerator AccionJugador()
     {
         Debug.Log("El jugador ataca al enemigo.");
+        PlayCard(); // Juega la carta seleccionada
         // Tras ejecutar su accion se vuelve a girar
         yield return new WaitForSeconds(1f);
         cameraScript.Rotate180Degrees();
+    }
+
+    private void PlayCard()
+    {
+        List<Carta> cartasEnMano = FindObjectsOfType<Carta>().ToList();
+        foreach (Carta carta in cartasEnMano)
+        {
+            if (carta.isSelected)
+                carta.DoAction();
+        }
     }
 
     private void EjecutarAccionJugador()

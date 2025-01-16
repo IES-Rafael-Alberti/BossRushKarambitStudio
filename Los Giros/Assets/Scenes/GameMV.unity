@@ -251,11 +251,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cantidadCartasARobar: 3
   tiempoContador: 5
-  listaCartasJugador: []
+  listaCartasJugador:
+  - id: 0
+    "da\xF1o": 0
+    curacion: 0
+    proteccion: 0
+    esEsquiva: 0
+  - id: 1
+    "da\xF1o": 0
+    curacion: 0
+    proteccion: 0
+    esEsquiva: 0
+  - id: 2
+    "da\xF1o": 0
+    curacion: 0
+    proteccion: 0
+    esEsquiva: 0
+  - id: 3
+    "da\xF1o": 0
+    curacion: 0
+    proteccion: 0
+    esEsquiva: 0
   txtContador: {fileID: 765017676}
-  prefabCarta: {fileID: 0}
+  prefabCarta: {fileID: 8408931947712722435, guid: f5bd44659cf03a64f9f2ef0a21509307, type: 3}
   prefabsEnemigos: []
-  baseDatosCartas: {fileID: 0}
+  baseDatosCartas: {fileID: 11400000, guid: 37002b20f8dc9cf4abe8085c556cbdf6, type: 2}
   cameraScript: {fileID: 859285986}
   huecoCartas: {fileID: 823944171}
 --- !u!4 &301086369
@@ -1300,6 +1320,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 624204041}
     m_Modifications:
+    - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
+      propertyPath: maxAmmo
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
+      propertyPath: accuracy
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
+      propertyPath: maxHealth
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8035948497044918344, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
       propertyPath: m_Name
       value: Player

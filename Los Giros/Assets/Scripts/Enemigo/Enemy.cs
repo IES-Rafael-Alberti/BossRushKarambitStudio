@@ -301,7 +301,7 @@ public class Enemy : MonoBehaviour
     #endregion
 
     #region RECIBIR DAÑO
-    private void ReceiveDamage(int damage)
+    public void ReceiveDamage(int damage)
     {
         audioSource.PlayOneShot(audioClipDamaged);
         currentHealth -= damage;

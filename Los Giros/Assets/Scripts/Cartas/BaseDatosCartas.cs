@@ -14,6 +14,8 @@ public class BaseDatosCartas : ScriptableObject
         public Sprite spriteCarta;
         public string infoES;
         public string infoEN;
+        public ActionType actionType;
+        public SpecialAttackType specialAttackType;
     }
 
     public ObjetoColeccion[] baseDatos;

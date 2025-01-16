@@ -9,12 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3663543796694615804}
-  - component: {fileID: 6736229167040051390}
   - component: {fileID: 7735686567626986140}
-  - component: {fileID: -7331863558343777803}
-  m_Layer: 0
+  - component: {fileID: 6736229167040051390}
+  - component: {fileID: 3222690860723269912}
+  - component: {fileID: 4389326037077092443}
+  m_Layer: 6
   m_Name: Carta
-  m_TagString: TagCarta
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34,27 +35,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6736229167040051390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8408931947712722435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f85cbb285d4eedd41814620c28459d72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
-  damage: 0
-  healAmount: 0
-  isPlayable: 0
-  actionType: 0
-  specialAttackType: 0
-  audioClip: {fileID: 0}
-  audioClipSonidoCarta: {fileID: 0}
-  isSelected: 0
 --- !u!212 &7735686567626986140
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -107,7 +87,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!65 &-7331863558343777803
+--- !u!114 &6736229167040051390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8408931947712722435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f85cbb285d4eedd41814620c28459d72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  damage: 0
+  healAmount: 0
+  isPlayable: 0
+  actionType: 0
+  specialAttackType: 0
+  audioClip: {fileID: 0}
+  audioClipSonidoCarta: {fileID: 0}
+  isSelected: 0
+--- !u!114 &3222690860723269912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8408931947712722435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2de8f9fc7ff2de4aabca92489020f98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCamera: {fileID: 0}
+--- !u!65 &4389326037077092443
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,5 +140,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.5867114, y: 4.992118, z: 1}
-  m_Center: {x: 0.024332047, y: 0.000975132, z: 0}
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}

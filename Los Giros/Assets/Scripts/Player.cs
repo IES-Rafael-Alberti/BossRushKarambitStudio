@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        currentAmmo = maxAmmo;
     }
 
     void Update()

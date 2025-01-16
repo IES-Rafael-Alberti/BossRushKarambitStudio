@@ -4,18 +4,15 @@ using UnityEngine;
 public class Carta : MonoBehaviour
 {
     public int id, damage, healAmount;
-    // public string infoES, infoEN;
     public bool isPlayable = false;
     public ActionType actionType;
     public SpecialAttackType specialAttackType;
-    // [SerializeField] private TMP_Text txtDaño, txtInfo;
     [SerializeField] private AudioClip audioClip, audioClipSonidoCarta;
-    [HideInInspector] public bool isSelected = false;
+    /*[HideInInspector]*/ public bool isSelected = false;
 
     private void Start()
     {
-        // txtDaño.text = damage.ToString();
-        // txtInfo.text = infoES; // Sistema de idioma
+
     }
 
     public void DoAction()
@@ -24,15 +21,22 @@ public class Carta : MonoBehaviour
         {
             case ActionType.Shot:
                 Shot();
+                Debug.Log("DISPARO");
                 break;
             case ActionType.Heal:
                 Heal(healAmount);
+                Debug.Log("CURACION");
                 break;
             case ActionType.Reload:
                 Reload();
+                Debug.Log("RECARGA");
                 break;
             case ActionType.SpecialAttack:
                 SpecialAttack();
+                Debug.Log("DISPARO ESPECIAL");
+                break;
+            case ActionType.Dodge:
+                Debug.Log("ESQUIVA");
                 break;
             default:
                 Debug.LogWarning($"{name} intento ejecutar una accion no permitida: {actionType}");
@@ -42,6 +46,7 @@ public class Carta : MonoBehaviour
 
     private void Shot()
     {
+        Debug.Log("SE DISPARA AL ENEMIGO");
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
         // Generar un valor aleatorio para determinar si el disparo acierta
@@ -56,7 +61,7 @@ public class Carta : MonoBehaviour
         else
         {
             // Si falla, muestra un mensaje de fallo
-            StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador falló.")));
         }
 
         // Reducir la municion independientemente de si acierta o falla
@@ -149,7 +154,7 @@ public class Carta : MonoBehaviour
             if (hitChance <= player.accuracy)
             {
                 // Si acierta, realiza el ataque
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
                 Debug.Log("¡Doble Ataque exitoso! El enemigo recibio daño.");
             }
             else
@@ -173,7 +178,7 @@ public class Carta : MonoBehaviour
         if (hitChance <= 0.90f)
         {
             // Si acierta, realiza el ataque
-            StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+            StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
             Debug.Log("¡Ataque rifle exitoso! El enemigo recibio daño.");
         }
         else
@@ -196,7 +201,7 @@ public class Carta : MonoBehaviour
         if (hitChance <= player.accuracy)
         {
             // Si acierta, realiza el ataque
-            StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+            StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
             Debug.Log("¡Ataque dinamita exitoso! El enemigo recibio daño.");
         }
         else

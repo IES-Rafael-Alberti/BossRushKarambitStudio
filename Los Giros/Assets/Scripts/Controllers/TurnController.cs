@@ -57,7 +57,6 @@ public class TurnController : MonoBehaviour
 
     public void FinalizarTurno()
     {
-        DestruirCartas(); // Descartar las cartas no usadas
         cameraScript.Rotate180Degrees();
         // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
     }
@@ -70,8 +69,7 @@ public class TurnController : MonoBehaviour
 
     private IEnumerator RobarCarta()
     {
-        float ajustePosicionX = -1f, ajustePosicionY = 0.6f, ajustePosicionZ = -0.4f;
-        // yield return new WaitForSeconds(2f);
+        float ajustePosicionX = -1f, ajustePosicionY = 0.6f, ajustePosicionZ = -0.1f;
         if (combateActivo)
         {
             if (cantidadCartasARobar <= listaTemp.Count)
@@ -83,9 +81,20 @@ public class TurnController : MonoBehaviour
                     go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicionX, huecoCartas.transform.position.y + ajustePosicionY, huecoCartas.transform.position.z + ajustePosicionZ);
                     ajustePosicionX += 1f;
                     go.GetComponent<Carta>().id = listaCartasJugador[random].id;
+                    if (go.GetComponent<Carta>().id == 0)
+                    {
+                        go.GetComponent<SpriteRenderer>().color = Color.red;
+                    }
+                    else if (go.GetComponent<Carta>().id == 1)
+                    {
+                        go.GetComponent<SpriteRenderer>().color = Color.green;
+                    }
+                    else
+                    {
+                        go.GetComponent<SpriteRenderer>().color = Color.blue;
+                    }
                     go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                     go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
-                    // go.GetComponent<Carta>().infoES = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES; // **TRADUCCION**
                     go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
                     if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
                         go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
@@ -118,7 +127,6 @@ public class TurnController : MonoBehaviour
                         go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                         go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                         go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
-                        // go.GetComponent<Carta>().infoES = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES;
                         go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
                         if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
                             go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
@@ -165,6 +173,7 @@ public class TurnController : MonoBehaviour
         // Tras ejecutar su accion se vuelve a girar
         yield return new WaitForSeconds(1f);
         cameraScript.Rotate180Degrees();
+        DestruirCartas();
     }
 
     private void PlayCard()

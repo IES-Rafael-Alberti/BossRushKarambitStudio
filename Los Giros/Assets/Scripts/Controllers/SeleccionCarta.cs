@@ -1,16 +1,15 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, ISelectHandler, IDeselectHandler
 {
 
     EventSystem system;
-    GameObject lastSelectedGameObject;
-    GameObject currentSelectedGameObject_Recent;
-
-    public Carta cartaInfo;
+    // GameObject lastSelectedGameObject;
+    // GameObject currentSelectedGameObject_Recent;
 
     private AudioSource audioSource;
 
@@ -29,9 +28,7 @@ public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterH
 
     void Update()
     {
-        cartaInfo = GetComponentInChildren<Carta>();
-
-        GetLastGameObjectSelected();
+        // GetLastGameObjectSelected();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -50,15 +47,26 @@ public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterH
     public void OnPointerDown(PointerEventData eventData)
     {
         //El puntero cliquea sobre el objeto
-        Debug.Log(cartaInfo.infoES + " es seleccionado.");
 
-        //Debug.Log(lastSelectedGameObject.name)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        List<Carta> cardsInHand = FindObjectsOfType<Carta>().ToList();
 
-        //Reconocer el prefab y su script particular
-
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.TryGetComponent<Carta>(out var cartaHit))
+            {
+                Debug.Log(cartaHit.id + " es Seleccionada");
+                foreach (Carta carta in cardsInHand) // Resetear seleccion en caso de no ser la primera carta escogida
+                {
+                    carta.isSelected = false;
+                }
+                cartaHit.isSelected = true;
+            }
+        }
     }
 
-    private void GetLastGameObjectSelected()
+    /*private void GetLastGameObjectSelected()
     {
         //Intento de registrar
 
@@ -68,22 +76,22 @@ public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterH
 
             currentSelectedGameObject_Recent = system.currentSelectedGameObject;
         }
-    }
+    }*/
 
     public void OnSelect(BaseEventData eventData)
     {
-       //Animación al seleccionar la carta
+        //Animacion al seleccionar la carta
         StartCoroutine(AnimarCarta(true));
         Debug.Log("En Seleccion.");
-        
+
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        //Animación al deseleccionar la carta
+        //Animacion al deseleccionar la carta
         StartCoroutine(AnimarCarta(false));
         Debug.Log("En Deseleccion.");
-        
+
     }
 
     private IEnumerator AnimarCarta(bool startingAnim)

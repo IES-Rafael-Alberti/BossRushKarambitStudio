@@ -70,20 +70,18 @@ public class TurnController : MonoBehaviour
 
     private IEnumerator RobarCarta()
     {
-        int ajustePosicion = -340;
+        float ajustePosicionX = -1f, ajustePosicionY = 0.6f, ajustePosicionZ = -0.4f;
         // yield return new WaitForSeconds(2f);
         if (combateActivo)
         {
-            Debug.LogWarning("Antes de condicion");
             if (cantidadCartasARobar <= listaTemp.Count)
             {
-                Debug.LogWarning("Entro en condicion");
                 for (int i = 0; i < cantidadCartasARobar; i++)
                 {
                     int random = Random.Range(0, listaTemp.Count);
                     GameObject go = Instantiate(prefabCarta, huecoCartas);
-                    go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicion, huecoCartas.transform.position.y + 30, 0);
-                    ajustePosicion += 70;
+                    go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicionX, huecoCartas.transform.position.y + ajustePosicionY, huecoCartas.transform.position.z + ajustePosicionZ);
+                    ajustePosicionX += 1f;
                     go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                     go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                     go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
@@ -100,7 +98,6 @@ public class TurnController : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("AAAA");
                 if (cantidadCartasBaraja == 0)
                 {
                     // Resetear la lista si no hay cartas que robar
@@ -116,12 +113,12 @@ public class TurnController : MonoBehaviour
                     {
                         int random = Random.Range(0, listaTemp.Count);
                         GameObject go = Instantiate(prefabCarta, huecoCartas);
-                        go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicion, huecoCartas.transform.position.y + 30, 0);
-                        ajustePosicion += 70;
+                        go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicionX, huecoCartas.transform.position.y + ajustePosicionY, huecoCartas.transform.position.z + ajustePosicionZ);
+                        ajustePosicionX += 0.5f;
                         go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                         go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                         go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
-                        go.GetComponent<Carta>().infoES = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES;
+                        // go.GetComponent<Carta>().infoES = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES;
                         go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
                         if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
                             go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;

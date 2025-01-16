@@ -1,22 +1,21 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class Carta : MonoBehaviour
 {
     public int id, damage, healAmount;
-    public string infoES, infoEN;
+    // public string infoES, infoEN;
     public bool isPlayable = false;
     public ActionType actionType;
     public SpecialAttackType specialAttackType;
-    [SerializeField] private TMP_Text txtDaño, txtInfo;
+    // [SerializeField] private TMP_Text txtDaño, txtInfo;
     [SerializeField] private AudioClip audioClip, audioClipSonidoCarta;
     [HideInInspector] public bool isSelected = false;
 
     private void Start()
     {
-        txtDaño.text = damage.ToString();
-        txtInfo.text = infoES; // Sistema de idioma
+        // txtDaño.text = damage.ToString();
+        // txtInfo.text = infoES; // Sistema de idioma
     }
 
     public void DoAction()

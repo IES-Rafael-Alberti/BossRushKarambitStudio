@@ -15,6 +15,7 @@ public class Carta : MonoBehaviour
         txtDaño.text = daño.ToString();
         txtInfo.text = infoES; // Sistema de idioma
     }
+
 }
 
 [Serializable]

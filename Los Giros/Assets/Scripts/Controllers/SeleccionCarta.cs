@@ -10,7 +10,11 @@ public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterH
     GameObject lastSelectedGameObject;
     GameObject currentSelectedGameObject_Recent;
 
-    public Carta cartaInfo;
+    //public GameObject cartaSeleccionada;
+
+    //string tagName = "TagCarta";
+
+    //public Carta cartaInfo;
 
     private AudioSource audioSource;
 
@@ -29,9 +33,7 @@ public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterH
 
     void Update()
     {
-        cartaInfo = GetComponentInChildren<Carta>();
-
-        GetLastGameObjectSelected();
+            GetLastGameObjectSelected();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -50,13 +52,84 @@ public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterH
     public void OnPointerDown(PointerEventData eventData)
     {
         //El puntero cliquea sobre el objeto
-        Debug.Log(cartaInfo.infoES + " es seleccionado.");
+
+        //Raycast Hit funciona perfecto!
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            Carta cartaHit = hit.collider.GetComponent<Carta>();
+            if (cartaHit != null)
+            {
+                Debug.Log(cartaHit.id + " es Seleccionada");
+
+                if (cartaHit.id == 0)
+                {
+                    Debug.Log("Disparo.");
+                }
+
+                else if (cartaHit.id == 1)
+                {
+                    Debug.Log("Cura.");
+                }
+
+                else if (cartaHit.id == 2)
+                {
+                    Debug.Log("Esquiva.");
+                }
+
+                else
+                {
+                    Debug.Log("Carta desconocida");
+                }
+            }
+
+
+        }
+
+
+
+        /*cartaSeleccionada = GameObject.FindGameObjectWithTag(tagName);
+
+        cartaInfo = cartaSeleccionada.GetComponent<Carta>();
+
+        Debug.Log(cartaInfo.id + " es seleccionado.");
+
+        if (cartaInfo.id == 0) 
+        {
+            Debug.Log("Disparo.");
+        }
+
+        else if (cartaInfo.id == 1) 
+        {
+            Debug.Log("Cura.");
+        }
+
+        else if (cartaInfo.id == 2)
+        {
+            Debug.Log("Esquiva.");
+        }
+
+        else
+        {
+            Debug.Log("Carta desconocida");
+        }*/
 
         //Debug.Log(lastSelectedGameObject.name)
 
         //Reconocer el prefab y su script particular
 
     }
+
+    /*public void ClickSeleccion()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            
+        }
+    }*/
 
     private void GetLastGameObjectSelected()
     {

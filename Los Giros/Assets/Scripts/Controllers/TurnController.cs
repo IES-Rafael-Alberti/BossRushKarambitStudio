@@ -81,18 +81,6 @@ public class TurnController : MonoBehaviour
                     go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicionX, huecoCartas.transform.position.y + ajustePosicionY, huecoCartas.transform.position.z + ajustePosicionZ);
                     ajustePosicionX += 1f;
                     go.GetComponent<Carta>().id = listaCartasJugador[random].id;
-                    if (go.GetComponent<Carta>().id == 0)
-                    {
-                        go.GetComponent<SpriteRenderer>().color = Color.red;
-                    }
-                    else if (go.GetComponent<Carta>().id == 1)
-                    {
-                        go.GetComponent<SpriteRenderer>().color = Color.green;
-                    }
-                    else
-                    {
-                        go.GetComponent<SpriteRenderer>().color = Color.blue;
-                    }
                     go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                     go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
                     go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
@@ -103,6 +91,7 @@ public class TurnController : MonoBehaviour
                     yield return new WaitForSeconds(0.2f);
                 }
                 cantidadCartasBaraja -= cantidadCartasARobar;
+                ResetearBaraja();
                 // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
             }
             else

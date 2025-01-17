@@ -11,16 +11,19 @@ public class TurnController : MonoBehaviour
     [SerializeField] private int cantidadCartasARobar = 3, tiempoContador = 10;
     public List<DatosCarta> listaCartasJugador = new();
     private List<DatosCarta> listaTemp = new();
-    [SerializeField] private TMP_Text txtContador;
+    [SerializeField] private TMP_Text txtContador, txtPlayerHealth;
     [SerializeField] private GameObject prefabCarta;
     [SerializeField] private List<GameObject> prefabsEnemigos;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
     [SerializeField] private Transform huecoCartas;
     private bool combateActivo = false;
+    private Player player;
 
     private void Start()
     {
+        player = FindObjectOfType<Player>();
+        UpdateHealthText();
         cameraScript.OnRotationComplete += EjecutarAccionJugador; // Suscribirse al evento
         cameraScript.OnRotationComplete += EjecutarAccionEnemigo;
         cameraScript.onTurnComplete += IniciarTurno;
@@ -28,12 +31,6 @@ public class TurnController : MonoBehaviour
         ResetearBaraja();
         EmpezarPelea();
     }
-
-    /*private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            cameraScript.Rotate180Degrees();
-    }*/
 
     private void IniciarDatos()
     {
@@ -83,6 +80,7 @@ public class TurnController : MonoBehaviour
                     go.GetComponent<Carta>().id = listaCartasJugador[random].id;
                     go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
                     go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
+                    go.GetComponent<Carta>().nombreCarta = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES;
                     go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
                     if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
                         go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
@@ -144,6 +142,11 @@ public class TurnController : MonoBehaviour
         }
         txtContador.text = tiempoLimite.ToString();
         FinalizarTurno();
+    }
+
+    public void UpdateHealthText()
+    {
+        txtPlayerHealth.text = "Health: " + player.currentHealth;
     }
 
     private void DestruirCartas()

@@ -1,18 +1,21 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Carta : MonoBehaviour
 {
     public int id, damage, healAmount;
     public bool isPlayable = false;
+    [SerializeField] private TMP_Text txtNombre;
+    [HideInInspector] public string nombreCarta;
     public ActionType actionType;
     public SpecialAttackType specialAttackType;
     [SerializeField] private AudioClip audioClip, audioClipSonidoCarta;
-    /*[HideInInspector]*/ public bool isSelected = false;
+    [HideInInspector] public bool isSelected = false;
 
     private void Start()
     {
-
+        txtNombre.text = nombreCarta;
     }
 
     public void DoAction()

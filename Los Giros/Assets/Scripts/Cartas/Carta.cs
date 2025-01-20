@@ -11,7 +11,7 @@ public class Carta : MonoBehaviour
     public ActionType actionType;
     public SpecialAttackType specialAttackType;
     [SerializeField] private AudioClip audioClip, audioClipSonidoCarta;
-    [HideInInspector] public bool isSelected = false;
+    [HideInInspector] public bool isSelected = false, isDodge;
 
     private void Start()
     {
@@ -52,23 +52,30 @@ public class Carta : MonoBehaviour
         Debug.Log("SE DISPARA AL ENEMIGO");
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
-        // Generar un valor aleatorio para determinar si el disparo acierta
-        float hitChance = Random.Range(0f, 1f);
-
-        if (hitChance <= player.accuracy)
+        if (player.currentAmmo > 0)
         {
-            // Si acierta, realiza el ataque
-            StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
-            Debug.Log("¡Ataque exitoso! El enemigo recibio daño.");
+            // Generar un valor aleatorio para determinar si el disparo acierta
+            float hitChance = Random.Range(0f, 1f);
+
+            if (hitChance <= player.accuracy)
+            {
+                // Si acierta, realiza el ataque
+                StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
+                Debug.Log("¡Ataque exitoso! El enemigo recibio daño.");
+            }
+            else
+            {
+                // Si falla, muestra un mensaje de fallo
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador falló.")));
+            }
+
+            // Reducir la municion independientemente de si acierta o falla
+            player.currentAmmo -= 1;
         }
         else
         {
-            // Si falla, muestra un mensaje de fallo
-            StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador falló.")));
+            Debug.LogWarning("El jugador intentó disparar sin munición");
         }
-
-        // Reducir la municion independientemente de si acierta o falla
-        player.currentAmmo -= 1;
     }
 
     private IEnumerator AnimAttack(System.Action onAnimationComplete)
@@ -116,9 +123,7 @@ public class Carta : MonoBehaviour
     private void Heal(int healAmount)
     {
         Player player = FindObjectOfType<Player>();
-        player.currentHealth += healAmount;
-        if (player.currentHealth > player.maxHealth)
-            player.currentHealth = player.maxHealth;
+        player.Heal(healAmount);
     }
 
     private void Reload()
@@ -158,12 +163,11 @@ public class Carta : MonoBehaviour
             {
                 // Si acierta, realiza el ataque
                 StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
-                Debug.Log("¡Doble Ataque exitoso! El enemigo recibio daño.");
             }
             else
             {
                 // Si falla, muestra un mensaje de fallo
-                StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador falló.")));
             }
 
             // Reducir la municion independientemente de si acierta o falla
@@ -223,6 +227,11 @@ public class DatosCarta
 {
     public int id, daño, curacion, proteccion;
     public bool esEsquiva;
+
+    public DatosCarta(int id)
+    {
+        this.id = id;
+    }
 }
 
 public enum ActionType

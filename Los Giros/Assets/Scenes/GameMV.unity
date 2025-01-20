@@ -249,36 +249,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2151f317152970d4694341fc240533cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cantidadCartasARobar: 3
-  tiempoContador: 10
-  listaCartasJugador:
-  - id: 0
-    "da\xF1o": 0
-    curacion: 0
-    proteccion: 0
-    esEsquiva: 0
-  - id: 1
-    "da\xF1o": 0
-    curacion: 0
-    proteccion: 0
-    esEsquiva: 0
-  - id: 2
-    "da\xF1o": 0
-    curacion: 0
-    proteccion: 0
-    esEsquiva: 0
-  - id: 3
-    "da\xF1o": 0
-    curacion: 0
-    proteccion: 0
-    esEsquiva: 0
-  txtContador: {fileID: 765017676}
+  basicsPlayerActions: 0000000001000000020000000300000004000000
+  drawCardAmount: 3
+  timerTime: 5
+  txtTimer: {fileID: 765017676}
   txtPlayerHealth: {fileID: 1365499394}
-  prefabCarta: {fileID: 8408931947712722435, guid: f5bd44659cf03a64f9f2ef0a21509307, type: 3}
-  prefabsEnemigos: []
+  prefabCard: {fileID: 8408931947712722435, guid: f5bd44659cf03a64f9f2ef0a21509307, type: 3}
   baseDatosCartas: {fileID: 11400000, guid: 37002b20f8dc9cf4abe8085c556cbdf6, type: 2}
   cameraScript: {fileID: 859285986}
-  huecoCartas: {fileID: 823944171}
+  cardLocation: {fileID: 823944171}
 --- !u!4 &301086369
 Transform:
   m_ObjectHideFlags: 0

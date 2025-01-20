@@ -33,10 +33,7 @@ public class Enemy : MonoBehaviour
     {
         // Verificar que haya suficientes acciones permitidas
         if (allowedActions.Count < 3)
-        {
-            // Debug.LogWarning("No hay suficientes acciones permitidas para elegir 3.");
             return;
-        }
 
         // Crear una lista temporal para las 3 opciones seleccionadas
         List<EnemyAction> selectedActions = new();
@@ -66,8 +63,6 @@ public class Enemy : MonoBehaviour
 
         // Asignar la mejor accion
         actionChosen = bestAction;
-
-        // Debug.Log($"Accion elegida: {actionChosen}");
     }
 
     // Metodo para evaluar la puntuacion de una accion
@@ -136,7 +131,6 @@ public class Enemy : MonoBehaviour
                 SpecialAttack();
                 break;
             default:
-                // Debug.LogWarning($"{name} intento ejecutar una accion no permitida: {actionChosen}");
                 break;
         }
     }
@@ -151,12 +145,11 @@ public class Enemy : MonoBehaviour
         {
             // Si acierta, realiza el ataque
             StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
-            // Debug.Log("¡Ataque exitoso! El jugador recibio daño.");
         }
         else
         {
             // Si falla, muestra un mensaje de fallo
-            // StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo falló.")));
         }
 
         // Reducir la municion independientemente de si acierta o falla
@@ -177,7 +170,6 @@ public class Enemy : MonoBehaviour
                 Dynamite();
                 break;
             default:
-                // Debug.LogWarning($"{name} intento ejecutar una accion no permitida: {specialAttack}");
                 break;
         }
     }
@@ -193,12 +185,11 @@ public class Enemy : MonoBehaviour
             {
                 // Si acierta, realiza el ataque
                 StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
-                // Debug.Log("¡Doble Ataque exitoso! El jugador recibio daño.");
             }
             else
             {
                 // Si falla, muestra un mensaje de fallo
-                StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
             }
 
             // Reducir la municion independientemente de si acierta o falla

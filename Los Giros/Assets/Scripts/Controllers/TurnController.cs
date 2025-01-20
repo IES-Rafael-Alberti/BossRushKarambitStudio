@@ -6,142 +6,109 @@ using UnityEngine;
 
 public class TurnController : MonoBehaviour
 {
-    private int cantidadCartasBaraja, tiempoLimite = 0;
-    public static int contResultado = 0;
-    [SerializeField] private int cantidadCartasARobar = 3, tiempoContador = 10;
-    public List<DatosCarta> listaCartasJugador = new();
-    private List<DatosCarta> listaTemp = new();
-    [SerializeField] private TMP_Text txtContador, txtPlayerHealth;
-    [SerializeField] private GameObject prefabCarta;
-    [SerializeField] private List<GameObject> prefabsEnemigos;
+    private readonly int limitTimerTime = 0;
+    [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
+    [SerializeField] private int drawCardAmount, timerTime;
+    [SerializeField] private TMP_Text txtTimer, txtPlayerHealth;
+    [SerializeField] private GameObject prefabCard;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
-    [SerializeField] private Transform huecoCartas;
-    private bool combateActivo = false;
+    [SerializeField] private Transform cardLocation;
+    private bool isBattleActive = false;
     private Player player;
+    [HideInInspector] public readonly List<DatosCarta> playerDeck = new();
 
     private void Start()
     {
         player = FindObjectOfType<Player>();
         UpdateHealthText();
-        cameraScript.OnRotationComplete += EjecutarAccionJugador; // Suscribirse al evento
-        cameraScript.OnRotationComplete += EjecutarAccionEnemigo;
-        cameraScript.onTurnComplete += IniciarTurno;
-        IniciarDatos();
-        ResetearBaraja();
-        EmpezarPelea();
+        cameraScript.OnRotationComplete += DoPlayerAction; // Suscribirse al evento
+        cameraScript.OnRotationComplete += DoEnemyAction;
+        cameraScript.onTurnComplete += InitTurn;
+        InitData();
+        StartBattle();
     }
 
-    private void IniciarDatos()
+    private void InitData()
     {
-        // listaCartasJugador = ControladorDatos.listaCartasPartida;
-        cantidadCartasBaraja = listaCartasJugador.Count;
+        foreach (var action in basicsPlayerActions)
+        {
+            if (BasicPlayerAction.Shot == action)
+                playerDeck.Add(new(0));
+            else if (BasicPlayerAction.Heal == action)
+                playerDeck.Add(new(1));
+            else if (BasicPlayerAction.Dodge == action)
+                playerDeck.Add(new(2));
+            else if (BasicPlayerAction.Reload == action)
+                playerDeck.Add(new(3));
+            else if (BasicPlayerAction.SpecialAttack == action)
+                playerDeck.Add(new(4));
+        }
     }
 
     #region PELEA
-    public void EmpezarPelea()
+    public void StartBattle()
     {
-        combateActivo = true;
-        IniciarTurno();
+        isBattleActive = true;
+        InitTurn();
     }
 
-    private void IniciarTurno()
+    private void InitTurn()
     {
-        StartCoroutine(RobarCarta()); // Robar Cartas (inicializar, instanciar...)
-        ElegirAccionEnemigo();
-        StartCoroutine(IniciarContador());
+        StartCoroutine(DrawCard()); // Robar Cartas (inicializar, instanciar...)
+        ChooseEnemyAction();
+        StartCoroutine(InitTimer());
     }
 
-    public void FinalizarTurno()
+    public void EndTurn()
     {
         cameraScript.Rotate180Degrees();
         // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
     }
 
-    private void ElegirAccionEnemigo()
+    private void ChooseEnemyAction()
     {
         Enemy enemy = FindObjectOfType<Enemy>();
         enemy.ChooseAction();
     }
 
-    private IEnumerator RobarCarta()
+    private IEnumerator DrawCard()
     {
         float ajustePosicionX = -1f, ajustePosicionY = 0.6f, ajustePosicionZ = -0.1f;
-        if (combateActivo)
+        if (isBattleActive)
         {
-            if (cantidadCartasARobar <= listaTemp.Count)
+            for (int i = 0; i < drawCardAmount; i++)
             {
-                for (int i = 0; i < cantidadCartasARobar; i++)
-                {
-                    int random = Random.Range(0, listaTemp.Count);
-                    GameObject go = Instantiate(prefabCarta, huecoCartas);
-                    go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicionX, huecoCartas.transform.position.y + ajustePosicionY, huecoCartas.transform.position.z + ajustePosicionZ);
-                    ajustePosicionX += 1f;
-                    go.GetComponent<Carta>().id = listaCartasJugador[random].id;
-                    go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
-                    go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
-                    go.GetComponent<Carta>().nombreCarta = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES;
-                    go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
-                    if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
-                        go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
+                int random = Random.Range(0, playerDeck.Count);
+                GameObject go = Instantiate(prefabCard, cardLocation);
+                go.transform.position = new Vector3(cardLocation.transform.position.x + ajustePosicionX, cardLocation.transform.position.y + ajustePosicionY, cardLocation.transform.position.z + ajustePosicionZ);
+                ajustePosicionX += 1f;
+                go.GetComponent<Carta>().id = baseDatosCartas.baseDatos[random].id;
+                go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
+                go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
+                go.GetComponent<Carta>().healAmount = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].curacion;
+                go.GetComponent<Carta>().isDodge = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].esEsquiva;
+                go.GetComponent<Carta>().nombreCarta = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES;
+                go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
+                if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
+                    go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
 
-                    listaTemp.RemoveAt(random);
-                    yield return new WaitForSeconds(0.2f);
-                }
-                cantidadCartasBaraja -= cantidadCartasARobar;
-                ResetearBaraja();
-                // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
-            }
-            else
-            {
-                if (cantidadCartasBaraja == 0)
-                {
-                    // Resetear la lista si no hay cartas que robar
-                    ResetearBaraja();
-                    cantidadCartasBaraja = listaCartasJugador.Count;
-                    StartCoroutine(RobarCarta());
-                }
-                else
-                {
-                    int index = 0;
-                    int iterations = listaTemp.Count; // Guardar el número inicial de iteraciones
-                    for (int i = 0; i < iterations; i++) // Iteramos basado en el tamaño inicial
-                    {
-                        int random = Random.Range(0, listaTemp.Count);
-                        GameObject go = Instantiate(prefabCarta, huecoCartas);
-                        go.transform.position = new Vector3(huecoCartas.transform.position.x + ajustePosicionX, huecoCartas.transform.position.y + ajustePosicionY, huecoCartas.transform.position.z + ajustePosicionZ);
-                        ajustePosicionX += 0.5f;
-                        go.GetComponent<Carta>().id = listaCartasJugador[random].id;
-                        go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
-                        go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
-                        go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
-                        if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
-                            go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
-
-                        listaTemp.RemoveAt(random);
-                        yield return new WaitForSeconds(0.2f);
-                        index++;
-                    }
-                    cantidadCartasBaraja -= index;
-                    // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
-                    ResetearBaraja();
-                    cantidadCartasBaraja = listaCartasJugador.Count;
-                }
+                yield return new WaitForSeconds(0.2f);
             }
         }
     }
 
-    private IEnumerator IniciarContador()
+    private IEnumerator InitTimer()
     {
-        int tiempoAux = tiempoContador;
-        while (tiempoAux >= tiempoLimite)
+        int auxTime = timerTime;
+        while (auxTime >= limitTimerTime)
         {
-            txtContador.text = tiempoAux.ToString(); // Actualizar el texto con el valor actual
+            txtTimer.text = auxTime.ToString(); // Actualizar el texto con el valor actual
             yield return new WaitForSeconds(1f);    // Esperar un segundo
-            tiempoAux -= 1;                         // Reducir el contador
+            auxTime -= 1;                         // Reducir el contador
         }
-        txtContador.text = tiempoLimite.ToString();
-        FinalizarTurno();
+        txtTimer.text = limitTimerTime.ToString();
+        EndTurn();
     }
 
     public void UpdateHealthText()
@@ -149,7 +116,7 @@ public class TurnController : MonoBehaviour
         txtPlayerHealth.text = "Health: " + player.currentHealth;
     }
 
-    private void DestruirCartas()
+    private void DestroyCards()
     {
         List<Carta> cartas = FindObjectsOfType<Carta>().ToList();
         foreach (Carta carta in cartas)
@@ -158,14 +125,13 @@ public class TurnController : MonoBehaviour
         }
     }
 
-    private IEnumerator AccionJugador()
+    private IEnumerator PlayerAction()
     {
-        Debug.Log("El jugador ataca al enemigo.");
         PlayCard(); // Juega la carta seleccionada
         // Tras ejecutar su accion se vuelve a girar
         yield return new WaitForSeconds(1f);
         cameraScript.Rotate180Degrees();
-        DestruirCartas();
+        DestroyCards();
     }
 
     private void PlayCard()
@@ -178,36 +144,36 @@ public class TurnController : MonoBehaviour
         }
     }
 
-    private void EjecutarAccionJugador()
+    private void DoPlayerAction()
     {
-        StartCoroutine(AccionJugador());
+        StartCoroutine(PlayerAction());
     }
 
-    private void EjecutarAccionEnemigo()
+    private void DoEnemyAction()
     {
-        StartCoroutine(AccionEnemigo());
+        StartCoroutine(EnemyAction());
     }
 
-    private IEnumerator AccionEnemigo()
+    private IEnumerator EnemyAction()
     {
         Enemy enemy = FindObjectOfType<Enemy>();
         enemy.DoAction();
-        Debug.Log("El enemigo realiza la accion.");
         yield return new WaitForSeconds(1f);
-    }
-
-    private void ResetearBaraja()
-    {
-        listaTemp.Clear();
-        foreach (var carta in listaCartasJugador)
-        {
-            listaTemp.Add(carta);
-        }
     }
     #endregion
 
     private void OnDestroy()
     {
-        cameraScript.OnRotationComplete -= EjecutarAccionJugador; // Desuscribirse para evitar errores
+        cameraScript.OnRotationComplete -= DoPlayerAction; // Desuscribirse para evitar errores
+        cameraScript.OnRotationComplete -= DoEnemyAction;
     }
+}
+
+public enum BasicPlayerAction
+{
+    Shot,
+    Heal,
+    Dodge,
+    Reload,
+    SpecialAttack
 }

@@ -16,13 +16,20 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     public void ReceiveDamage(int damage)
     {
         currentHealth -= damage;
         turnController.UpdateHealthText();
-        Debug.Log("Current player health: " + currentHealth);
+    }
+
+    public void Heal(int amount)
+    {
+        currentHealth += amount;
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+        turnController.UpdateHealthText();
     }
 }

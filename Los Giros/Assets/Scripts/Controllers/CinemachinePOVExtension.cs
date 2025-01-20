@@ -32,13 +32,11 @@ public class CinemachinePOVExtension : CinemachineExtension
                     if (needAtack)
                     {
                         needAtack = !needAtack;
-                        Debug.Log("Necesita atacar: " + needAtack);
                         OnRotationComplete?.Invoke(); // Notificar que la rotacion ha terminado
                     }
                     else
                     {
                         needAtack = !needAtack;
-                        Debug.Log("No necesita atacar: " + needAtack);
                         onTurnComplete?.Invoke();
                     }
                 }

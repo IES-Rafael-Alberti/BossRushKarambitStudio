@@ -3,14 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class SceneController: MonoBehaviour
 {
-    public static MainMenu instance;
+    public static SceneController instance;
     [SerializeField] Animator transitionAnim;
+    public GameObject SceneTransition;
+    
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void StartGame()
     {
         StartCoroutine(LoadLevel());
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadSceneAsync(sceneName);
     }
 
     IEnumerator LoadLevel()

@@ -58,6 +58,7 @@ public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterH
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
+
         if (Physics.Raycast(ray, out hit))
         {
             Carta cartaHit = hit.collider.GetComponent<Carta>();

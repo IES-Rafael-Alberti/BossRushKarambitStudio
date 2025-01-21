@@ -3,34 +3,59 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurnController : MonoBehaviour
 {
+    #region VARIABLES
+    // Constantes
     private readonly int limitTimerTime = 0;
+
+    // Serializables
     [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
     [SerializeField] private int drawCardAmount, timerTime;
     [SerializeField] private TMP_Text txtTimer, txtPlayerHealth;
     [SerializeField] private GameObject prefabCard, victoryPanel, defeatPanel;
+    [SerializeField] private Button btnContinue, btnRetry;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
     [SerializeField] private Transform cardLocation;
+
+    // Privadas
     private bool isBattleActive = false;
     private Player player;
-    [HideInInspector] public readonly List<DatosCarta> playerDeck = new();
 
+    // Publicas
+    [HideInInspector] public readonly List<DatosCarta> playerDeck = new();
+    #endregion
+
+    #region UNITY METHODS
     private void Start()
     {
-        player = FindObjectOfType<Player>();
-        UpdateHealthText();
-        cameraScript.OnRotationComplete += DoPlayerAction; // Suscribirse al evento
-        cameraScript.OnRotationComplete += DoEnemyAction;
-        cameraScript.OnTurnComplete += InitTurn;
         InitData();
+        UpdateHealthText();
         StartBattle();
     }
 
+    private void OnDestroy()
+    {
+        cameraScript.OnRotationComplete -= DoPlayerAction; // Desuscribirse para evitar errores
+        cameraScript.OnRotationComplete -= DoEnemyAction;
+    }
+
+    #endregion
+
+    #region INITIALIZATION
+
     private void InitData()
     {
+        player = FindObjectOfType<Player>();
+        cameraScript.OnRotationComplete += DoPlayerAction; // Suscribirse al evento
+        cameraScript.OnRotationComplete += DoEnemyAction;
+        cameraScript.OnTurnComplete += InitTurn;
+        btnContinue.onClick.AddListener(NextEnemy);
+        btnRetry.onClick.AddListener(Retry);
+
         foreach (var action in basicsPlayerActions)
         {
             if (BasicPlayerAction.Shot == action)
@@ -46,7 +71,10 @@ public class TurnController : MonoBehaviour
         }
     }
 
-    #region PELEA
+    #endregion
+
+    #region TURN MANAGEMENT
+
     public void StartBattle()
     {
         isBattleActive = true;
@@ -55,7 +83,7 @@ public class TurnController : MonoBehaviour
 
     private void InitTurn()
     {
-        StartCoroutine(DrawCard()); // Robar Cartas (inicializar, instanciar...)
+        StartCoroutine(DrawCard()); // Robar cartas
         ChooseEnemyAction();
         StartCoroutine(InitTimer());
     }
@@ -71,64 +99,50 @@ public class TurnController : MonoBehaviour
         enemy.ChooseAction();
     }
 
-    private IEnumerator DrawCard()
-    {
-        float ajustePosicionX = -1f, ajustePosicionY = 0.6f, ajustePosicionZ = -0.1f;
-        if (isBattleActive)
-        {
-            for (int i = 0; i < drawCardAmount; i++)
-            {
-                int random = Random.Range(0, playerDeck.Count);
-                GameObject go = Instantiate(prefabCard, cardLocation);
-                go.transform.position = new Vector3(cardLocation.transform.position.x + ajustePosicionX, cardLocation.transform.position.y + ajustePosicionY, cardLocation.transform.position.z + ajustePosicionZ);
-                ajustePosicionX += 1f;
-                go.GetComponent<Carta>().id = baseDatosCartas.baseDatos[random].id;
-                go.GetComponent<SpriteRenderer>().sprite = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].spriteCarta;
-                go.GetComponent<Carta>().damage = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].daño;
-                go.GetComponent<Carta>().healAmount = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].curacion;
-                go.GetComponent<Carta>().isDodge = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].esEsquiva;
-                go.GetComponent<Carta>().nombreCarta = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].infoES;
-                go.GetComponent<Carta>().actionType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].actionType;
-                if (go.GetComponent<Carta>().actionType == ActionType.SpecialAttack)
-                    go.GetComponent<Carta>().specialAttackType = baseDatosCartas.baseDatos[go.GetComponent<Carta>().id].specialAttackType;
-
-                yield return new WaitForSeconds(0.2f);
-            }
-        }
-    }
-
     private IEnumerator InitTimer()
     {
         int auxTime = timerTime;
         while (auxTime >= limitTimerTime)
         {
             txtTimer.text = auxTime.ToString(); // Actualizar el texto con el valor actual
-            yield return new WaitForSeconds(1f);    // Esperar un segundo
-            auxTime -= 1;                         // Reducir el contador
+            yield return new WaitForSeconds(1f);
+            auxTime -= 1; // Reducir el contador
         }
         txtTimer.text = limitTimerTime.ToString();
         EndTurn();
     }
 
-    public void UpdateHealthText()
+    public void DetectOutcome()
     {
-        txtPlayerHealth.text = "Health: " + player.currentHealth;
-    }
+        Player player = FindObjectOfType<Player>();
+        Enemy enemy = FindObjectOfType<Enemy>();
 
-    private void DestroyCards()
-    {
-        List<Carta> cartas = FindObjectsOfType<Carta>().ToList();
-        foreach (Carta carta in cartas)
+        bool isPlayerDead = player.currentHealth <= 0;
+        bool isEnemyDead = enemy.currentHealth <= 0;
+
+        if (isPlayerDead && isEnemyDead)
         {
-            Destroy(carta.gameObject);
+            Debug.Log("¡Empate tecnico! Prioridad: derrota del jugador.");
+            DetectLose();
+        }
+        else if (isPlayerDead)
+        {
+            DetectLose();
+        }
+        else if (isEnemyDead)
+        {
+            DetectWin();
         }
     }
+
+    #endregion
+
+    #region PLAYER ACTIONS
 
     private IEnumerator PlayerAction()
     {
         PlayCard(); // Juega la carta seleccionada
-        // Tras ejecutar su accion se vuelve a girar
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f); // Tiempo antes de girar
         cameraScript.Rotate180Degrees();
         DestroyCards();
     }
@@ -148,6 +162,10 @@ public class TurnController : MonoBehaviour
         StartCoroutine(PlayerAction());
     }
 
+    #endregion
+
+    #region ENEMY ACTIONS
+
     private void DoEnemyAction()
     {
         StartCoroutine(EnemyAction());
@@ -157,72 +175,104 @@ public class TurnController : MonoBehaviour
     {
         Enemy enemy = FindObjectOfType<Enemy>();
         enemy.DoAction();
-        yield return new WaitForSeconds(1f); // Verificar el estado de la partida despues de la accion del enemigo
+        yield return new WaitForSeconds(1f);
         DetectOutcome();
     }
 
-    public void DetectOutcome()
+    #endregion
+
+    #region BATTLE UTILITIES
+
+    private IEnumerator DrawCard()
     {
-        Player player = FindObjectOfType<Player>();
-        Enemy enemy = FindObjectOfType<Enemy>();
+        float ajustePosicionX = -1f, ajustePosicionY = 0.6f, ajustePosicionZ = -0.1f;
 
-        bool isPlayerDead = player.currentHealth <= 0;
-        bool isEnemyDead = enemy.currentHealth <= 0;
-
-        if (isPlayerDead && isEnemyDead) // Ambos estan muertos, priorizamos la derrota del player
+        if (isBattleActive)
         {
-            Debug.Log("¡Empate tecnico! Prioridad: derrota del jugador.");
-            DetectLose();
+            for (int i = 0; i < drawCardAmount; i++)
+            {
+                int random = Random.Range(0, playerDeck.Count);
+                GameObject go = Instantiate(prefabCard, cardLocation);
+                go.transform.position = new Vector3(cardLocation.transform.position.x + ajustePosicionX, cardLocation.transform.position.y + ajustePosicionY, cardLocation.transform.position.z + ajustePosicionZ);
+                ajustePosicionX += 1f;
+
+                // Configurar propiedades de la carta
+                var cartaData = baseDatosCartas.baseDatos[random];
+                var carta = go.GetComponent<Carta>();
+                carta.id = cartaData.id;
+                carta.GetComponent<SpriteRenderer>().sprite = cartaData.spriteCarta;
+                carta.damage = cartaData.daño;
+                carta.healAmount = cartaData.curacion;
+                carta.isDodge = cartaData.esEsquiva;
+                carta.nombreCarta = cartaData.infoES;
+                carta.actionType = cartaData.actionType;
+                if (carta.actionType == ActionType.SpecialAttack)
+                    carta.specialAttackType = cartaData.specialAttackType;
+
+                yield return new WaitForSeconds(0.2f);
+            }
         }
-        else if (isPlayerDead) // Solo el jugador esta muerto
-            DetectLose();
-        else if (isEnemyDead) // Solo el enemigo esta muerto
-            DetectWin();
     }
+
+    private void DestroyCards()
+    {
+        List<Carta> cartas = FindObjectsOfType<Carta>().ToList();
+        foreach (Carta carta in cartas)
+        {
+            Destroy(carta.gameObject);
+        }
+    }
+
+    public void UpdateHealthText()
+    {
+        txtPlayerHealth.text = "Health: " + player.currentHealth;
+    }
+
+    #endregion
+
+    #region GAME ENDINGS
 
     public void DetectWin()
     {
-        // Detener la batalla
         isBattleActive = false;
-
-        // Mostrar mensaje de victoria
         Debug.Log("¡Jugador, has derrotado al enemigo!");
-
-        // Detener cualquier accion o logica en curso
         StopAllCoroutines();
         ShowVictoryPanel();
     }
 
     public void DetectLose()
     {
-        // Detener la batalla
         isBattleActive = false;
-
-        // Mostrar mensaje de derrota (puedes cambiar esto por una animacion o transicion)
         Debug.Log("¡Jugador, has sido derrotado!");
-
-        // Detener cualquier accion o logica en curso
         StopAllCoroutines();
         ShowDefeatPanel();
     }
 
-    private void ShowDefeatPanel()
-    {
-        // Logica para mostrar una pantalla de derrota o reiniciar el nivel
-        Debug.Log("Mostrar pantalla de derrota...");
-    }
-
     private void ShowVictoryPanel()
     {
-
+        // Logica para mostrar pantalla de victoria
     }
+
+    private void ShowDefeatPanel()
+    {
+        // Logica para mostrar pantalla de derrota
+    }
+
     #endregion
 
-    private void OnDestroy()
+    #region UI ACTIONS
+
+    private void NextEnemy()
     {
-        cameraScript.OnRotationComplete -= DoPlayerAction; // Desuscribirse para evitar errores
-        cameraScript.OnRotationComplete -= DoEnemyAction;
+        // Logica para avanzar al siguiente enemigo
     }
+
+    private void Retry()
+    {
+        // Logica para reiniciar la partida
+    }
+
+    #endregion
 }
 
 public enum BasicPlayerAction

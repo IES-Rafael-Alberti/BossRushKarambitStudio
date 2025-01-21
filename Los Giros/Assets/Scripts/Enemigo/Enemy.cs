@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
-    public EnemySpecialAttack specialAttack;
-    public int healAmount, damage, maxHealth, maxAmmo, reloadAmount;
+    [SerializeField] private List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
+    [SerializeField] private EnemySpecialAttack specialAttack;
+    [SerializeField] private int healAmount, damage, maxHealth, maxAmmo, reloadAmount;
     [Range(0f, 1f)] public float accuracy;
-    public AudioClip audioClipDamaged;
+    [SerializeField] private AudioClip audioClipDamaged;
     private Player player;
     private EnemyAction actionChosen;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
-    private int currentHealth, currentAmmo;
+    [HideInInspector] public int currentHealth, currentAmmo;
+    private TurnController turnController;
 
     private void Start()
     {
+        turnController = FindObjectOfType<TurnController>();
         player = FindObjectOfType<Player>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
@@ -42,9 +44,7 @@ public class Enemy : MonoBehaviour
         {
             int randomIndex = Random.Range(0, allowedActions.Count);
             if (!selectedActions.Contains(allowedActions[randomIndex]))
-            {
                 selectedActions.Add(allowedActions[randomIndex]);
-            }
         }
 
         // Evaluar cada accion segun una formula personalizada
@@ -84,14 +84,14 @@ public class Enemy : MonoBehaviour
                 if (currentAmmo >= maxAmmo)
                     score = 0; // No puede recargar si ya tiene municion completa
                 else
-                    score += 10f * (1f - (currentAmmo / maxAmmo)); // Prioriza recargar si el cargador tiene pocas balas
+                    score += 10f * (1.5f - (currentAmmo / maxAmmo)); // Prioriza recargar si el cargador tiene pocas balas
                 break;
 
             case EnemyAction.Heal:
                 if (currentHealth >= maxHealth)
                     score = 0; // No puede curarse si ya tiene salud completa
                 else
-                    score += 10f * (1f - (currentHealth / maxHealth)); // Prioriza curarse cuando el enemigo tiene poca vida
+                    score += 10f * (1.5f - (currentHealth / maxHealth)); // Prioriza curarse cuando el enemigo tiene poca vida
                 break;
 
             case EnemyAction.Dodge:
@@ -99,7 +99,7 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyAction.Protect:
-                score += 5f * (1f - (currentHealth / maxHealth)); // Prioriza protegerse cuando tiene poca vida
+                score += 5f * (1.5f - (currentHealth / maxHealth)); // Prioriza protegerse cuando tiene poca vida
                 break;
 
             case EnemyAction.SpecialAttack:
@@ -304,6 +304,7 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
+        turnController.DetectOutcome(); // Detectar el resultado del duelo
         // Hacerlo IEnumerator, meterle animacion, desactivar collider y destruir
         Destroy(gameObject);
     }

@@ -10,7 +10,7 @@ public class TurnController : MonoBehaviour
     [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
     [SerializeField] private int drawCardAmount, timerTime;
     [SerializeField] private TMP_Text txtTimer, txtPlayerHealth;
-    [SerializeField] private GameObject prefabCard;
+    [SerializeField] private GameObject prefabCard, victoryPanel, defeatPanel;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
     [SerializeField] private Transform cardLocation;
@@ -24,7 +24,7 @@ public class TurnController : MonoBehaviour
         UpdateHealthText();
         cameraScript.OnRotationComplete += DoPlayerAction; // Suscribirse al evento
         cameraScript.OnRotationComplete += DoEnemyAction;
-        cameraScript.onTurnComplete += InitTurn;
+        cameraScript.OnTurnComplete += InitTurn;
         InitData();
         StartBattle();
     }
@@ -63,7 +63,6 @@ public class TurnController : MonoBehaviour
     public void EndTurn()
     {
         cameraScript.Rotate180Degrees();
-        // txtCantidadCartasBaraja.text = listaTemp.Count.ToString();
     }
 
     private void ChooseEnemyAction()
@@ -158,7 +157,64 @@ public class TurnController : MonoBehaviour
     {
         Enemy enemy = FindObjectOfType<Enemy>();
         enemy.DoAction();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f); // Verificar el estado de la partida despues de la accion del enemigo
+        DetectOutcome();
+    }
+
+    public void DetectOutcome()
+    {
+        Player player = FindObjectOfType<Player>();
+        Enemy enemy = FindObjectOfType<Enemy>();
+
+        bool isPlayerDead = player.currentHealth <= 0;
+        bool isEnemyDead = enemy.currentHealth <= 0;
+
+        if (isPlayerDead && isEnemyDead) // Ambos estan muertos, priorizamos la derrota del player
+        {
+            Debug.Log("¡Empate tecnico! Prioridad: derrota del jugador.");
+            DetectLose();
+        }
+        else if (isPlayerDead) // Solo el jugador esta muerto
+            DetectLose();
+        else if (isEnemyDead) // Solo el enemigo esta muerto
+            DetectWin();
+    }
+
+    public void DetectWin()
+    {
+        // Detener la batalla
+        isBattleActive = false;
+
+        // Mostrar mensaje de victoria
+        Debug.Log("¡Jugador, has derrotado al enemigo!");
+
+        // Detener cualquier accion o logica en curso
+        StopAllCoroutines();
+        ShowVictoryPanel();
+    }
+
+    public void DetectLose()
+    {
+        // Detener la batalla
+        isBattleActive = false;
+
+        // Mostrar mensaje de derrota (puedes cambiar esto por una animacion o transicion)
+        Debug.Log("¡Jugador, has sido derrotado!");
+
+        // Detener cualquier accion o logica en curso
+        StopAllCoroutines();
+        ShowDefeatPanel();
+    }
+
+    private void ShowDefeatPanel()
+    {
+        // Logica para mostrar una pantalla de derrota o reiniciar el nivel
+        Debug.Log("Mostrar pantalla de derrota...");
+    }
+
+    private void ShowVictoryPanel()
+    {
+
     }
     #endregion
 

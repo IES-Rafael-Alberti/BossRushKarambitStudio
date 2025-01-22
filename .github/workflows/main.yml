@@ -1,38 +1,76 @@
-name: Build and Deploy to Itch.io
+name: Build, Test and Deploy 💻
 
 on:
   push:
     branches:
-      - main
+      - based
+    paths-ignore:
+      - '.github/README.md'
+      - 'presentation/index.md'
+  pull_request:
+    paths-ignore:
+      - '.github/README.md'
+      - 'presentation/**'
 
 jobs:
-  build-and-deploy:
+  buildForAllSupportedPlatforms:
+    name: Build, Test and Deploy for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false # if one build fails, other platforms will still be built
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64
+          - WebGL
+          - StandaloneOSX
+        
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Unity
-        uses: game-ci/unity-setup@v2
+      # Fetch Files  
+      - uses: actions/checkout@v2
         with:
-          unityVersion: 2022.3.35f1
+          fetch-depth: 0
+          lfs: true
+      
+      # Cache Unity Library Folder
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
 
-      - name: Build Unity Project
+      # Test playmode and editmode
+      - uses: game-ci/unity-test-runner@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        run: |
-          mkdir -p Builds/WebGL
-          unity-editor -quit -batchmode -buildTarget WebGL -projectPath . -executeMethod BuildCommand.BuildWebGL
+        with:
+          # https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret
+          githubToken: ${{ secrets.GITHUB_TOKEN }} # used to view test results
 
-      - name: Install Butler
-        run: |
-          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/latest/archive/default
-          unzip butler.zip -d ~/bin
-          chmod +x ~/bin/butler
-          echo "::add-path::~/bin"
-
-      - name: Push to Itch.io
+      # Upload Test results as artifacts
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Test results
+          path: artifacts
+      
+      # Build Unity Game
+      - uses: game-ci/unity-builder@v2
         env:
-          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        run: butler push ./Builds/WebGL karambitstudio/los-giros:web
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+      
+      # Upload Build as Artifacts
+      #- uses: actions/upload-artifact@v2
+      #  with:
+      #    name: Build-${{ matrix.targetPlatform }}
+      #    path: build/${{ matrix.targetPlatform }}
+      
+      # Publish to Itch.IO
+      - uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: ${{ matrix.targetPlatform }}
+          ITCH_GAME: deployexample
+          ITCH_USER: Macawls
+          PACKAGE: build/${{ matrix.targetPlatform }}

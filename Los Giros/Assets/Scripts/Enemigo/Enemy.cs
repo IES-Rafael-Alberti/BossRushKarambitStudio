@@ -77,29 +77,25 @@ public class Enemy : MonoBehaviour
                 if (currentAmmo <= 0)
                     score = 0; // No puede atacar si no tiene municion
                 else
-                    score += 15f * (1.5f - (FindObjectOfType<Player>().currentHealth / FindObjectOfType<Player>().maxHealth)); // Prioriza atacar cuando el jugador tiene menos vida
+                    score += 10f * (1.5f - (FindObjectOfType<Player>().currentHealth / FindObjectOfType<Player>().maxHealth)); // Prioriza atacar cuando el jugador tiene menos vida
                 break;
 
             case EnemyAction.Reload:
                 if (currentAmmo >= maxAmmo)
                     score = 0; // No puede recargar si ya tiene municion completa
                 else
-                    score += 10f * (1.5f - (currentAmmo / maxAmmo)); // Prioriza recargar si el cargador tiene pocas balas
+                    score += 10f * (1.1f - (currentAmmo / maxAmmo)); // Prioriza recargar si el cargador tiene pocas balas
                 break;
 
             case EnemyAction.Heal:
                 if (currentHealth >= maxHealth)
                     score = 0; // No puede curarse si ya tiene salud completa
                 else
-                    score += 10f * (1.5f - (currentHealth / maxHealth)); // Prioriza curarse cuando el enemigo tiene poca vida
+                    score += 10f * (1.1f - (currentHealth / maxHealth)); // Prioriza curarse cuando el enemigo tiene poca vida
                 break;
 
             case EnemyAction.Dodge:
                 score += 8f; // Prioridad fija por evasion
-                break;
-
-            case EnemyAction.Protect:
-                score += 5f * (1.5f - (currentHealth / maxHealth)); // Prioriza protegerse cuando tiene poca vida
                 break;
 
             case EnemyAction.SpecialAttack:
@@ -288,6 +284,8 @@ public class Enemy : MonoBehaviour
         currentHealth += healAmount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
+        
+        Debug.LogWarning("Vida actual del enemigo: " + currentHealth);
     }
     #endregion
 
@@ -323,6 +321,8 @@ public class Enemy : MonoBehaviour
         currentAmmo += reloadAmount;
         if (currentAmmo > maxAmmo)
             currentAmmo = maxAmmo;
+        
+        Debug.LogWarning("Munición actual del enemigo: " + currentAmmo);
     }
     #endregion
 }

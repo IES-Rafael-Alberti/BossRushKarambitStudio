@@ -262,6 +262,8 @@ MonoBehaviour:
   baseDatosCartas: {fileID: 11400000, guid: 37002b20f8dc9cf4abe8085c556cbdf6, type: 2}
   cameraScript: {fileID: 859285986}
   cardLocation: {fileID: 823944171}
+  moveDuration: 0.75
+  rotateDuration: 0.9
 --- !u!4 &301086369
 Transform:
   m_ObjectHideFlags: 0
@@ -1780,6 +1782,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 624204041}
     m_Modifications:
+    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
+      propertyPath: maxHealth
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5976868946371282611, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -108.68646

@@ -24,7 +24,6 @@ public class TurnController : MonoBehaviour
 
     // Privadas
     private bool isBattleActive = false;
-    private float moveDistanceX = 1.5f;
     private Player player;
 
     // Publicas
@@ -188,12 +187,18 @@ public class TurnController : MonoBehaviour
     private IEnumerator DrawCard()
     {
         float ajustePosicionZ = -0.1f; // Ajuste para que se vean las cartas por encima de la baraja al robarlas
+        float moveDistanceX = 1.5f;
+
+        // Reiniciar los pesos al inicio del turno
+        List<float> cardWeights = ResetCardWeights();
 
         if (isBattleActive)
         {
             for (int i = 0; i < drawCardAmount; i++)
             {
-                int random = Random.Range(0, playerDeck.Count);
+                // Seleccionar una carta basada en pesos
+                int random = GetWeightedRandomIndex(cardWeights);
+
                 GameObject go = Instantiate(prefabCard, cardLocation);
                 go.transform.position = new Vector3(cardLocation.transform.position.x, cardLocation.transform.position.y, cardLocation.transform.position.z + ajustePosicionZ);
 
@@ -214,9 +219,42 @@ public class TurnController : MonoBehaviour
                 if (carta.actionType == ActionType.SpecialAttack)
                     carta.specialAttackType = cartaData.specialAttackType;
 
+                // Reducir peso de la carta seleccionada
+                cardWeights[random] *= 0.5f; // Reducir su probabilidad de aparecer de nuevo
+
                 yield return new WaitForSeconds(0.25f);
             }
         }
+    }
+
+    // Metodo para seleccionar un indice basado en pesos
+    private int GetWeightedRandomIndex(List<float> weights)
+    {
+        float totalWeight = weights.Sum(); // Suma de todos los pesos
+        float randomValue = Random.Range(0, totalWeight); // Generar un numero aleatorio en el rango de los pesos totales
+
+        float cumulativeWeight = 0f;
+        for (int i = 0; i < weights.Count; i++)
+        {
+            cumulativeWeight += weights[i];
+            if (randomValue < cumulativeWeight)
+            {
+                return i; // Devolver el indice seleccionado
+            }
+        }
+
+        return weights.Count - 1; // Devolver el ultimo indice como respaldo
+    }
+
+    // Metodo para reiniciar los pesos al inicio de cada turno
+    private List<float> ResetCardWeights()
+    {
+        List<float> weights = new(new float[playerDeck.Count]);
+        for (int i = 0; i < weights.Count; i++)
+        {
+            weights[i] = 1f; // Reiniciar todos los pesos al valor inicial
+        }
+        return weights;
     }
 
     private void DestroyCards()

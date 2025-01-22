@@ -1,0 +1,43 @@
+name: Build and Deploy Unity Project to Itch.io
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Configurar Unity
+      - name: Set up Unity
+        uses: game-ci/unity-setup@v2
+        with:
+          unityVersion: 2022.3.35f1  
+
+      # 3. Construye el proyecto en Unity
+      - name: Los Giros
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |
+          mkdir -p Builds/WebGL
+          unity-editor -quit -batchmode -buildTarget WebGL -projectPath . -executeMethod BuildCommand.BuildWebGL
+
+      # 4. Instalar Butler
+      - name: Install Butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/latest/archive/default
+          unzip butler.zip -d ~/bin
+          chmod +x ~/bin/butler
+          echo "::add-path::~/bin"
+
+      # 5. Subir el build a Itch.io
+      - name: Deploy to Itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: butler push ./Builds/WebGL KarambitStudios/los-giros:web

@@ -695,8 +695,8 @@ MonoBehaviour:
     curacion: 0
     proteccion: 0
     esEsquiva: 0
-  txtCantidadCartasBaraja: {fileID: 1830567612}
   txtContador: {fileID: 1734825868}
+  txtPlayerHealth: {fileID: 0}
   prefabCarta: {fileID: 8408931947712722435, guid: f5bd44659cf03a64f9f2ef0a21509307, type: 3}
   prefabsEnemigos: []
   baseDatosCartas: {fileID: 11400000, guid: 37002b20f8dc9cf4abe8085c556cbdf6, type: 2}
@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2de8f9fc7ff2de4aabca92489020f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cartaInfo: {fileID: 0}
+  myCamera: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

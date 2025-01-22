@@ -1,23 +1,13 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, ISelectHandler, IDeselectHandler
+public class SeleccionCarta : MonoBehaviour, IEventSystemHandler
 {
-
-    EventSystem system;
-    GameObject lastSelectedGameObject;
-    GameObject currentSelectedGameObject_Recent;
-
-    //public GameObject cartaSeleccionada;
-
-    //string tagName = "TagCarta";
-
-    //public Carta cartaInfo;
-
     private AudioSource audioSource;
-
+    public Camera myCamera;
     // Animacion cursor por encima
     private readonly float moveTime = 0.1f;
     [Range(0f, 2f)] private readonly float scaleAmount = 1.15f;
@@ -25,157 +15,68 @@ public class SeleccionCarta : MonoBehaviour, IEventSystemHandler, IPointerEnterH
 
     void Start()
     {
-        system = EventSystem.current;
-
+        myCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         startScale = transform.localScale;
         audioSource = GetComponent<AudioSource>();
     }
 
-    void Update()
+    private void Update()
     {
-            GetLastGameObjectSelected();
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        // El puntero entra en el objeto
-        Debug.Log("Mirando carta.");
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        // El puntero sale del objeto
-        Debug.Log("No mirando carta");
-
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        //El puntero cliquea sobre el objeto
-
-        //Raycast Hit funciona perfecto!
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-
-        if (Physics.Raycast(ray, out hit))
+        SelectCard();
+        Ray ray = myCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Card")))
         {
-            Carta cartaHit = hit.collider.GetComponent<Carta>();
-            if (cartaHit != null)
+            // Comprueba si el collider golpeado pertenece a este objeto
+            if (hit.collider.gameObject == gameObject)
             {
-                Debug.Log(cartaHit.id + " es Seleccionada");
-
-                if (cartaHit.id == 0)
-                {
-                    Debug.Log("Disparo.");
-                }
-
-                else if (cartaHit.id == 1)
-                {
-                    Debug.Log("Cura.");
-                }
-
-                else if (cartaHit.id == 2)
-                {
-                    Debug.Log("Esquiva.");
-                }
-
-                else
-                {
-                    Debug.Log("Carta desconocida");
-                }
+                StartCoroutine(AnimCard(true));
             }
-
-
         }
-
-
-
-        /*cartaSeleccionada = GameObject.FindGameObjectWithTag(tagName);
-
-        cartaInfo = cartaSeleccionada.GetComponent<Carta>();
-
-        Debug.Log(cartaInfo.id + " es seleccionado.");
-
-        if (cartaInfo.id == 0) 
-        {
-            Debug.Log("Disparo.");
-        }
-
-        else if (cartaInfo.id == 1) 
-        {
-            Debug.Log("Cura.");
-        }
-
-        else if (cartaInfo.id == 2)
-        {
-            Debug.Log("Esquiva.");
-        }
-
         else
         {
-            Debug.Log("Carta desconocida");
-        }*/
-
-        //Debug.Log(lastSelectedGameObject.name)
-
-        //Reconocer el prefab y su script particular
-
+            if(!GetComponent<Carta>().isSelected)
+                StartCoroutine(AnimCard(false));
+        }
     }
 
-    /*public void ClickSeleccion()
+    private void SelectCard()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            
+            // Genera un rayo desde la camara hacia la posicion del mouse en el mundo 3D
+            Ray ray = myCamera.ScreenPointToRay(Input.mousePosition);
+            // Lanza el rayo
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Card")))
+            {
+                // Comprueba si el collider golpeado pertenece a este objeto
+                if (hit.collider.gameObject == gameObject)
+                {
+                    Debug.Log(hit.collider.gameObject.GetComponent<Carta>().id + " es Seleccionada");
+
+                    // Encuentra todas las cartas en la mano y resetea su seleccion
+                    List<Carta> cardsInHand = FindObjectsOfType<Carta>().ToList();
+                    foreach (Carta carta in cardsInHand)
+                    {
+                        carta.isSelected = false;
+                    }
+
+                    // Marca la carta golpeada como seleccionada
+                    hit.collider.gameObject.GetComponent<Carta>().isSelected = true;
+                    EventSystem.current.SetSelectedGameObject(gameObject);
+                }
+            }
         }
-    }*/
-
-    private void GetLastGameObjectSelected()
-    {
-        //Intento de registrar
-
-        if (system.currentSelectedGameObject != currentSelectedGameObject_Recent)
-        {
-            lastSelectedGameObject = currentSelectedGameObject_Recent;
-
-            currentSelectedGameObject_Recent = system.currentSelectedGameObject;
-        }
     }
 
-    public void OnSelect(BaseEventData eventData)
+    private IEnumerator AnimCard(bool startingAnim)
     {
-       //Animación al seleccionar la carta
-        StartCoroutine(AnimarCarta(true));
-        Debug.Log("En Seleccion.");
-        
-    }
-
-    public void OnDeselect(BaseEventData eventData)
-    {
-        //Animación al deseleccionar la carta
-        StartCoroutine(AnimarCarta(false));
-        Debug.Log("En Deseleccion.");
-        
-    }
-
-    private IEnumerator AnimarCarta(bool startingAnim)
-    {
-        Vector3 endScale;
+        Vector3 endScale = startingAnim ? startScale * scaleAmount : startScale;
         float elapsedTime = 0f;
+
         while (elapsedTime < moveTime)
         {
             elapsedTime += Time.time;
-            if (startingAnim)
-                endScale = startScale * scaleAmount;
-            else
-                endScale = startScale;
-
-            // Calculate the lerped amounts
-            Vector3 lerpedScale = Vector3.Lerp(transform.localScale, endScale, elapsedTime / moveTime);
-
-            transform.localScale = lerpedScale;
+            transform.localScale = Vector3.Lerp(transform.localScale, endScale, elapsedTime / moveTime);
             yield return null;
         }
     }

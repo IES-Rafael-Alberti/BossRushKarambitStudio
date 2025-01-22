@@ -1,11 +1,13 @@
+using System;
 using Cinemachine;
 using UnityEngine;
 
 public class CinemachinePOVExtension : CinemachineExtension
 {
+    public event Action OnRotationComplete, OnTurnComplete; // Evento que se dispara al completar la rotacion
     private Vector3 currentRotation; // Almacena la rotacion actual
-    [SerializeField] private float rotationSpeed = 5f; // Velocidad de rotacion para el giro suave
-    private bool isRotating = false; // Bandera para saber si esta girando
+    [SerializeField] private float rotationSpeed = 5f; // Velocidad de rotacion para el giro
+    private bool isRotating = false, needAtack = true; // Bandera para saber si esta girando
     private float targetYRotation; // Angulo objetivo de rotacion en el eje Y
 
     protected override void Awake()
@@ -22,11 +24,21 @@ public class CinemachinePOVExtension : CinemachineExtension
                 // Interpola suavemente hacia el angulo objetivo
                 currentRotation.y = Mathf.Lerp(currentRotation.y, targetYRotation, rotationSpeed * deltaTime);
 
-                // Si la rotacion está suficientemente cerca del objetivo, deten el giro
+                // Si la rotacion esta suficientemente cerca del objetivo, deten el giro
                 if (Mathf.Abs(currentRotation.y - targetYRotation) < 0.1f)
                 {
                     currentRotation.y = targetYRotation;
                     isRotating = false;
+                    if (needAtack)
+                    {
+                        needAtack = !needAtack;
+                        OnRotationComplete?.Invoke(); // Notificar que la rotacion ha terminado
+                    }
+                    else
+                    {
+                        needAtack = !needAtack;
+                        OnTurnComplete?.Invoke();
+                    }
                 }
             }
 

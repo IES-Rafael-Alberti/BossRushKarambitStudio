@@ -18,22 +18,78 @@ MonoBehaviour:
     "da\xF1o": 1
     proteccion: 0
     esEsquiva: 0
-    spriteCarta: {fileID: 21300000, guid: da7b4b2df24b23543854f38b6bc46e84, type: 3}
+    spriteCarta: {fileID: 21300000, guid: a41ead8ba58989f43954740e38b8f6e7, type: 3}
     infoES: Dispara
     infoEN: Shoot
+    actionType: 0
+    specialAttackType: 0
   - id: 1
     curacion: 1
     "da\xF1o": 0
     proteccion: 0
     esEsquiva: 0
-    spriteCarta: {fileID: 21300000, guid: da7b4b2df24b23543854f38b6bc46e84, type: 3}
+    spriteCarta: {fileID: 21300000, guid: 0c64e8a976b4848428812184ce57a8ac, type: 3}
     infoES: Curacion
     infoEN: Heal
+    actionType: 1
+    specialAttackType: 0
   - id: 2
     curacion: 0
     "da\xF1o": 0
     proteccion: 0
     esEsquiva: 1
-    spriteCarta: {fileID: 21300000, guid: da7b4b2df24b23543854f38b6bc46e84, type: 3}
+    spriteCarta: {fileID: 21300000, guid: 55e8c02a772afb649af7dc6a5ba9bd80, type: 3}
     infoES: Esquiva
     infoEN: Dodge
+    actionType: 2
+    specialAttackType: 0
+  - id: 5
+    curacion: 0
+    "da\xF1o": 1
+    proteccion: 0
+    esEsquiva: 0
+    spriteCarta: {fileID: 21300000, guid: 3d25bf5ef3b395e4cb617b326b803ed8, type: 3}
+    infoES: Recargar
+    infoEN: Reload
+    actionType: 3
+    specialAttackType: 0
+  - id: 3
+    curacion: 0
+    "da\xF1o": 0
+    proteccion: 0
+    esEsquiva: 0
+    spriteCarta: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+    infoES: Recarga
+    infoEN: Reload
+    actionType: 3
+    specialAttackType: 2
+  - id: 4
+    curacion: 0
+    "da\xF1o": 1
+    proteccion: 0
+    esEsquiva: 0
+    spriteCarta: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+    infoES: SA DShot
+    infoEN: SA DShot
+    actionType: 4
+    specialAttackType: 0
+  - id: 5
+    curacion: 0
+    "da\xF1o": 1
+    proteccion: 0
+    esEsquiva: 0
+    spriteCarta: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+    infoES: SA RShot
+    infoEN: SA RShot
+    actionType: 4
+    specialAttackType: 1
+  - id: 6
+    curacion: 0
+    "da\xF1o": 1
+    proteccion: 0
+    esEsquiva: 0
+    spriteCarta: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+    infoES: SA DYShot
+    infoEN: SA DYShot
+    actionType: 4
+    specialAttackType: 2

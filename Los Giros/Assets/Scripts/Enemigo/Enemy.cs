@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
-    public EnemySpecialAttack specialAttack;
-    public int healAmount, damage, maxHealth, maxAmmo, reloadAmount;
+    [SerializeField] private List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
+    [SerializeField] private EnemySpecialAttack specialAttack;
+    [SerializeField] private int healAmount, damage, maxHealth, maxAmmo, reloadAmount;
     [Range(0f, 1f)] public float accuracy;
-    public AudioClip audioClipDamaged;
+    [SerializeField] private AudioClip audioClipDamaged;
     private Player player;
     private EnemyAction actionChosen;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
-    private int currentHealth, currentAmmo;
+    [HideInInspector] public int currentHealth, currentAmmo;
+    private TurnController turnController;
 
     private void Start()
     {
+        turnController = FindObjectOfType<TurnController>();
         player = FindObjectOfType<Player>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
@@ -33,10 +35,7 @@ public class Enemy : MonoBehaviour
     {
         // Verificar que haya suficientes acciones permitidas
         if (allowedActions.Count < 3)
-        {
-            // Debug.LogWarning("No hay suficientes acciones permitidas para elegir 3.");
             return;
-        }
 
         // Crear una lista temporal para las 3 opciones seleccionadas
         List<EnemyAction> selectedActions = new();
@@ -45,9 +44,7 @@ public class Enemy : MonoBehaviour
         {
             int randomIndex = Random.Range(0, allowedActions.Count);
             if (!selectedActions.Contains(allowedActions[randomIndex]))
-            {
                 selectedActions.Add(allowedActions[randomIndex]);
-            }
         }
 
         // Evaluar cada accion segun una formula personalizada
@@ -66,8 +63,6 @@ public class Enemy : MonoBehaviour
 
         // Asignar la mejor accion
         actionChosen = bestAction;
-
-        // Debug.Log($"Accion elegida: {actionChosen}");
     }
 
     // Metodo para evaluar la puntuacion de una accion
@@ -89,14 +84,14 @@ public class Enemy : MonoBehaviour
                 if (currentAmmo >= maxAmmo)
                     score = 0; // No puede recargar si ya tiene municion completa
                 else
-                    score += 10f * (1f - (currentAmmo / maxAmmo)); // Prioriza recargar si el cargador tiene pocas balas
+                    score += 10f * (1.5f - (currentAmmo / maxAmmo)); // Prioriza recargar si el cargador tiene pocas balas
                 break;
 
             case EnemyAction.Heal:
                 if (currentHealth >= maxHealth)
                     score = 0; // No puede curarse si ya tiene salud completa
                 else
-                    score += 10f * (1f - (currentHealth / maxHealth)); // Prioriza curarse cuando el enemigo tiene poca vida
+                    score += 10f * (1.5f - (currentHealth / maxHealth)); // Prioriza curarse cuando el enemigo tiene poca vida
                 break;
 
             case EnemyAction.Dodge:
@@ -104,7 +99,7 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyAction.Protect:
-                score += 5f * (1f - (currentHealth / maxHealth)); // Prioriza protegerse cuando tiene poca vida
+                score += 5f * (1.5f - (currentHealth / maxHealth)); // Prioriza protegerse cuando tiene poca vida
                 break;
 
             case EnemyAction.SpecialAttack:
@@ -136,7 +131,6 @@ public class Enemy : MonoBehaviour
                 SpecialAttack();
                 break;
             default:
-                // Debug.LogWarning($"{name} intento ejecutar una accion no permitida: {actionChosen}");
                 break;
         }
     }
@@ -151,12 +145,11 @@ public class Enemy : MonoBehaviour
         {
             // Si acierta, realiza el ataque
             StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
-            // Debug.Log("¡Ataque exitoso! El jugador recibio daño.");
         }
         else
         {
             // Si falla, muestra un mensaje de fallo
-            // StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo falló.")));
         }
 
         // Reducir la municion independientemente de si acierta o falla
@@ -177,7 +170,6 @@ public class Enemy : MonoBehaviour
                 Dynamite();
                 break;
             default:
-                // Debug.LogWarning($"{name} intento ejecutar una accion no permitida: {specialAttack}");
                 break;
         }
     }
@@ -193,12 +185,11 @@ public class Enemy : MonoBehaviour
             {
                 // Si acierta, realiza el ataque
                 StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
-                // Debug.Log("¡Doble Ataque exitoso! El jugador recibio daño.");
             }
             else
             {
                 // Si falla, muestra un mensaje de fallo
-                StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
             }
 
             // Reducir la municion independientemente de si acierta o falla
@@ -313,6 +304,7 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
+        turnController.DetectOutcome(); // Detectar el resultado del duelo
         // Hacerlo IEnumerator, meterle animacion, desactivar collider y destruir
         Destroy(gameObject);
     }

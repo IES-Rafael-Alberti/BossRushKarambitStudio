@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CinemachinePOVExtension : CinemachineExtension
 {
-    public event Action OnRotationComplete, onTurnComplete; // Evento que se dispara al completar la rotacion
+    public event Action OnRotationComplete, OnTurnComplete; // Evento que se dispara al completar la rotacion
     private Vector3 currentRotation; // Almacena la rotacion actual
     [SerializeField] private float rotationSpeed = 5f; // Velocidad de rotacion para el giro
     private bool isRotating = false, needAtack = true; // Bandera para saber si esta girando
@@ -32,14 +32,12 @@ public class CinemachinePOVExtension : CinemachineExtension
                     if (needAtack)
                     {
                         needAtack = !needAtack;
-                        Debug.Log("Necesita atacar: " + needAtack);
                         OnRotationComplete?.Invoke(); // Notificar que la rotacion ha terminado
                     }
                     else
                     {
                         needAtack = !needAtack;
-                        Debug.Log("No necesita atacar: " + needAtack);
-                        onTurnComplete?.Invoke();
+                        OnTurnComplete?.Invoke();
                     }
                 }
             }

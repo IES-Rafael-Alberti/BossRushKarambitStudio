@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5976868946371282611}
   - component: {fileID: 4372903362230927476}
   - component: {fileID: 3785252439302979764}
+  - component: {fileID: 3032530032934653464}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8043513078498755837}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -98,17 +99,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowedActions: 00000000030000000100000005000000
-  healAmount: 2
+  specialAttack: 0
+  healAmount: 1
   damage: 2
-  maxHealth: 10
+  maxHealth: 1
   maxAmmo: 6
   reloadAmount: 1
   accuracy: 0.75
   audioClipDamaged: {fileID: 0}
-  player: {fileID: 0}
-  actionChosen: 0
-  spriteRenderer: {fileID: 0}
-  audioSource: {fileID: 0}
   currentHealth: 0
   currentAmmo: 0
-  currentPlayerHealth: 0
+--- !u!114 &3032530032934653464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8043513078498755837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 447e19a5c2843ae42a3124d450546e4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  flickerMaterial: {fileID: 2100000, guid: 74a6b6a389061e24c9c9a76b842ccdee, type: 2}

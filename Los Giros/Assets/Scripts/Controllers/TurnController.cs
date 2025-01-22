@@ -53,8 +53,8 @@ public class TurnController : MonoBehaviour
         cameraScript.OnRotationComplete += DoPlayerAction; // Suscribirse al evento
         cameraScript.OnRotationComplete += DoEnemyAction;
         cameraScript.OnTurnComplete += InitTurn;
-        btnContinue.onClick.AddListener(NextEnemy);
-        btnRetry.onClick.AddListener(Retry);
+        // btnContinue.onClick.AddListener(NextEnemy); DESCOMENTAR EN EL MOMENTO NECESARIO
+        // btnRetry.onClick.AddListener(Retry);
 
         foreach (var action in basicsPlayerActions)
         {

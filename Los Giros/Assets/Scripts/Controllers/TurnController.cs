@@ -20,9 +20,11 @@ public class TurnController : MonoBehaviour
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
     [SerializeField] private Transform cardLocation;
+    [SerializeField] float moveDuration = 0.75f, rotateDuration = 0.9f;
 
     // Privadas
     private bool isBattleActive = false;
+    private float moveDistanceX = 1.5f;
     private Player player;
 
     // Publicas
@@ -185,7 +187,7 @@ public class TurnController : MonoBehaviour
 
     private IEnumerator DrawCard()
     {
-        float ajustePosicionX = -1f, ajustePosicionY = 0.6f, ajustePosicionZ = -0.1f;
+        float ajustePosicionZ = -0.1f; // Ajuste para que se vean las cartas por encima de la baraja al robarlas
 
         if (isBattleActive)
         {
@@ -193,14 +195,17 @@ public class TurnController : MonoBehaviour
             {
                 int random = Random.Range(0, playerDeck.Count);
                 GameObject go = Instantiate(prefabCard, cardLocation);
-                go.transform.position = new Vector3(cardLocation.transform.position.x + ajustePosicionX, cardLocation.transform.position.y + ajustePosicionY, cardLocation.transform.position.z + ajustePosicionZ);
-                ajustePosicionX += 1f;
+                go.transform.position = new Vector3(cardLocation.transform.position.x, cardLocation.transform.position.y, cardLocation.transform.position.z + ajustePosicionZ);
 
                 // Configurar propiedades de la carta
                 var cartaData = baseDatosCartas.baseDatos[random];
-                var carta = go.GetComponent<Carta>();
+                Carta carta = go.GetComponent<Carta>();
                 carta.id = cartaData.id;
                 carta.GetComponent<SpriteRenderer>().sprite = cartaData.spriteCarta;
+                carta.moveDistanceX = moveDistanceX;
+                moveDistanceX += 1.3f;
+                carta.moveDuration = moveDuration;
+                carta.rotateDuration = rotateDuration;
                 carta.damage = cartaData.daño;
                 carta.healAmount = cartaData.curacion;
                 carta.isDodge = cartaData.esEsquiva;
@@ -209,7 +214,7 @@ public class TurnController : MonoBehaviour
                 if (carta.actionType == ActionType.SpecialAttack)
                     carta.specialAttackType = cartaData.specialAttackType;
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.25f);
             }
         }
     }

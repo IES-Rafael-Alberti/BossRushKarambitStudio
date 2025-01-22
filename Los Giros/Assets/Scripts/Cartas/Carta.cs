@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Carta : MonoBehaviour
 {
-    public int id, damage, healAmount;
-    public bool isPlayable = false;
+    [HideInInspector] public int id, damage, healAmount;
+    [HideInInspector] public float moveDistanceX, moveDuration, rotateDuration;
+    // public bool isPlayable = false;
     [SerializeField] private TMP_Text txtNombre;
     [HideInInspector] public string nombreCarta;
     public ActionType actionType;
@@ -16,6 +17,7 @@ public class Carta : MonoBehaviour
     private void Start()
     {
         txtNombre.text = nombreCarta;
+        StartCoroutine(AnimPlacement(moveDistanceX, moveDuration, rotateDuration));
     }
 
     public void DoAction()
@@ -66,7 +68,7 @@ public class Carta : MonoBehaviour
             else
             {
                 // Si falla, muestra un mensaje de fallo
-                StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador falló.")));
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador fallo.")));
             }
 
             // Reducir la municion independientemente de si acierta o falla
@@ -74,7 +76,7 @@ public class Carta : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("El jugador intentó disparar sin munición");
+            Debug.LogWarning("El jugador intento disparar sin municion");
         }
     }
 
@@ -167,7 +169,7 @@ public class Carta : MonoBehaviour
             else
             {
                 // Si falla, muestra un mensaje de fallo
-                StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador falló.")));
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador fallo.")));
             }
 
             // Reducir la municion independientemente de si acierta o falla
@@ -219,6 +221,44 @@ public class Carta : MonoBehaviour
 
         // Reducir la municion independientemente de si acierta o falla
         player.currentAmmo -= 1;
+    }
+
+    private IEnumerator AnimPlacement(float moveDistanceX, float moveDuration, float rotateDuration)
+    {
+        // Animar el movimiento en el eje X
+        Vector3 startPosition = transform.localPosition;
+        Vector3 endPosition = startPosition + new Vector3(moveDistanceX, 0, 0); // Mover en el eje X
+        float elapsedTime = 0;
+
+        while (elapsedTime < moveDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / moveDuration);
+            transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
+            yield return null;
+        }
+
+        // Asegurarse de que la posicion final sea exacta
+        transform.localPosition = endPosition;
+
+        // Esperar un fotograma antes de iniciar la rotacion
+        yield return null;
+
+        // Animar la rotacion en el eje Y
+        Quaternion startRotation = transform.rotation;
+        Quaternion endRotation = Quaternion.Euler(0, 0, 0);
+        elapsedTime = 0;
+
+        while (elapsedTime < rotateDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / rotateDuration);
+            transform.rotation = Quaternion.Lerp(startRotation, endRotation, t);
+            yield return null;
+        }
+
+        // Asegurarse de que la rotacion final sea exacta
+        transform.rotation = endRotation;
     }
 }
 

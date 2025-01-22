@@ -1,0 +1,38 @@
+name: Build and Deploy to Itch.io
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Unity
+        uses: game-ci/unity-setup@v2
+        with:
+          unityVersion: 2022.3.35f1
+
+      - name: Build Unity Project
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |
+          mkdir -p Builds/WebGL
+          unity-editor -quit -batchmode -buildTarget WebGL -projectPath . -executeMethod BuildCommand.BuildWebGL
+
+      - name: Install Butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/latest/archive/default
+          unzip butler.zip -d ~/bin
+          chmod +x ~/bin/butler
+          echo "::add-path::~/bin"
+
+      - name: Push to Itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: butler push ./Builds/WebGL karambitstudio/los-giros:web

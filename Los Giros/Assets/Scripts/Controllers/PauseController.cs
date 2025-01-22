@@ -8,6 +8,11 @@ public class PauseController : MonoBehaviour
 
     [SerializeField] GameObject pauseMenuCanvas;
 
+    void Update()
+    {
+        PauseButton();
+    }
+
     public void PauseButton()
     {
         if (Input.GetKeyDown(KeyCode.P))

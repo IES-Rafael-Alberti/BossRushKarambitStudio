@@ -10,23 +10,6 @@ public class SceneController: MonoBehaviour
     [SerializeField] GameObject mainMenuCanvas;
     public GameObject SceneTransition;
 
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
-        else
-        {
-            Destroy(gameObject);
-        }
-
-
-    }
-
     public void StartGame()
     {
         StartCoroutine(LoadLevel());

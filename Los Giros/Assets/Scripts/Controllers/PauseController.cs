@@ -8,6 +8,11 @@ public class PauseController : MonoBehaviour
     [SerializeField] GameObject pauseMenuCanvas;
     [SerializeField] GameObject mainMenuCanvas;
 
+    void Awake()
+    {
+        pauseMenuCanvas.SetActive(false);
+    }
+
     void Update()
     {
         PauseButton();
@@ -39,6 +44,7 @@ public class PauseController : MonoBehaviour
     public void Return()
     {
         Resume();
+        pauseMenuCanvas.SetActive(false);
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex - 1);
         mainMenuCanvas.SetActive(true);
     }

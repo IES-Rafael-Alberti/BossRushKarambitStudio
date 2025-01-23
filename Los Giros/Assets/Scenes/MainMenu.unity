@@ -995,13 +995,14 @@ GameObject:
   - component: {fileID: 260532325}
   - component: {fileID: 260532324}
   - component: {fileID: 260532328}
+  - component: {fileID: 260532329}
   m_Layer: 5
   m_Name: PauseMenuCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &260532324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1080,7 +1081,7 @@ RectTransform:
   - {fileID: 1452824059}
   - {fileID: 1684101753}
   - {fileID: 2044031280}
-  m_Father: {fileID: 1668463411}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1102,6 +1103,18 @@ MonoBehaviour:
   myMixer: {fileID: 24100000, guid: df1b893eda2fb3a48a1bc868af783c7c, type: 2}
   musicSlider: {fileID: 1059212480}
   SFXSlider: {fileID: 448839195}
+--- !u!114 &260532329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260532323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d627c23000b8509459c0f89c28b9a3f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &269706091
 GameObject:
   m_ObjectHideFlags: 0
@@ -3611,6 +3624,7 @@ GameObject:
   - component: {fileID: 856929366}
   - component: {fileID: 856929365}
   - component: {fileID: 856929370}
+  - component: {fileID: 856929371}
   m_Layer: 5
   m_Name: MainMenuCanvas
   m_TagString: Untagged
@@ -3696,7 +3710,7 @@ RectTransform:
   - {fileID: 1653613317}
   - {fileID: 996835614}
   - {fileID: 1958198579}
-  m_Father: {fileID: 1668463411}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3718,6 +3732,18 @@ MonoBehaviour:
   myMixer: {fileID: 24100000, guid: df1b893eda2fb3a48a1bc868af783c7c, type: 2}
   musicSlider: {fileID: 491844971}
   SFXSlider: {fileID: 3359248}
+--- !u!114 &856929371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856929364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47de992624f83534fb94813dd11e4aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &884602945
 GameObject:
   m_ObjectHideFlags: 0
@@ -4494,6 +4520,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1452824056}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1141896631
 MonoBehaviour:
@@ -6082,6 +6120,7 @@ GameObject:
   - component: {fileID: 1668463411}
   - component: {fileID: 1668463412}
   - component: {fileID: 1668463413}
+  - component: {fileID: 1668463414}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -6102,8 +6141,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 856929368}
-  - {fileID: 260532327}
   - {fileID: 577457108}
   - {fileID: 1625339052}
   m_Father: {fileID: 0}
@@ -6137,6 +6174,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenuCanvas: {fileID: 260532323}
   mainMenuCanvas: {fileID: 856929364}
+--- !u!114 &1668463414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668463410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d248d2e0644c03947a3d7fae696855f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1677751962
 GameObject:
   m_ObjectHideFlags: 0
@@ -8067,4 +8116,6 @@ SceneRoots:
   - {fileID: 1688716733}
   - {fileID: 1550497658}
   - {fileID: 1668463411}
+  - {fileID: 856929368}
+  - {fileID: 260532327}
   - {fileID: 2000021695}

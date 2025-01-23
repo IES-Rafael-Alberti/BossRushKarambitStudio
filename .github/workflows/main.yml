@@ -18,6 +18,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - uses: actions/cache@v3
+        with:
+          path: Los Giros/Library
+          key: Library-MyProjectName-TargetPlatform
+          restore-keys: |
+            Library-MyProjectName-
+            Library-
+
       # Configura Unity Builder y construye el proyecto
       - name: Build WebGL
         uses: game-ci/unity-builder@v4.3.0
@@ -35,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: build-WebGL
-          path: Los Giros/build/WebGL
+          path: build/WebGL
 
   deployToItch:
     needs: buildWebGL

@@ -18,23 +18,6 @@ jobs:
      - name: Checkout code
        uses: actions/checkout@v3
 
-     - name: Create LFS file list
-       run: git lfs ls-files -l | cut -d' ' -f1 | sort > Los Giros/.lfs-assets-id
-
-     - name: Restore LFS cache
-       uses: actions/cache@v3
-       id: lfs-cache
-       with:
-         path: Los Giros/.git/lfs
-         key: ${{ runner.os }}-lfs-${{ hashFiles('Los Giros/.lfs-assets-id') }}
-
-     - name: Git LFS Pull
-       run: |
-         cd Los\ Giros
-         git lfs pull
-         git add .
-         git reset --hard
-
      - name: Restore Library cache
        uses: actions/cache@v3
        with:

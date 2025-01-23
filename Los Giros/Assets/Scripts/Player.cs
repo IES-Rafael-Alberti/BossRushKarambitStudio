@@ -3,8 +3,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public int maxHealth, maxAmmo;
-    [Range(0f, 1f)] public float accuracy;
+    [Range(0f, 1f)] public float accuracy, enemyDodgeProbability, rifleAccuracy;
     [HideInInspector] public int currentHealth, currentAmmo;
+    [HideInInspector] public bool isDodging;
     private TurnController turnController;
 
     void Start()

@@ -156,24 +156,23 @@ public class Carta : MonoBehaviour
     {
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
+
         for (int i = 0; i < 2; i++)
         {
             // Generar un valor aleatorio para determinar si el disparo acierta
             float hitChance = Random.Range(0f, 1f);
 
-            if (hitChance <= player.accuracy)
+            if (hitChance <= player.accuracy) // Si acierta, realiza el ataque
             {
-                // Si acierta, realiza el ataque
-                StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
+                if (player.isDodging && hitChance <= player.accuracy - player.enemyDodgeProbability) // Si esta esquivando el enemigo, pero la precision esta dentro del rango, le da la bala
+                    StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
+                else if (player.isDodging && hitChance > player.accuracy - player.enemyDodgeProbability) // Si esta esquivando el enemigo, pero no esta a rango de precision, no le da
+                    StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador fallo.")));
+                else // No esta el player esquivando y le da
+                    StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
             }
-            else
-            {
-                // Si falla, muestra un mensaje de fallo
+            else // Si falla, muestra un mensaje de fallo
                 StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador fallo.")));
-            }
-
-            // Reducir la municion independientemente de si acierta o falla
-            player.currentAmmo -= 1;
         }
     }
 
@@ -181,46 +180,43 @@ public class Carta : MonoBehaviour
     {
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
+
         // Generar un valor aleatorio para determinar si el disparo acierta
         float hitChance = Random.Range(0f, 1f);
 
-        if (hitChance <= 0.90f)
+        if (hitChance <= player.rifleAccuracy)
         {
-            // Si acierta, realiza el ataque
-            StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
-            Debug.Log("¡Ataque rifle exitoso! El enemigo recibio daño.");
+            if (player.isDodging && hitChance <= player.rifleAccuracy - player.enemyDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la bala
+                StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
+            else if (player.isDodging && hitChance > player.rifleAccuracy - player.enemyDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, no le da
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador fallo.")));
+            else // No esta el player esquivando y le da
+                StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
         }
-        else
-        {
-            // Si falla, muestra un mensaje de fallo
-            StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
-        }
-
-        // Reducir la municion independientemente de si acierta o falla
-        player.currentAmmo -= 1;
+        else // Si falla, muestra un mensaje de fallo
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador fallo.")));
     }
 
     private void Dynamite()
     {
+
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
+
         // Generar un valor aleatorio para determinar si la dinamita acierta
         float hitChance = Random.Range(0f, 1f);
 
         if (hitChance <= player.accuracy)
         {
-            // Si acierta, realiza el ataque
-            StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
-            Debug.Log("¡Ataque dinamita exitoso! El enemigo recibio daño.");
+            if (player.isDodging && hitChance <= player.accuracy - player.enemyDodgeProbability) // Si esta esquivando el enemigo, pero la precision esta dentro del rango, le da la dinamita
+                StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
+            else if (player.isDodging && hitChance > player.accuracy - player.enemyDodgeProbability) // Si esta esquivando el enemigo, pero no esta a rango de precision, la dinamita le hace menos daño
+                StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage / 2)));
+            else // No esta el enemigo esquivando y le da
+                StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
         }
-        else
-        {
-            // Si falla, muestra un mensaje de fallo
-            StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
-        }
-
-        // Reducir la municion independientemente de si acierta o falla
-        player.currentAmmo -= 1;
+        else // Si falla, muestra un mensaje de fallo
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador fallo.")));
     }
 
     private IEnumerator AnimPlacement(float moveDistanceX, float moveDuration, float rotateDuration)
@@ -262,7 +258,6 @@ public class Carta : MonoBehaviour
     }
 }
 
-[System.Serializable]
 public class DatosCarta
 {
     public int id, daño, curacion, proteccion;

@@ -122,18 +122,11 @@ public class TurnController : MonoBehaviour
         bool isEnemyDead = enemy.currentHealth <= 0;
 
         if (isPlayerDead && isEnemyDead)
-        {
-            Debug.Log("¡Empate tecnico! Prioridad: derrota del jugador.");
             DetectLose();
-        }
         else if (isPlayerDead)
-        {
             DetectLose();
-        }
         else if (isEnemyDead)
-        {
             DetectWin();
-        }
     }
 
     #endregion
@@ -176,10 +169,9 @@ public class TurnController : MonoBehaviour
     {
         Enemy enemy = FindObjectOfType<Enemy>();
         enemy.DoAction();
-        yield return new WaitForSeconds(1f);
         DetectOutcome();
+        yield return new WaitForSeconds(1f);
     }
-
     #endregion
 
     #region BATTLE UTILITIES

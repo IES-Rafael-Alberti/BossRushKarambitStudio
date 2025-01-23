@@ -1,76 +1,85 @@
-name: Build, Test and Deploy 💻
+name: GameCI Template 🎮
 
 on:
   push:
     branches:
-      - based
-    paths-ignore:
-      - '.github/README.md'
-      - 'presentation/index.md'
-  pull_request:
-    paths-ignore:
-      - '.github/README.md'
-      - 'presentation/**'
+      - main
 
-jobs:
-  buildForAllSupportedPlatforms:
-    name: Build, Test and Deploy for ${{ matrix.targetPlatform }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false # if one build fails, other platforms will still be built
-      matrix:
-        targetPlatform:
-          - StandaloneWindows64
-          - WebGL
-          - StandaloneOSX
-        
-    steps:
-      # Fetch Files  
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          lfs: true
-      
-      # Cache Unity Library Folder
-      - uses: actions/cache@v2
-        with:
-          path: Library
-          key: Library-${{ matrix.targetPlatform }}
-          restore-keys: Library-
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
-      # Test playmode and editmode
-      - uses: game-ci/unity-test-runner@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          # https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret
-          githubToken: ${{ secrets.GITHUB_TOKEN }} # used to view test results
+jobs:         
+ buildWebGL:
+   name: Build for WebGL 🖥️
+   runs-on: ubuntu-latest
+   strategy:
+     fail-fast: false
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v3
 
-      # Upload Test results as artifacts
-      - uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: Test results
-          path: artifacts
-      
-      # Build Unity Game
-      - uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          targetPlatform: ${{ matrix.targetPlatform }}
-      
-      # Upload Build as Artifacts
-      #- uses: actions/upload-artifact@v2
-      #  with:
-      #    name: Build-${{ matrix.targetPlatform }}
-      #    path: build/${{ matrix.targetPlatform }}
-      
-      # Publish to Itch.IO
-      - uses: manleydev/butler-publish-itchio-action@master
-    env:
-      BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-      CHANNEL: ${{ matrix.targetPlatform }}
-      ITCH_GAME: ${{ secrets.ITCH_GAME }}
-      ITCH_USER: ${{ secrets.ITCH_USER }}
-      PACKAGE: build/${{ matrix.targetPlatform }}
+     - name: Create LFS file list
+       run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+     - name: Restore LFS cache
+       uses: actions/cache@v3
+       id: lfs-cache
+       with:
+         path: .git/lfs
+         key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+     - name: Git LFS Pull
+       run: |
+         git lfs pull
+         git add .
+         git reset --hard
+
+     - name: Restore Library cache
+       uses: actions/cache@v3
+       with:
+         path: Library
+         key: Library-build-WebGL
+         restore-keys: |
+           Library-build-
+           Library-
+
+     - uses: game-ci/unity-builder@v2.1.2
+       with:
+         targetPlatform: WebGL
+
+     - uses: actions/upload-artifact@v3
+       with:
+         name: build-WebGL
+         path: build/WebGL
+         
+ deployPages:
+   needs: buildWebGL
+   name: Deploy to Itch.io 🚀
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v3
+
+     - uses: actions/download-artifact@v2
+       with:
+         name: build-WebGL
+         path: build
+
+     - name: Display structure of root files
+       run: ls -R
+       working-directory: build/WebGL
+
+     - name: Deploy 🚀
+       uses: JamesIves/github-pages-deploy-action@4.1.4
+       with:
+         branch: itch-io
+         folder: build/WebGL
+         
+     - uses: yeslayla/butler-publish-itchio-action@master
+       env:
+         BUTLER_CREDENTIALS: ${{ secrets.ITCH_API_KEY }}
+         CHANNEL: HTML
+         ITCH_GAME: ${{ secrets.ITCH_GAME }}
+         ITCH_USER: ${{ secrets.ITCH_USER }}
+         BRANCH: itch-io
+         PACKAGE: build/WebGL

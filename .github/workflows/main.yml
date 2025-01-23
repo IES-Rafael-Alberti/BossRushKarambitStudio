@@ -40,10 +40,10 @@ jobs:
 
       # Subir el build como artefacto para usar en el deploy
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-WebGL
-          path: build/WebGL
+          path: build
 
   deployToItch:
     needs: buildWebGL
@@ -56,14 +56,14 @@ jobs:
 
       # Descargar los artefactos del paso anterior
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-WebGL
-          path: build/WebGL
+          path: build
 
       # Mostrar los archivos descargados
       - name: Display Build Files
-        run: ls -R build/WebGL
+        run: ls -R build
 
       # Despliega en Itch.io usando Butler
       - name: Deploy to Itch.io
@@ -73,4 +73,4 @@ jobs:
           ITCH_USER: ${{ secrets.ITCH_USER }}
           ITCH_GAME: ${{ secrets.ITCH_GAME }}
           CHANNEL: HTML
-          PACKAGE: build/WebGL
+          PACKAGE: build

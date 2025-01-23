@@ -3038,6 +3038,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1668463413}
+        m_TargetAssemblyTypeName: PauseController, Assembly-CSharp
+        m_MethodName: Resume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &676360992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3684,7 +3696,7 @@ RectTransform:
   - {fileID: 1653613317}
   - {fileID: 996835614}
   - {fileID: 1958198579}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1668463411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6090,9 +6102,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 856929368}
   - {fileID: 260532327}
-  - {fileID: 1625339052}
   - {fileID: 577457108}
+  - {fileID: 1625339052}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1668463412
@@ -6108,6 +6121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionAnim: {fileID: 1625339051}
+  mainMenuCanvas: {fileID: 856929364}
   SceneTransition: {fileID: 1625339050}
 --- !u!114 &1668463413
 MonoBehaviour:
@@ -6122,6 +6136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuCanvas: {fileID: 260532323}
+  mainMenuCanvas: {fileID: 856929364}
 --- !u!1 &1677751962
 GameObject:
   m_ObjectHideFlags: 0
@@ -8050,7 +8065,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1688716733}
-  - {fileID: 856929368}
   - {fileID: 1550497658}
   - {fileID: 1668463411}
   - {fileID: 2000021695}

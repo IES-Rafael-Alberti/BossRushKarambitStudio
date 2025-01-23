@@ -1,4 +1,4 @@
-name: GameCI Template 🎮
+name: GameCI Build and Deploy 🎮
 
 on:
   push:
@@ -8,71 +8,60 @@ on:
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
-jobs:         
- buildWebGL:
-   name: Build for WebGL 🖥️
-   runs-on: ubuntu-20.04
-   strategy:
-     fail-fast: false
-   steps:
-     # Limpia cualquier contenedor o caché de Docker previo
-     - name: Clean Docker
-       run: docker system prune -af
+jobs:
+  buildWebGL:
+    name: Build WebGL 🖥️
+    runs-on: ubuntu-20.04
+    steps:
+      # Limpia Docker (para evitar conflictos con contenedores previos)
+      - name: Clean Docker
+        run: docker system prune -af || true
 
-     # Checkout del código
-     - name: Checkout code
-       uses: actions/checkout@v3
+      # Descarga el código fuente
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-     # Restaurar caché de la carpeta Library
-     - name: Restore Library cache
-       uses: actions/cache@v3
-       with:
-         path: Los Giros/Library
-         key: Library-build-WebGL
-         restore-keys: |
-           Library-build-
-           Library-
+      # Configura Unity Builder y construye el proyecto
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v2
+        with:
+          projectPath: Los Giros
+          targetPlatform: WebGL
+          unityVersion: 2022.3.35f1 # Ajusta según tu versión de Unity
 
-     # Configuración y construcción de Unity
-     - name: Build Unity Project
-       uses: game-ci/unity-builder@v2
-       with:
-         targetPlatform: WebGL
-         projectPath: Los Giros
-         unityVersion: 2022.3.35f1 # Tu versión de Unity
+      # Subir el build como artefacto para usar en el deploy
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-WebGL
+          path: Los Giros/build/WebGL
 
-     # Subir los artefactos creados como resultado del build
-     - uses: actions/upload-artifact@v3
-       with:
-         name: build-WebGL
-         path: Los Giros/build/WebGL
-         
- deployPages:
-   needs: buildWebGL
-   name: Deploy to Itch.io 🚀
-   runs-on: ubuntu-20.04
-   steps:
-     # Checkout del código
-     - name: Checkout code
-       uses: actions/checkout@v3
+  deployToItch:
+    needs: buildWebGL
+    name: Deploy to Itch.io 🚀
+    runs-on: ubuntu-20.04
+    steps:
+      # Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-     # Descargar los artefactos generados en el paso de build
-     - uses: actions/download-artifact@v2
-       with:
-         name: build-WebGL
-         path: build
+      # Descargar los artefactos del paso anterior
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-WebGL
+          path: build/WebGL
 
-     # Mostrar estructura de los archivos generados
-     - name: Display structure of root files
-       run: ls -R
-       working-directory: build/WebGL
+      # Mostrar los archivos descargados
+      - name: Display Build Files
+        run: ls -R build/WebGL
 
-     # Subir a Itch.io
-     - name: Deploy 🚀
-       uses: yeslayla/butler-publish-itchio-action@master
-       env:
-         BUTLER_CREDENTIALS: ${{ secrets.ITCH_API_KEY }}
-         CHANNEL: HTML
-         ITCH_GAME: ${{ secrets.ITCH_GAME }}
-         ITCH_USER: ${{ secrets.ITCH_USER }}
-         PACKAGE: build/WebGL
+      # Despliega en Itch.io usando Butler
+      - name: Deploy to Itch.io
+        uses: yeslayla/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.ITCH_API_KEY }}
+          ITCH_USER: ${{ secrets.ITCH_USER }}
+          ITCH_GAME: ${{ secrets.ITCH_GAME }}
+          CHANNEL: HTML
+          PACKAGE: build/WebGL

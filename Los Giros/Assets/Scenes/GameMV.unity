@@ -1790,6 +1790,18 @@ PrefabInstance:
       propertyPath: maxHealth
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
+      propertyPath: initialAmmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
+      propertyPath: rifleAccuracy
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
+      propertyPath: playerDodgeProbability
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 5976868946371282611, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -108.68646
@@ -1858,6 +1870,18 @@ PrefabInstance:
     - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
       propertyPath: maxHealth
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
+      propertyPath: initialAmmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
+      propertyPath: rifleAccuracy
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
+      propertyPath: enemyDodgeProbability
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8035948497044918344, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
       propertyPath: m_Name

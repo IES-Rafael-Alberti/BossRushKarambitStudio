@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
         currentHealth = maxHealth;
-        currentAmmo = maxAmmo;
+        currentAmmo = initialAmmo;
     }
 
     private void Update()

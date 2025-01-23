@@ -4,6 +4,7 @@ public class Player : MonoBehaviour
 {
     public int maxHealth, maxAmmo;
     [Range(0f, 1f)] public float accuracy, enemyDodgeProbability, rifleAccuracy;
+    [SerializeField] private int initialAmmo;
     [HideInInspector] public int currentHealth, currentAmmo;
     [HideInInspector] public bool isDodging;
     private TurnController turnController;
@@ -12,7 +13,7 @@ public class Player : MonoBehaviour
     {
         turnController = FindObjectOfType<TurnController>();
         currentHealth = maxHealth;
-        currentAmmo = maxAmmo;
+        currentAmmo = initialAmmo;
     }
 
     void Update()

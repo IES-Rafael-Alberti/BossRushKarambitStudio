@@ -23,7 +23,7 @@ jobs:
 
       # Configura Unity Builder y construye el proyecto
       - name: Build WebGL
-        uses: game-ci/unity-builder@v2
+        uses: game-ci/unity-builder@v4.3.0
         with:
           projectPath: Los Giros
           targetPlatform: WebGL

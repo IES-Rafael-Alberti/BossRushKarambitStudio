@@ -11,13 +11,19 @@ env:
 jobs:         
  buildWebGL:
    name: Build for WebGL 🖥️
-   runs-on: ubuntu-latest
+   runs-on: ubuntu-20.04
    strategy:
      fail-fast: false
    steps:
+     # Limpia cualquier contenedor o caché de Docker previo
+     - name: Clean Docker
+       run: docker system prune -af
+
+     # Checkout del código
      - name: Checkout code
        uses: actions/checkout@v3
 
+     # Restaurar caché de la carpeta Library
      - name: Restore Library cache
        uses: actions/cache@v3
        with:
@@ -27,11 +33,15 @@ jobs:
            Library-build-
            Library-
 
-     - uses: game-ci/unity-builder@v2.1.2
+     # Configuración y construcción de Unity
+     - name: Build Unity Project
+       uses: game-ci/unity-builder@v2
        with:
          targetPlatform: WebGL
          projectPath: Los Giros
+         unityVersion: 2022.3.35f1 # Tu versión de Unity
 
+     # Subir los artefactos creados como resultado del build
      - uses: actions/upload-artifact@v3
        with:
          name: build-WebGL
@@ -40,31 +50,29 @@ jobs:
  deployPages:
    needs: buildWebGL
    name: Deploy to Itch.io 🚀
-   runs-on: ubuntu-latest
+   runs-on: ubuntu-20.04
    steps:
+     # Checkout del código
      - name: Checkout code
        uses: actions/checkout@v3
 
+     # Descargar los artefactos generados en el paso de build
      - uses: actions/download-artifact@v2
        with:
          name: build-WebGL
          path: build
 
+     # Mostrar estructura de los archivos generados
      - name: Display structure of root files
        run: ls -R
        working-directory: build/WebGL
 
+     # Subir a Itch.io
      - name: Deploy 🚀
-       uses: JamesIves/github-pages-deploy-action@4.1.4
-       with:
-         branch: itch-io
-         folder: build/WebGL
-         
-     - uses: yeslayla/butler-publish-itchio-action@master
+       uses: yeslayla/butler-publish-itchio-action@master
        env:
          BUTLER_CREDENTIALS: ${{ secrets.ITCH_API_KEY }}
          CHANNEL: HTML
          ITCH_GAME: ${{ secrets.ITCH_GAME }}
          ITCH_USER: ${{ secrets.ITCH_USER }}
-         BRANCH: itch-io
          PACKAGE: build/WebGL

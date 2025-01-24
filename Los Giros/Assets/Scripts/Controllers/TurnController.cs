@@ -40,8 +40,8 @@ public class TurnController : MonoBehaviour
 
     private void OnDestroy()
     {
-        cameraScript.OnRotationComplete -= DoPlayerAction; // Desuscribirse para evitar errores
-        cameraScript.OnRotationComplete -= DoEnemyAction;
+        cameraScript.OnRotationCompleteY -= DoPlayerAction; // Desuscribirse para evitar errores
+        cameraScript.OnRotationCompleteY -= DoEnemyAction;
     }
 
     #endregion
@@ -51,8 +51,8 @@ public class TurnController : MonoBehaviour
     private void InitData()
     {
         player = FindObjectOfType<Player>();
-        cameraScript.OnRotationComplete += DoPlayerAction; // Suscribirse al evento
-        cameraScript.OnRotationComplete += DoEnemyAction;
+        cameraScript.OnRotationCompleteY += DoPlayerAction; // Suscribirse a eventos
+        cameraScript.OnRotationCompleteY += DoEnemyAction;
         cameraScript.OnTurnComplete += InitTurn;
         // btnContinue.onClick.AddListener(NextEnemy); DESCOMENTAR EN EL MOMENTO NECESARIO
         // btnRetry.onClick.AddListener(Retry);
@@ -91,7 +91,7 @@ public class TurnController : MonoBehaviour
 
     public void EndTurn()
     {
-        cameraScript.Rotate180Degrees();
+        cameraScript.Rotate180DegreesY();
     }
 
     private void ChooseEnemyAction()
@@ -137,7 +137,7 @@ public class TurnController : MonoBehaviour
     {
         PlayCard(); // Juega la carta seleccionada
         yield return new WaitForSeconds(1f); // Tiempo antes de girar
-        cameraScript.Rotate180Degrees();
+        cameraScript.Rotate180DegreesY();
         DestroyCards();
     }
 
@@ -272,7 +272,8 @@ public class TurnController : MonoBehaviour
         isBattleActive = false;
         Debug.Log("¡Jugador, has derrotado al enemigo!");
         StopAllCoroutines();
-        ShowVictoryPanel();
+        cameraScript.Rotate45DegreesX();
+        StartCoroutine(ShowVictoryPanel());
     }
 
     public void DetectLose()
@@ -280,17 +281,24 @@ public class TurnController : MonoBehaviour
         isBattleActive = false;
         Debug.Log("¡Jugador, has sido derrotado!");
         StopAllCoroutines();
-        ShowDefeatPanel();
+        cameraScript.Rotate45DegreesX();
+        StartCoroutine(ShowDefeatPanel());
     }
 
-    private void ShowVictoryPanel()
+    private IEnumerator ShowVictoryPanel() // Se llama al final de la rotacion de la camara
     {
+        cameraScript.Rotate45DegreesX();
+        yield return new WaitForSeconds(2f);
         // Logica para mostrar pantalla de victoria
+        victoryPanel.SetActive(true);
     }
 
-    private void ShowDefeatPanel()
+    private IEnumerator ShowDefeatPanel()
     {
+        cameraScript.Rotate45DegreesX();
+        yield return new WaitForSeconds(2f);
         // Logica para mostrar pantalla de derrota
+        defeatPanel.SetActive(true);
     }
 
     #endregion

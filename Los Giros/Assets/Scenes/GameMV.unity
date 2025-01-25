@@ -290,6 +290,7 @@ GameObject:
   - component: {fileID: 462645663}
   - component: {fileID: 462645664}
   - component: {fileID: 462645665}
+  - component: {fileID: 462645666}
   m_Layer: 0
   m_Name: PuntoAnimacion
   m_TagString: Untagged
@@ -305,8 +306,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462645662}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.74}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.9, y: -1.5, z: 2.6}
   m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -379,12 +380,28 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4.00391, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &462645666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462645662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a51b7af459c9642b39d8bd4028b305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialY: -1.5
+  targetY: 0
+  moveDuration: 0.3
+  delayBeforeHide: 0.5
 --- !u!1 &482155933
 GameObject:
   m_ObjectHideFlags: 0
@@ -2088,11 +2105,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: damage
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: maxHealth
-      value: 1
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
+      propertyPath: healAmount
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: initialAmmo

@@ -13,9 +13,11 @@ public class Carta : MonoBehaviour
     public SpecialAttackType specialAttackType;
     [SerializeField] private AudioClip audioClip, audioClipSonidoCarta;
     [HideInInspector] public bool isSelected = false, isDodge;
+    private ShowAnimation showAnimation;
 
     private void Start()
     {
+        showAnimation = FindObjectOfType<ShowAnimation>();
         txtNombre.text = nombreCarta;
         StartCoroutine(AnimPlacement(moveDistanceX, moveDuration, rotateDuration));
     }
@@ -41,6 +43,7 @@ public class Carta : MonoBehaviour
                 Debug.Log("DISPARO ESPECIAL");
                 break;
             case ActionType.Dodge:
+                Dodge();
                 Debug.Log("ESQUIVA");
                 break;
             default:
@@ -54,6 +57,7 @@ public class Carta : MonoBehaviour
         Debug.Log("SE DISPARA AL ENEMIGO");
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
+        showAnimation.InitMove("Shot");
         if (player.currentAmmo > 0)
         {
             // Generar un valor aleatorio para determinar si el disparo acierta
@@ -122,15 +126,22 @@ public class Carta : MonoBehaviour
         transform.localScale = escalaOriginal;
     }
 
+    private void Dodge()
+    {
+        FindObjectOfType<Player>().Dodge();
+    }
+
     private void Heal(int healAmount)
     {
         Player player = FindObjectOfType<Player>();
+        showAnimation.InitMove("Heal");
         player.Heal(healAmount);
     }
 
     private void Reload()
     {
         Player player = FindObjectOfType<Player>();
+        showAnimation.InitMove("Reload");
         player.currentAmmo += 1;
         if (player.currentAmmo > player.maxAmmo)
             player.currentAmmo = player.maxAmmo;
@@ -157,6 +168,8 @@ public class Carta : MonoBehaviour
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
 
+        showAnimation.InitMove("DoubleShot");
+
         for (int i = 0; i < 2; i++)
         {
             // Generar un valor aleatorio para determinar si el disparo acierta
@@ -181,6 +194,8 @@ public class Carta : MonoBehaviour
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
 
+        showAnimation.InitMove("RifleShot");
+
         // Generar un valor aleatorio para determinar si el disparo acierta
         float hitChance = Random.Range(0f, 1f);
 
@@ -202,6 +217,8 @@ public class Carta : MonoBehaviour
 
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
+
+        showAnimation.InitMove("ThrowDynamite");
 
         // Generar un valor aleatorio para determinar si la dinamita acierta
         float hitChance = Random.Range(0f, 1f);

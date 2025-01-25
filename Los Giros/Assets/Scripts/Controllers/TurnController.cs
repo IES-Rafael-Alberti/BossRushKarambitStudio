@@ -136,7 +136,7 @@ public class TurnController : MonoBehaviour
     private IEnumerator PlayerAction()
     {
         PlayCard(); // Juega la carta seleccionada
-        yield return new WaitForSeconds(1f); // Tiempo antes de girar
+        yield return new WaitForSeconds(2f); // Tiempo antes de girar
         cameraScript.Rotate180DegreesY();
         DestroyCards();
     }

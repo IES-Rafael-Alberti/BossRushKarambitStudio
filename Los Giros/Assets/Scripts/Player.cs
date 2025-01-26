@@ -21,16 +21,12 @@ public class Player : MonoBehaviour
         currentAmmo = initialAmmo;
     }
 
-    void Update()
-    {
-
-    }
-
     // Recibir daño
     public void ReceiveDamage(int damage)
     {
         // Reducir la salud del player
         currentHealth -= damage;
+        FindObjectOfType<Enemy>().damageMultiplier = 1;
 
         // Comprobar la salud y muerte del player
         if (currentHealth < 0)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ public class TurnController : MonoBehaviour
     [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
     [SerializeField] private int drawCardAmount, timerTime;
     [SerializeField] private TMP_Text txtTimer, txtPlayerHealth, txtEnemyHealth;
-    [SerializeField] private GameObject prefabCard, victoryPanel, defeatPanel;
+    [SerializeField] private GameObject prefabCard, victoryPanel, defeatPanel, spinGO, iconBoost;
     [SerializeField] private Button btnContinue, btnRetry;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
@@ -96,14 +97,21 @@ public class TurnController : MonoBehaviour
 
     private void InitTurn()
     {
+        ShowSpin();
+    }
+
+    /*private void InitTurn()
+    {
+        ShowSpin();
         StartCoroutine(DrawCard()); // Robar cartas
         ChooseEnemyAction();
         StartCoroutine(InitTimer());
-    }
+    }*/
 
     public void EndTurn()
     {
         cameraScript.Rotate180DegreesY();
+        iconBoost.SetActive(false);
     }
 
     private void ChooseEnemyAction()
@@ -139,6 +147,78 @@ public class TurnController : MonoBehaviour
             DetectLose();
         else if (isEnemyDead)
             DetectWin();
+    }
+
+    private void ShowSpin()
+    {
+        spinGO.SetActive(true);
+        Spin spin = spinGO.GetComponentInChildren<Spin>();
+        spin.MakeSpin();
+
+        // Asegurar que el siguiente paso del turno ocurra tras el giro
+        StartCoroutine(WaitForSpin());
+    }
+
+    private IEnumerator WaitForSpin()
+    {
+        List<Carta> cardsOnHand = new();
+        // Esperar a que finalice la duracion del giro de la ruleta
+        Spin spin = spinGO.GetComponentInChildren<Spin>();
+        yield return new WaitForSeconds(spin.spinDuration + 0.1f);
+        iconBoost.GetComponent<Image>().sprite = spin.spriteIcon;
+        iconBoost.SetActive(true);
+        switch (spin.spinBoost)
+        {
+            case SpinBoost.X2Damage:
+                cardsOnHand = FindObjectsOfType<Carta>().ToList();
+                foreach (Carta card in cardsOnHand)
+                {
+                    card.damage *= 2;
+                }
+                enemy.damageMultiplier *= 2;
+                break;
+            case SpinBoost.X3Damage:
+                cardsOnHand = FindObjectsOfType<Carta>().ToList();
+                foreach (Carta card in cardsOnHand)
+                {
+                    card.damage *= 3;
+                }
+                enemy.damageMultiplier *= 3;
+                break;
+            case SpinBoost.X2Action:
+                // ¡¡¡ Puede producir errores inesperados, hay que probarlo !!!
+                /*DoPlayerAction();
+                DoEnemyAction();*/
+                break;
+            case SpinBoost.HealingBullets:
+                cardsOnHand = FindObjectsOfType<Carta>().ToList();
+                foreach (Carta card in cardsOnHand)
+                {
+                    if(card.damage > 0)
+                        card.healAmount += 1;
+                }
+                if(enemy.actionChosen == global::EnemyAction.Attack || enemy.actionChosen == global::EnemyAction.SpecialAttack)
+                    enemy.Heal(1);
+                break;
+            /*case SpinBoost.X2Damage:
+                break;
+            case SpinBoost.X2Damage:
+                break;
+            case SpinBoost.X2Damage:
+                break;*/
+            default:
+                break;
+        }
+
+        yield return new WaitForSeconds(0.15f);
+
+        // Ocultar la ruleta tras el giro
+        spinGO.SetActive(false);
+
+        // Continuar el flujo del turno
+        StartCoroutine(DrawCard()); // Robar cartas
+        ChooseEnemyAction();
+        StartCoroutine(InitTimer());
     }
 
     #endregion

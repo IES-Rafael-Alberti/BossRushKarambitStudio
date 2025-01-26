@@ -7,15 +7,15 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
     [SerializeField] private EnemySpecialAttack specialAttack;
-    [SerializeField] private int healAmount, damage, maxAmmo, initialAmmo, reloadAmount;
-    public int maxHealth;
+    [SerializeField] private int healAmount, maxAmmo, initialAmmo, reloadAmount;
+    public int maxHealth, damage;
     [Range(0f, 1f)] public float accuracy, playerDodgeProbability, rifleAccuracy;
     [SerializeField] private AudioClip audioClipDamaged;
     private Player player;
-    private EnemyAction actionChosen;
+    [HideInInspector] public EnemyAction actionChosen;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
-    [HideInInspector] public int currentHealth, currentAmmo;
+    [HideInInspector] public int currentHealth, currentAmmo, damageMultiplier;
     private TurnController turnController;
 
     private void Start()
@@ -174,11 +174,11 @@ public class Enemy : MonoBehaviour
         if (hitChance <= accuracy) // Si acierta, realiza el ataque
         {
             if (player.isDodging && hitChance <= accuracy - playerDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la bala
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
             else if (player.isDodging && hitChance > accuracy - playerDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, no le da
                 StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
             else // No esta el player esquivando y le da
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
         }
         else // Si falla, muestra un mensaje de fallo
             StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
@@ -215,11 +215,11 @@ public class Enemy : MonoBehaviour
             if (hitChance <= accuracy) // Si acierta, realiza el ataque
             {
                 if (player.isDodging && hitChance <= accuracy - playerDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la bala
-                    StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                    StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
                 else if (player.isDodging && hitChance > accuracy - playerDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, no le da
                     StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
                 else // No esta el player esquivando y le da
-                    StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                    StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
             }
             else // Si falla, muestra un mensaje de fallo
                 StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
@@ -234,11 +234,11 @@ public class Enemy : MonoBehaviour
         if (hitChance <= rifleAccuracy)
         {
             if (player.isDodging && hitChance <= rifleAccuracy - playerDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la bala
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
             else if (player.isDodging && hitChance > rifleAccuracy - playerDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, no le da
                 StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
             else // No esta el player esquivando y le da
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
         }
         else // Si falla, muestra un mensaje de fallo
             StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
@@ -252,11 +252,11 @@ public class Enemy : MonoBehaviour
         if (hitChance <= accuracy)
         {
             if (player.isDodging && hitChance <= accuracy - playerDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la dinamita
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
             else if (player.isDodging && hitChance > accuracy - playerDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, la dinamita le hace menos daño
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage / 2)));
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage / 2 * damageMultiplier)));
             else // No esta el player esquivando y le da
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
         }
         else // Si falla, muestra un mensaje de fallo
             StartCoroutine(AnimAttack(() => Debug.Log("El ataque del enemigo fallo.")));
@@ -306,12 +306,12 @@ public class Enemy : MonoBehaviour
     #endregion
 
     #region CURAR
-    private void Heal(int healAmount)
+    public void Heal(int healAmount)
     {
         currentHealth += healAmount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
-            
+
         turnController.UpdateEnemyHealthUI();
     }
     #endregion

@@ -14,10 +14,12 @@ public class Carta : MonoBehaviour
     [SerializeField] private AudioClip audioClip, audioClipSonidoCarta;
     [HideInInspector] public bool isSelected = false, isDodge;
     private ShowAnimation showAnimation;
+    private TurnController turnController;
 
     private void Start()
     {
         showAnimation = FindObjectOfType<ShowAnimation>();
+        turnController = FindObjectOfType<TurnController>();
         txtNombre.text = nombreCarta;
         StartCoroutine(AnimPlacement(moveDistanceX, moveDuration, rotateDuration));
     }
@@ -54,7 +56,7 @@ public class Carta : MonoBehaviour
 
     private void Shot()
     {
-        Debug.Log("SE DISPARA AL ENEMIGO");
+        // Debug.Log("SE DISPARA AL ENEMIGO");
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
         showAnimation.InitMove("Shot");
@@ -77,6 +79,7 @@ public class Carta : MonoBehaviour
 
             // Reducir la municion independientemente de si acierta o falla
             player.currentAmmo -= 1;
+            turnController.UpdateUIBullets();
         }
         else
         {
@@ -145,6 +148,8 @@ public class Carta : MonoBehaviour
         player.currentAmmo += 1;
         if (player.currentAmmo > player.maxAmmo)
             player.currentAmmo = player.maxAmmo;
+
+        turnController.UpdateUIBullets();
     }
 
     private void SpecialAttack()

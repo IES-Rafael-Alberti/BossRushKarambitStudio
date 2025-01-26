@@ -12,6 +12,7 @@ public class TurnController : MonoBehaviour
     private readonly int limitTimerTime = 0;
 
     // Serializables
+    [SerializeField] private List<GameObject> listBulletsUI;
     [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
     [SerializeField] private int drawCardAmount, timerTime;
     [SerializeField] private TMP_Text txtTimer, txtPlayerHealth;
@@ -34,6 +35,7 @@ public class TurnController : MonoBehaviour
     private void Start()
     {
         InitData();
+        UpdateUIBullets();
         UpdateHealthText();
         StartBattle();
     }
@@ -315,6 +317,15 @@ public class TurnController : MonoBehaviour
         // Logica para reiniciar la partida
     }
 
+    public void UpdateUIBullets()
+    {
+        // Recorrer cada indice en la lista
+        for (int i = 0; i < listBulletsUI.Count; i++)
+        {
+            // Activar los elementos segun la municion
+            listBulletsUI[i].SetActive(i < player.currentAmmo);
+        }
+    }
     #endregion
 }
 

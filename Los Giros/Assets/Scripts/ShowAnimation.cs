@@ -53,14 +53,17 @@ public class ShowAnimation : MonoBehaviour
     // Metodo para mostrar
     private void ShowAnim(float initialY, float targetY)
     {
-        MoveY(initialY, targetY);
+        
 
-        if (initialY < targetY && !string.IsNullOrEmpty(triggerName))
-            animator.SetTrigger(triggerName);
+        if (!string.IsNullOrEmpty(triggerName))
+        {
+            animator.SetTrigger(triggerName); // Activa el trigger
+            MoveY(initialY, targetY);
+            StartCoroutine(ResetTrigger(triggerName)); // Reinicia el trigger despues de un frame
+        }
 
-        // Si se completa la animacion de mostrar, iniciar el proceso para esconder
-        if (!isMovingY)
-            StartCoroutine(DelayAndHide());
+        // Inicia la animacion de esconder despues del retraso
+        StartCoroutine(DelayAndHide());
     }
 
     // Metodo para esconder
@@ -68,8 +71,14 @@ public class ShowAnimation : MonoBehaviour
     {
         MoveY(targetY, initialY);
 
-        if (targetY > initialY && !string.IsNullOrEmpty(triggerName))
-            animator.SetTrigger(triggerName);
+        if (!isMovingY)
+        {
+            if (!string.IsNullOrEmpty(triggerName))
+            {
+                animator.SetTrigger(triggerName); // Activa el trigger
+                StartCoroutine(ResetTrigger(triggerName)); // Reinicia el trigger despues de un frame
+            }
+        }
     }
 
     // Metodo para mover el objeto en el eje Y
@@ -98,5 +107,12 @@ public class ShowAnimation : MonoBehaviour
     {
         yield return new WaitForSeconds(delayBeforeHide);
         InitHide(triggerName); // Inicia la animacion de esconder
+    }
+
+    // Corrutina para reiniciar el trigger
+    private IEnumerator ResetTrigger(string triggerName)
+    {
+        yield return null; // Espera un frame
+        animator.ResetTrigger(triggerName); // Reinicia el trigger
     }
 }

@@ -15,17 +15,19 @@ public class TurnController : MonoBehaviour
     [SerializeField] private List<GameObject> listBulletsUI;
     [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
     [SerializeField] private int drawCardAmount, timerTime;
-    [SerializeField] private TMP_Text txtTimer, txtPlayerHealth;
+    [SerializeField] private TMP_Text txtTimer, txtPlayerHealth, txtEnemyHealth;
     [SerializeField] private GameObject prefabCard, victoryPanel, defeatPanel;
     [SerializeField] private Button btnContinue, btnRetry;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
     [SerializeField] private Transform cardLocation;
     [SerializeField] float moveDuration = 0.75f, rotateDuration = 0.9f;
+    [SerializeField] Slider sliderPlayerHealth, sliderEnemyHealth;
 
     // Privadas
     private bool isBattleActive = false;
     private Player player;
+    private Enemy enemy;
 
     // Publicas
     [HideInInspector] public readonly List<DatosCarta> playerDeck = new();
@@ -36,7 +38,8 @@ public class TurnController : MonoBehaviour
     {
         InitData();
         UpdateUIBullets();
-        UpdateHealthText();
+        UpdatePlayerHealthUI();
+        UpdateEnemyHealthUI();
         StartBattle();
     }
 
@@ -53,6 +56,7 @@ public class TurnController : MonoBehaviour
     private void InitData()
     {
         player = FindObjectOfType<Player>();
+        enemy = FindObjectOfType<Enemy>();
         cameraScript.OnRotationCompleteY += DoPlayerAction; // Suscribirse a eventos
         cameraScript.OnRotationCompleteY += DoEnemyAction;
         cameraScript.OnTurnComplete += InitTurn;
@@ -72,6 +76,12 @@ public class TurnController : MonoBehaviour
             else if (BasicPlayerAction.SpecialAttack == action)
                 playerDeck.Add(new(4));
         }
+
+        sliderPlayerHealth.minValue = 0;
+        sliderPlayerHealth.maxValue = player.maxHealth;
+
+        sliderEnemyHealth.minValue = 0;
+        sliderEnemyHealth.maxValue = enemy.maxHealth;
     }
 
     #endregion
@@ -138,7 +148,8 @@ public class TurnController : MonoBehaviour
     private IEnumerator PlayerAction()
     {
         PlayCard(); // Juega la carta seleccionada
-        yield return new WaitForSeconds(2f); // Tiempo antes de girar
+        DetectOutcome();
+        yield return new WaitForSeconds(2f); // Tiempo antes de girar para elegir nuevamente carta
         cameraScript.Rotate180DegreesY();
         DestroyCards();
     }
@@ -260,9 +271,17 @@ public class TurnController : MonoBehaviour
         }
     }
 
-    public void UpdateHealthText()
+    public void UpdatePlayerHealthUI()
     {
         txtPlayerHealth.text = "Health: " + player.currentHealth;
+        sliderPlayerHealth.value = player.currentHealth;
+    }
+
+    public void UpdateEnemyHealthUI()
+    {
+        Enemy e = FindObjectOfType<Enemy>();
+        txtEnemyHealth.text = "Health: " + e.currentHealth;
+        sliderEnemyHealth.value = e.currentHealth;
     }
 
     #endregion

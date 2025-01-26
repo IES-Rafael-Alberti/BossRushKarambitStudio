@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
             Death();
 
         // Actualizar el texto de la vida
-        turnController.UpdateHealthText();
+        turnController.UpdatePlayerHealthUI();
     }
 
     // Curacion del player
@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
         currentHealth += amount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
-        turnController.UpdateHealthText();
+        turnController.UpdatePlayerHealthUI();
     }
 
     // Método para iniciar la esquiva

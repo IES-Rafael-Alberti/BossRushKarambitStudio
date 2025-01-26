@@ -7,7 +7,8 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
     [SerializeField] private EnemySpecialAttack specialAttack;
-    [SerializeField] private int healAmount, damage, maxHealth, maxAmmo, initialAmmo, reloadAmount;
+    [SerializeField] private int healAmount, damage, maxAmmo, initialAmmo, reloadAmount;
+    public int maxHealth;
     [Range(0f, 1f)] public float accuracy, playerDodgeProbability, rifleAccuracy;
     [SerializeField] private AudioClip audioClipDamaged;
     private Player player;
@@ -310,8 +311,8 @@ public class Enemy : MonoBehaviour
         currentHealth += healAmount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
-
-        Debug.LogWarning("Vida actual del enemigo: " + currentHealth);
+            
+        turnController.UpdateEnemyHealthUI();
     }
     #endregion
 
@@ -320,8 +321,8 @@ public class Enemy : MonoBehaviour
     {
         // audioSource.PlayOneShot(audioClipDamaged);
         currentHealth -= damage;
-        Debug.LogWarning("Vida actual del enemigo: " + currentHealth);
         StartCoroutine(Damaged());
+        turnController.UpdateEnemyHealthUI();
         if (currentHealth <= 0)
             Death();
     }

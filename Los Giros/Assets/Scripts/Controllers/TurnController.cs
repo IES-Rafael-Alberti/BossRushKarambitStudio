@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,7 @@ public class TurnController : MonoBehaviour
     private readonly int limitTimerTime = 0;
 
     // Serializables
-    [SerializeField] private List<GameObject> listBulletsUI;
+    [SerializeField] private List<GameObject> listBulletsUI, listEnemies;
     [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
     [SerializeField] private int drawCardAmount, timerTime;
     [SerializeField] private TMP_Text txtTimer, txtPlayerHealth, txtEnemyHealth;
@@ -21,7 +22,7 @@ public class TurnController : MonoBehaviour
     [SerializeField] private Button btnContinue, btnRetry;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
-    [SerializeField] private Transform cardLocation;
+    [SerializeField] private Transform cardLocation, world;
     [SerializeField] float moveDuration = 0.75f, rotateDuration = 0.9f;
     [SerializeField] Slider sliderPlayerHealth, sliderEnemyHealth;
 
@@ -44,6 +45,11 @@ public class TurnController : MonoBehaviour
         StartBattle();
     }
 
+    private void Update()
+    {
+        DetectOutcome();
+    }
+
     private void OnDestroy()
     {
         cameraScript.OnRotationCompleteY -= DoPlayerAction; // Desuscribirse para evitar errores
@@ -62,7 +68,7 @@ public class TurnController : MonoBehaviour
         cameraScript.OnRotationCompleteY += DoEnemyAction;
         cameraScript.OnTurnComplete += InitTurn;
         // btnContinue.onClick.AddListener(NextEnemy); DESCOMENTAR EN EL MOMENTO NECESARIO
-        // btnRetry.onClick.AddListener(Retry);
+        btnRetry.onClick.AddListener(() => StartCoroutine(Retry()));
 
         foreach (var action in basicsPlayerActions)
         {
@@ -100,14 +106,6 @@ public class TurnController : MonoBehaviour
         ShowSpin();
     }
 
-    /*private void InitTurn()
-    {
-        ShowSpin();
-        StartCoroutine(DrawCard()); // Robar cartas
-        ChooseEnemyAction();
-        StartCoroutine(InitTimer());
-    }*/
-
     public void EndTurn()
     {
         cameraScript.Rotate180DegreesY();
@@ -135,18 +133,21 @@ public class TurnController : MonoBehaviour
 
     public void DetectOutcome()
     {
-        Player player = FindObjectOfType<Player>();
-        Enemy enemy = FindObjectOfType<Enemy>();
+        if (isBattleActive)
+        {
+            Player player = FindObjectOfType<Player>();
+            Enemy enemy = FindObjectOfType<Enemy>();
 
-        bool isPlayerDead = player.currentHealth <= 0;
-        bool isEnemyDead = enemy.currentHealth <= 0;
+            bool isPlayerDead = player.currentHealth <= 0;
+            bool isEnemyDead = enemy.currentHealth <= 0;
 
-        if (isPlayerDead && isEnemyDead)
-            DetectLose();
-        else if (isPlayerDead)
-            DetectLose();
-        else if (isEnemyDead)
-            DetectWin();
+            if (isPlayerDead && isEnemyDead)
+                DetectLose();
+            else if (isPlayerDead)
+                DetectLose();
+            else if (isEnemyDead)
+                DetectWin();
+        }
     }
 
     private void ShowSpin()
@@ -161,7 +162,7 @@ public class TurnController : MonoBehaviour
 
     private IEnumerator WaitForSpin()
     {
-        List<Carta> cardsOnHand = new();
+        List<Carta> cardsOnHand;
         // Esperar a que finalice la duracion del giro de la ruleta
         Spin spin = spinGO.GetComponentInChildren<Spin>();
         yield return new WaitForSeconds(spin.spinDuration + 0.1f);
@@ -194,11 +195,11 @@ public class TurnController : MonoBehaviour
                 cardsOnHand = FindObjectsOfType<Carta>().ToList();
                 foreach (Carta card in cardsOnHand)
                 {
-                    if(card.damage > 0)
+                    if (card.damage > 0)
                         card.healAmount += 1;
                 }
-                if(enemy.actionChosen == global::EnemyAction.Attack || enemy.actionChosen == global::EnemyAction.SpecialAttack)
-                    enemy.Heal(1);
+                if (enemy.actionChosen == global::EnemyAction.Attack || enemy.actionChosen == global::EnemyAction.SpecialAttack)
+                    enemy.Heal(enemy.healAmount);
                 break;
             /*case SpinBoost.X2Damage:
                 break;
@@ -264,6 +265,7 @@ public class TurnController : MonoBehaviour
         enemy.DoAction();
         DetectOutcome();
         yield return new WaitForSeconds(1f);
+        enemy.damageMultiplier = 1;
     }
     #endregion
 
@@ -373,7 +375,7 @@ public class TurnController : MonoBehaviour
         isBattleActive = false;
         Debug.Log("¡Jugador, has derrotado al enemigo!");
         StopAllCoroutines();
-        cameraScript.Rotate45DegreesX();
+        cameraScript.Rotate45DegreesX(45);
         StartCoroutine(ShowVictoryPanel());
     }
 
@@ -382,13 +384,13 @@ public class TurnController : MonoBehaviour
         isBattleActive = false;
         Debug.Log("¡Jugador, has sido derrotado!");
         StopAllCoroutines();
-        cameraScript.Rotate45DegreesX();
+        cameraScript.Rotate45DegreesX(45);
         StartCoroutine(ShowDefeatPanel());
     }
 
     private IEnumerator ShowVictoryPanel() // Se llama al final de la rotacion de la camara
     {
-        cameraScript.Rotate45DegreesX();
+        cameraScript.Rotate45DegreesX(45);
         yield return new WaitForSeconds(2f);
         // Logica para mostrar pantalla de victoria
         victoryPanel.SetActive(true);
@@ -396,7 +398,7 @@ public class TurnController : MonoBehaviour
 
     private IEnumerator ShowDefeatPanel()
     {
-        cameraScript.Rotate45DegreesX();
+        cameraScript.Rotate45DegreesX(45);
         yield return new WaitForSeconds(2f);
         // Logica para mostrar pantalla de derrota
         defeatPanel.SetActive(true);
@@ -411,9 +413,32 @@ public class TurnController : MonoBehaviour
         // Logica para avanzar al siguiente enemigo
     }
 
-    private void Retry()
+    private IEnumerator Retry()
     {
         // Logica para reiniciar la partida
+        Enemy enemy = FindObjectOfType<Enemy>();
+        foreach (GameObject e in listEnemies)
+        {
+            if (e.GetComponent<Enemy>().ID == enemy.ID)
+            {
+                GameObject go = Instantiate(e, world);
+                go.transform.localPosition = enemy.transform.localPosition;
+                Destroy(enemy.gameObject, 0.1f);
+            }
+        }
+
+        // Tras instanciar al enemigo y reemplazar al anterior, recolocar la camara y reiniciar los turnos
+        player.currentHealth = player.maxHealth;
+        player.currentAmmo = player.initialAmmo;
+        UpdatePlayerHealthUI();
+        UpdateUIBullets();
+        DestroyCards();
+        defeatPanel.SetActive(false);
+        cameraScript.Rotate45DegreesX(-45);
+        yield return new WaitForSeconds(2f);
+        cameraScript.Rotate180DegreesY();
+        UpdateEnemyHealthUI();
+        isBattleActive = true;
     }
 
     public void UpdateUIBullets()

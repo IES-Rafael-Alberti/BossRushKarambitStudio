@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int maxHealth, maxAmmo;
+    public int maxHealth, maxAmmo, initialAmmo;
     [Range(0f, 1f)] public float accuracy, enemyDodgeProbability, rifleAccuracy;
-    [SerializeField] private int initialAmmo;
     [SerializeField] private float dodgeDistance = 1f; // Distancia que se movera hacia abajo
     [SerializeField] private float dodgeDuration = 0.2f; // Duracion del movimiento hacia abajo
     [SerializeField] private float dodgeWaitTime = 0.1f; // Tiempo que esperara antes de regresar

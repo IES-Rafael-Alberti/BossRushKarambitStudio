@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public int ID;
     [SerializeField] private List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
     [SerializeField] private EnemySpecialAttack specialAttack;
-    [SerializeField] private int healAmount, maxAmmo, initialAmmo, reloadAmount;
-    public int maxHealth, damage;
+    [SerializeField] private int maxAmmo, initialAmmo, reloadAmount;
+    public int maxHealth, damage, healAmount;
     [Range(0f, 1f)] public float accuracy, playerDodgeProbability, rifleAccuracy;
     [SerializeField] private AudioClip audioClipDamaged;
     private Player player;

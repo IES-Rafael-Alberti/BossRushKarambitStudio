@@ -71,13 +71,13 @@ public class CinemachinePOVExtension : CinemachineExtension
         }
     }
 
-    // Funcion para iniciar el giro de -45 grados en el eje X
-    public void Rotate45DegreesX()
+    // Funcion para iniciar el giro en grados en el eje X
+    public void Rotate45DegreesX(int angle)
     {
         if (!isRotatingX && !isRotatingY)
         {
             isRotatingX = true;
-            targetXRotation = (currentRotation.x - 45f) % 360f; // Calcular el angulo objetivo
+            targetXRotation = (currentRotation.x - angle) % 360f; // Calcular el angulo objetivo
         }
     }
 }

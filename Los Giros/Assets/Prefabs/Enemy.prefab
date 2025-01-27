@@ -98,17 +98,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e86ed57b6f6adf4892228c59447c796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
   allowedActions: 00000000030000000100000005000000
   specialAttack: 0
-  healAmount: 1
-  damage: 2
-  maxHealth: 1
   maxAmmo: 6
+  initialAmmo: 0
   reloadAmount: 1
+  maxHealth: 20
+  damage: 2
+  healAmount: 1
   accuracy: 0.75
+  playerDodgeProbability: 0.4
+  rifleAccuracy: 0.9
   audioClipDamaged: {fileID: 0}
+  actionChosen: 0
   currentHealth: 0
   currentAmmo: 0
+  damageMultiplier: 0
 --- !u!114 &3032530032934653464
 MonoBehaviour:
   m_ObjectHideFlags: 0

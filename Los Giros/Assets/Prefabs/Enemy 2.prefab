@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e86ed57b6f6adf4892228c59447c796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 1
   allowedActions: 00000000030000000100000005000000
   specialAttack: 1
   maxAmmo: 6

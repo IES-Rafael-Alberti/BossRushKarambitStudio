@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3785252439302979764}
   - component: {fileID: 3032530032934653464}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Enemy 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   allowedActions: 00000000030000000100000005000000
-  specialAttack: 0
+  specialAttack: 2
   maxAmmo: 6
   initialAmmo: 0
   reloadAmount: 1

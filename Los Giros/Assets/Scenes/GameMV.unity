@@ -483,6 +483,8 @@ MonoBehaviour:
   - {fileID: 1871304686}
   listEnemies:
   - {fileID: 8043513078498755837, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
+  - {fileID: 8043513078498755837, guid: 4576bacbcf373d149a41a4b5a6a8776d, type: 3}
+  - {fileID: 8043513078498755837, guid: b05a84a8ec4a6694e9588c654b8f8927, type: 3}
   basicsPlayerActions: 0000000001000000020000000300000004000000
   drawCardAmount: 3
   timerTime: 5

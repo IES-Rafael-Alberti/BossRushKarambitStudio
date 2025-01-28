@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,8 +17,8 @@ public class TurnController : MonoBehaviour
     [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
     [SerializeField] private int drawCardAmount, timerTime;
     [SerializeField] private TMP_Text txtTimer, txtPlayerHealth, txtEnemyHealth;
-    [SerializeField] private GameObject prefabCard, victoryPanel, defeatPanel, spinGO, iconBoost, posterWanted, posterWanted1, posterWanted2;
-    [SerializeField] private Button btnContinue, btnRetry;
+    [SerializeField] private GameObject prefabCard, victoryPanel, finalVictoryPanel, defeatPanel, spinGO, iconBoost, posterWanted, posterWanted1, posterWanted2;
+    [SerializeField] private Button btnExit, btnRetry;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
     [SerializeField] private Transform cardLocation, world;
@@ -69,7 +67,7 @@ public class TurnController : MonoBehaviour
         cameraScript.OnRotationCompleteY += DoPlayerAction; // Suscribirse a eventos
         cameraScript.OnRotationCompleteY += DoEnemyAction;
         cameraScript.OnTurnComplete += InitTurn;
-        // btnContinue.onClick.AddListener(NextEnemy); DESCOMENTAR EN EL MOMENTO NECESARIO
+        btnExit.onClick.AddListener(Exit);
         btnRetry.onClick.AddListener(() => StartCoroutine(Retry()));
 
         foreach (var action in basicsPlayerActions)
@@ -201,10 +199,14 @@ public class TurnController : MonoBehaviour
                 }
                 enemy.damageMultiplier *= 3;
                 break;
-            case SpinBoost.X2Action:
-                // Hay que testearlo mas
-                PlayCard();
-                FindObjectOfType<Enemy>().DoAction();
+            case SpinBoost.X10Damage:
+                cardsOnHand = FindObjectsOfType<Carta>().ToList();
+                foreach (Carta card in cardsOnHand)
+                {
+                    card.damage *= 10;
+                    Debug.Log("Damage: " + card.damage);
+                }
+                enemy.damageMultiplier *= 10;
                 break;
             case SpinBoost.HealingBullets:
                 cardsOnHand = FindObjectsOfType<Carta>().ToList();
@@ -216,12 +218,6 @@ public class TurnController : MonoBehaviour
                 if (enemy.actionChosen == global::EnemyAction.Attack || enemy.actionChosen == global::EnemyAction.SpecialAttack)
                     enemy.Heal(enemy.healAmount);
                 break;
-            /*case SpinBoost.X2Damage:
-                break;
-            case SpinBoost.X2Damage:
-                break;
-            case SpinBoost.X2Damage:
-                break;*/
             default:
                 break;
         }
@@ -402,10 +398,10 @@ public class TurnController : MonoBehaviour
         victoryPanel.SetActive(true);
         enemy.posterWanted.transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(2f);
-        if(FindObjectOfType<Enemy>().ID < 2)
+        if (FindObjectOfType<Enemy>().ID < 2)
             StartCoroutine(NextEnemy());
         else
-            EndGame();
+            StartCoroutine(EndGame());
     }
 
     private IEnumerator ShowDefeatPanel()
@@ -416,10 +412,14 @@ public class TurnController : MonoBehaviour
         defeatPanel.SetActive(true);
     }
 
-    private void EndGame()
+    private IEnumerator EndGame()
     {
         // Logica acabar juego
-        SceneManager.LoadScene("MainMenu");
+        // SceneManager.LoadScene("MainMenu");
+        yield return new WaitForSeconds(1.5f);
+        victoryPanel.SetActive(false);
+        cameraScript.Rotate45DegreesX(-45);
+        finalVictoryPanel.SetActive(true);
     }
 
     #endregion
@@ -479,6 +479,11 @@ public class TurnController : MonoBehaviour
         cameraScript.Rotate180DegreesY();
         UpdateEnemyHealthUI();
         isBattleActive = true;
+    }
+
+    private void Exit()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void UpdateUIBullets()

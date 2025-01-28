@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
-  m_Name: StringTable
+  m_Name: LosGirosTrans
   m_EditorClassIdentifier: 
-  m_SharedTableData: {fileID: 11400000, guid: eadb0f925ff33c04198129dff23d54af, type: 2}
+  m_SharedTableData: {fileID: 11400000, guid: 8e9a632c389156a41a518bb74e233af3, type: 2}
   m_Tables:
-  - {fileID: 11400000, guid: ef0ffde24b0107f4ba62528d266e6a53, type: 2}
-  - {fileID: 11400000, guid: f5f7af4ce329ebc4fabfd1e65b09036e, type: 2}
+  - {fileID: 11400000, guid: 91d7b00e177c99248b25e63cf1c03874, type: 2}
+  - {fileID: 11400000, guid: a0c13015687d25e46b8dc3d65b277d25, type: 2}
   m_Extensions: []
   m_Group: String Table
   references:

@@ -1,19 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public int ID;
     [SerializeField] private List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
     [SerializeField] private EnemySpecialAttack specialAttack;
-    [SerializeField] private int healAmount, damage, maxHealth, maxAmmo, reloadAmount;
-    [Range(0f, 1f)] public float accuracy;
+    [SerializeField] private int maxAmmo, initialAmmo, reloadAmount;
+    public int maxHealth, damage, healAmount;
+    [Range(0f, 1f)] public float accuracy, playerDodgeProbability, rifleAccuracy;
+    [HideInInspector] public GameObject posterWanted;
     [SerializeField] private AudioClip audioClipDamaged;
     private Player player;
-    private EnemyAction actionChosen;
+    [HideInInspector] public EnemyAction actionChosen;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
-    [HideInInspector] public int currentHealth, currentAmmo;
+    [HideInInspector] public int currentHealth, currentAmmo, damageMultiplier;
     private TurnController turnController;
 
     private void Start()
@@ -23,7 +27,7 @@ public class Enemy : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
         currentHealth = maxHealth;
-        currentAmmo = maxAmmo;
+        currentAmmo = initialAmmo;
     }
 
     private void Update()
@@ -40,9 +44,13 @@ public class Enemy : MonoBehaviour
         // Crear una lista temporal para las 3 opciones seleccionadas
         List<EnemyAction> selectedActions = new();
 
+        // Reiniciar los pesos al inicio del turno
+        List<float> cardWeights = ResetCardWeights();
+
         while (selectedActions.Count < 3)
         {
-            int randomIndex = Random.Range(0, allowedActions.Count);
+            // Seleccionar una carta basada en pesos
+            int randomIndex = GetWeightedRandomIndex(cardWeights);
             if (!selectedActions.Contains(allowedActions[randomIndex]))
                 selectedActions.Add(allowedActions[randomIndex]);
         }
@@ -65,41 +73,65 @@ public class Enemy : MonoBehaviour
         actionChosen = bestAction;
     }
 
+    // Metodo para seleccionar un indice basado en pesos
+    private int GetWeightedRandomIndex(List<float> weights)
+    {
+        float totalWeight = weights.Sum(); // Suma de todos los pesos
+        float randomValue = Random.Range(0, totalWeight); // Generar un numero aleatorio en el rango de los pesos totales
+
+        float cumulativeWeight = 0f;
+        for (int i = 0; i < weights.Count; i++)
+        {
+            cumulativeWeight += weights[i];
+            if (randomValue < cumulativeWeight)
+                return i; // Devolver el indice seleccionado
+        }
+
+        return weights.Count - 1; // Devolver el ultimo indice como respaldo
+    }
+
+    // Metodo para reiniciar los pesos al inicio de cada turno
+    private List<float> ResetCardWeights()
+    {
+        List<float> weights = new(new float[allowedActions.Count]);
+        for (int i = 0; i < weights.Count; i++)
+        {
+            weights[i] = 1f; // Reiniciar todos los pesos al valor inicial
+        }
+        return weights;
+    }
+
     // Metodo para evaluar la puntuacion de una accion
     private float EvaluateAction(EnemyAction action)
     {
         float score = 0f;
 
-        // Fórmula personalizada para puntuar acciones
+        // Formula personalizada para puntuar acciones
         switch (action)
         {
             case EnemyAction.Attack:
                 if (currentAmmo <= 0)
                     score = 0; // No puede atacar si no tiene municion
                 else
-                    score += 15f * (1.5f - (FindObjectOfType<Player>().currentHealth / FindObjectOfType<Player>().maxHealth)); // Prioriza atacar cuando el jugador tiene menos vida
+                    score += 10f * (1.5f - (FindObjectOfType<Player>().currentHealth / FindObjectOfType<Player>().maxHealth)); // Prioriza atacar cuando el jugador tiene menos vida
                 break;
 
             case EnemyAction.Reload:
                 if (currentAmmo >= maxAmmo)
                     score = 0; // No puede recargar si ya tiene municion completa
                 else
-                    score += 10f * (1.5f - (currentAmmo / maxAmmo)); // Prioriza recargar si el cargador tiene pocas balas
+                    score += 10f * (1.1f - (currentAmmo / maxAmmo)); // Prioriza recargar si el cargador tiene pocas balas
                 break;
 
             case EnemyAction.Heal:
                 if (currentHealth >= maxHealth)
                     score = 0; // No puede curarse si ya tiene salud completa
                 else
-                    score += 10f * (1.5f - (currentHealth / maxHealth)); // Prioriza curarse cuando el enemigo tiene poca vida
+                    score += 10f * (1.1f - (currentHealth / maxHealth)); // Prioriza curarse cuando el enemigo tiene poca vida
                 break;
 
             case EnemyAction.Dodge:
                 score += 8f; // Prioridad fija por evasion
-                break;
-
-            case EnemyAction.Protect:
-                score += 5f * (1.5f - (currentHealth / maxHealth)); // Prioriza protegerse cuando tiene poca vida
                 break;
 
             case EnemyAction.SpecialAttack:
@@ -141,16 +173,17 @@ public class Enemy : MonoBehaviour
         // Generar un valor aleatorio para determinar si el disparo acierta
         float hitChance = Random.Range(0f, 1f);
 
-        if (hitChance <= accuracy)
+        if (hitChance <= accuracy) // Si acierta, realiza el ataque
         {
-            // Si acierta, realiza el ataque
-            StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+            if (player.isDodging && hitChance <= accuracy - playerDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la bala
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
+            else if (player.isDodging && hitChance > accuracy - playerDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, no le da
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
+            else // No esta el player esquivando y le da
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
         }
-        else
-        {
-            // Si falla, muestra un mensaje de fallo
-            StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo falló.")));
-        }
+        else // Si falla, muestra un mensaje de fallo
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
 
         // Reducir la municion independientemente de si acierta o falla
         currentAmmo -= 1;
@@ -181,19 +214,17 @@ public class Enemy : MonoBehaviour
             // Generar un valor aleatorio para determinar si el disparo acierta
             float hitChance = Random.Range(0f, 1f);
 
-            if (hitChance <= accuracy)
+            if (hitChance <= accuracy) // Si acierta, realiza el ataque
             {
-                // Si acierta, realiza el ataque
-                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
+                if (player.isDodging && hitChance <= accuracy - playerDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la bala
+                    StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
+                else if (player.isDodging && hitChance > accuracy - playerDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, no le da
+                    StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
+                else // No esta el player esquivando y le da
+                    StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
             }
-            else
-            {
-                // Si falla, muestra un mensaje de fallo
+            else // Si falla, muestra un mensaje de fallo
                 StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
-            }
-
-            // Reducir la municion independientemente de si acierta o falla
-            currentAmmo -= 1;
         }
     }
 
@@ -202,20 +233,17 @@ public class Enemy : MonoBehaviour
         // Generar un valor aleatorio para determinar si el disparo acierta
         float hitChance = Random.Range(0f, 1f);
 
-        if (hitChance <= 0.90f)
+        if (hitChance <= rifleAccuracy)
         {
-            // Si acierta, realiza el ataque
-            StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
-            Debug.Log("¡Ataque rifle exitoso! El jugador recibio daño.");
+            if (player.isDodging && hitChance <= rifleAccuracy - playerDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la bala
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
+            else if (player.isDodging && hitChance > rifleAccuracy - playerDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, no le da
+                StartCoroutine(AnimAttack(() => Debug.Log("El ataque enemigo fallo.")));
+            else // No esta el player esquivando y le da
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
         }
-        else
-        {
-            // Si falla, muestra un mensaje de fallo
+        else // Si falla, muestra un mensaje de fallo
             StartCoroutine(AnimAttack(() => Debug.Log("El ataque fallo.")));
-        }
-
-        // Reducir la municion independientemente de si acierta o falla
-        currentAmmo -= 1;
     }
 
     private void Dynamite()
@@ -225,18 +253,15 @@ public class Enemy : MonoBehaviour
 
         if (hitChance <= accuracy)
         {
-            // Si acierta, realiza el ataque
-            StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage)));
-            Debug.Log("¡Ataque dinamita exitoso! El jugador recibio daño.");
+            if (player.isDodging && hitChance <= accuracy - playerDodgeProbability) // Si esta esquivando el player, pero la precision esta dentro del rango, le da la dinamita
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
+            else if (player.isDodging && hitChance > accuracy - playerDodgeProbability) // Si esta esquivando el player, pero no esta a rango de precision, la dinamita le hace menos daño
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage / 2 * damageMultiplier)));
+            else // No esta el player esquivando y le da
+                StartCoroutine(AnimAttack(() => player.ReceiveDamage(damage * damageMultiplier)));
         }
-        else
-        {
-            // Si falla, muestra un mensaje de fallo
-            StartCoroutine(AnimAttack(() => Debug.Log("El ataque del enemigo falló.")));
-        }
-
-        // Reducir la municion independientemente de si acierta o falla
-        currentAmmo -= 1;
+        else // Si falla, muestra un mensaje de fallo
+            StartCoroutine(AnimAttack(() => Debug.Log("El ataque del enemigo fallo.")));
     }
 
     private IEnumerator AnimAttack(System.Action onAnimationComplete)
@@ -283,11 +308,13 @@ public class Enemy : MonoBehaviour
     #endregion
 
     #region CURAR
-    private void Heal(int healAmount)
+    public void Heal(int healAmount)
     {
         currentHealth += healAmount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
+
+        turnController.UpdateEnemyHealthUI();
     }
     #endregion
 
@@ -296,8 +323,8 @@ public class Enemy : MonoBehaviour
     {
         // audioSource.PlayOneShot(audioClipDamaged);
         currentHealth -= damage;
-        Debug.LogWarning("Vida actual del enemigo: " + currentHealth);
         StartCoroutine(Damaged());
+        turnController.UpdateEnemyHealthUI();
         if (currentHealth <= 0)
             Death();
     }
@@ -306,7 +333,7 @@ public class Enemy : MonoBehaviour
     {
         turnController.DetectOutcome(); // Detectar el resultado del duelo
         // Hacerlo IEnumerator, meterle animacion, desactivar collider y destruir
-        Destroy(gameObject);
+        // Destroy(gameObject);
     }
 
     private IEnumerator Damaged()
@@ -323,6 +350,8 @@ public class Enemy : MonoBehaviour
         currentAmmo += reloadAmount;
         if (currentAmmo > maxAmmo)
             currentAmmo = maxAmmo;
+
+        Debug.LogWarning("Munición actual del enemigo: " + currentAmmo);
     }
     #endregion
 }

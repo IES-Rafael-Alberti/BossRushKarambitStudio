@@ -43,7 +43,7 @@ MonoBehaviour:
     infoEN: Dodge
     actionType: 2
     specialAttackType: 0
-  - id: 5
+  - id: 3
     curacion: 0
     "da\xF1o": 1
     proteccion: 0
@@ -53,33 +53,33 @@ MonoBehaviour:
     infoEN: Reload
     actionType: 3
     specialAttackType: 0
-  - id: 3
-    curacion: 0
-    "da\xF1o": 1
-    proteccion: 0
-    esEsquiva: 0
-    spriteCarta: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-    infoES: 
-    infoEN: 
-    actionType: 4
-    specialAttackType: 0
   - id: 4
     curacion: 0
     "da\xF1o": 1
     proteccion: 0
     esEsquiva: 0
-    spriteCarta: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-    infoES: 
-    infoEN: 
+    spriteCarta: {fileID: 21300000, guid: 7c395c72faec61241a39dd9ff94137b7, type: 3}
+    infoES: SA DShot
+    infoEN: SA DShot
     actionType: 4
-    specialAttackType: 1
+    specialAttackType: 0
   - id: 5
     curacion: 0
     "da\xF1o": 1
     proteccion: 0
     esEsquiva: 0
     spriteCarta: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-    infoES: 
-    infoEN: 
+    infoES: SA RShot
+    infoEN: SA RShot
+    actionType: 4
+    specialAttackType: 1
+  - id: 6
+    curacion: 0
+    "da\xF1o": 1
+    proteccion: 0
+    esEsquiva: 0
+    spriteCarta: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+    infoES: SA DYShot
+    infoEN: SA DYShot
     actionType: 4
     specialAttackType: 2

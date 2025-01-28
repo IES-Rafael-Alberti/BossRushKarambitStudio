@@ -7,12 +7,6 @@ public class LocaleSelector : MonoBehaviour
 {
     private bool active = false;
 
-    private void Start()
-    {
-        int ID = PlayerPrefs.GetInt("LocalKey", 0);
-        ChangeLocale(ID);
-    }
-
     public void ChangeLocale(int localeID)
     {
         if (active == true)

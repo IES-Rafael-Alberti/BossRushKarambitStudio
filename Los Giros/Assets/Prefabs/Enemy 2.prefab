@@ -104,12 +104,13 @@ MonoBehaviour:
   maxAmmo: 6
   initialAmmo: 0
   reloadAmount: 1
-  maxHealth: 20
+  maxHealth: 2
   damage: 2
   healAmount: 1
   accuracy: 0.75
   playerDodgeProbability: 0.4
   rifleAccuracy: 0.9
+  posterWanted: {fileID: 0}
   audioClipDamaged: {fileID: 0}
   actionChosen: 0
   currentHealth: 0

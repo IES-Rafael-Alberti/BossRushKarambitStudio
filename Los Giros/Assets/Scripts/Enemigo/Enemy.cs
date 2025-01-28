@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int maxAmmo, initialAmmo, reloadAmount;
     public int maxHealth, damage, healAmount;
     [Range(0f, 1f)] public float accuracy, playerDodgeProbability, rifleAccuracy;
+    [HideInInspector] public GameObject posterWanted;
     [SerializeField] private AudioClip audioClipDamaged;
     private Player player;
     [HideInInspector] public EnemyAction actionChosen;
@@ -332,7 +333,7 @@ public class Enemy : MonoBehaviour
     {
         turnController.DetectOutcome(); // Detectar el resultado del duelo
         // Hacerlo IEnumerator, meterle animacion, desactivar collider y destruir
-        Destroy(gameObject);
+        // Destroy(gameObject);
     }
 
     private IEnumerator Damaged()

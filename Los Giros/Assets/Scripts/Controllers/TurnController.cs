@@ -5,6 +5,7 @@ using System.Threading;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TurnController : MonoBehaviour
@@ -18,7 +19,7 @@ public class TurnController : MonoBehaviour
     [SerializeField] private List<BasicPlayerAction> basicsPlayerActions;
     [SerializeField] private int drawCardAmount, timerTime;
     [SerializeField] private TMP_Text txtTimer, txtPlayerHealth, txtEnemyHealth;
-    [SerializeField] private GameObject prefabCard, victoryPanel, defeatPanel, spinGO, iconBoost;
+    [SerializeField] private GameObject prefabCard, victoryPanel, defeatPanel, spinGO, iconBoost, posterWanted, posterWanted1, posterWanted2;
     [SerializeField] private Button btnContinue, btnRetry;
     [SerializeField] private BaseDatosCartas baseDatosCartas;
     [SerializeField] private CinemachinePOVExtension cameraScript;
@@ -64,6 +65,7 @@ public class TurnController : MonoBehaviour
     {
         player = FindObjectOfType<Player>();
         enemy = FindObjectOfType<Enemy>();
+        enemy.posterWanted = posterWanted;
         cameraScript.OnRotationCompleteY += DoPlayerAction; // Suscribirse a eventos
         cameraScript.OnRotationCompleteY += DoEnemyAction;
         cameraScript.OnTurnComplete += InitTurn;
@@ -155,6 +157,7 @@ public class TurnController : MonoBehaviour
         spinGO.SetActive(true);
         Spin spin = spinGO.GetComponentInChildren<Spin>();
         spin.MakeSpin();
+        spin.ChoseBoost();
 
         // Asegurar que el siguiente paso del turno ocurra tras el giro
         StartCoroutine(WaitForSpin());
@@ -168,6 +171,17 @@ public class TurnController : MonoBehaviour
         yield return new WaitForSeconds(spin.spinDuration + 0.1f);
         iconBoost.GetComponent<Image>().sprite = spin.spriteIcon;
         iconBoost.SetActive(true);
+        yield return new WaitForSeconds(0.15f);
+
+        // Ocultar la ruleta tras el giro
+        spinGO.SetActive(false);
+
+        // Continuar el flujo del turno
+        StartCoroutine(DrawCard()); // Robar cartas
+        ChooseEnemyAction();
+        StartCoroutine(InitTimer());
+
+        yield return new WaitForSeconds(1.3f);
         switch (spin.spinBoost)
         {
             case SpinBoost.X2Damage:
@@ -175,6 +189,7 @@ public class TurnController : MonoBehaviour
                 foreach (Carta card in cardsOnHand)
                 {
                     card.damage *= 2;
+                    Debug.Log("Damage: " + card.damage);
                 }
                 enemy.damageMultiplier *= 2;
                 break;
@@ -187,9 +202,9 @@ public class TurnController : MonoBehaviour
                 enemy.damageMultiplier *= 3;
                 break;
             case SpinBoost.X2Action:
-                // ¡¡¡ Puede producir errores inesperados, hay que probarlo !!!
-                /*DoPlayerAction();
-                DoEnemyAction();*/
+                // Hay que testearlo mas
+                PlayCard();
+                FindObjectOfType<Enemy>().DoAction();
                 break;
             case SpinBoost.HealingBullets:
                 cardsOnHand = FindObjectsOfType<Carta>().ToList();
@@ -210,16 +225,6 @@ public class TurnController : MonoBehaviour
             default:
                 break;
         }
-
-        yield return new WaitForSeconds(0.15f);
-
-        // Ocultar la ruleta tras el giro
-        spinGO.SetActive(false);
-
-        // Continuar el flujo del turno
-        StartCoroutine(DrawCard()); // Robar cartas
-        ChooseEnemyAction();
-        StartCoroutine(InitTimer());
     }
 
     #endregion
@@ -363,6 +368,7 @@ public class TurnController : MonoBehaviour
     {
         Enemy e = FindObjectOfType<Enemy>();
         txtEnemyHealth.text = "Health: " + e.currentHealth;
+        sliderEnemyHealth.maxValue = e.maxHealth;
         sliderEnemyHealth.value = e.currentHealth;
     }
 
@@ -394,6 +400,12 @@ public class TurnController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         // Logica para mostrar pantalla de victoria
         victoryPanel.SetActive(true);
+        enemy.posterWanted.transform.GetChild(0).gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        if(FindObjectOfType<Enemy>().ID < 2)
+            StartCoroutine(NextEnemy());
+        else
+            EndGame();
     }
 
     private IEnumerator ShowDefeatPanel()
@@ -404,13 +416,41 @@ public class TurnController : MonoBehaviour
         defeatPanel.SetActive(true);
     }
 
+    private void EndGame()
+    {
+        // Logica acabar juego
+        SceneManager.LoadScene("MainMenu");
+    }
+
     #endregion
 
     #region UI ACTIONS
 
-    private void NextEnemy()
+    private IEnumerator NextEnemy()
     {
         // Logica para avanzar al siguiente enemigo
+        Enemy enemy = FindObjectOfType<Enemy>();
+        foreach (GameObject e in listEnemies)
+        {
+            if (e.GetComponent<Enemy>().ID == enemy.ID + 1)
+            {
+                GameObject go = Instantiate(e, world);
+                if (e.GetComponent<Enemy>().ID == 1)
+                    e.GetComponent<Enemy>().posterWanted = posterWanted1;
+                else
+                    e.GetComponent<Enemy>().posterWanted = posterWanted2;
+                e.GetComponent<Enemy>().posterWanted.SetActive(true);
+                go.transform.localPosition = enemy.transform.localPosition;
+                Destroy(enemy.gameObject, 0.1f);
+            }
+        }
+        DestroyCards();
+        victoryPanel.SetActive(false);
+        cameraScript.Rotate45DegreesX(-45);
+        yield return new WaitForSeconds(2f);
+        cameraScript.Rotate180DegreesY();
+        UpdateEnemyHealthUI();
+        isBattleActive = true;
     }
 
     private IEnumerator Retry()

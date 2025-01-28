@@ -70,6 +70,8 @@ public class Carta : MonoBehaviour
                 // Si acierta, realiza el ataque
                 StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
                 Debug.Log("¡Ataque exitoso! El enemigo recibio daño.");
+                player.Heal(healAmount);
+                turnController.UpdatePlayerHealthUI();
             }
             else
             {

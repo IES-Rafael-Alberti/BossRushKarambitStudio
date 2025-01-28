@@ -199,10 +199,14 @@ public class TurnController : MonoBehaviour
                 }
                 enemy.damageMultiplier *= 3;
                 break;
-            case SpinBoost.X2Action:
-                // Hay que testearlo mas
-                PlayCard();
-                FindObjectOfType<Enemy>().DoAction();
+            case SpinBoost.X10Damage:
+                cardsOnHand = FindObjectsOfType<Carta>().ToList();
+                foreach (Carta card in cardsOnHand)
+                {
+                    card.damage *= 10;
+                    Debug.Log("Damage: " + card.damage);
+                }
+                enemy.damageMultiplier *= 10;
                 break;
             case SpinBoost.HealingBullets:
                 cardsOnHand = FindObjectsOfType<Carta>().ToList();
@@ -214,12 +218,6 @@ public class TurnController : MonoBehaviour
                 if (enemy.actionChosen == global::EnemyAction.Attack || enemy.actionChosen == global::EnemyAction.SpecialAttack)
                     enemy.Heal(enemy.healAmount);
                 break;
-            /*case SpinBoost.X2Damage:
-                break;
-            case SpinBoost.X2Damage:
-                break;
-            case SpinBoost.X2Damage:
-                break;*/
             default:
                 break;
         }
@@ -400,7 +398,7 @@ public class TurnController : MonoBehaviour
         victoryPanel.SetActive(true);
         enemy.posterWanted.transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(2f);
-        if(FindObjectOfType<Enemy>().ID < 2)
+        if (FindObjectOfType<Enemy>().ID < 2)
             StartCoroutine(NextEnemy());
         else
             StartCoroutine(EndGame());

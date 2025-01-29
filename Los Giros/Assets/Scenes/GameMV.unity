@@ -491,7 +491,7 @@ MonoBehaviour:
   txtTimer: {fileID: 765017676}
   txtPlayerHealth: {fileID: 1365499394}
   txtEnemyHealth: {fileID: 1305166108}
-  prefabCard: {fileID: 8408931947712722435, guid: f5bd44659cf03a64f9f2ef0a21509307, type: 3}
+  prefabCard: {fileID: 8408931947712722435, guid: 692201091589d3c4ca9edc5e9dcb32a0, type: 3}
   victoryPanel: {fileID: 689880583}
   defeatPanel: {fileID: 1180702906}
   spinGO: {fileID: 1493953529}

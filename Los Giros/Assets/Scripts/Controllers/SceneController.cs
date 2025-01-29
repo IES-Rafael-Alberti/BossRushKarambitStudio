@@ -8,6 +8,7 @@ public class SceneController: MonoBehaviour
     public static SceneController instance;
     [SerializeField] Animator transitionAnim;
     [SerializeField] GameObject mainMenuCanvas;
+    [SerializeField] AudioManager audioManager;
     public GameObject SceneTransition;
 
     public void StartGame()
@@ -26,6 +27,7 @@ public class SceneController: MonoBehaviour
         transitionAnim.SetTrigger("End");
         yield return new WaitForSeconds(1);
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        audioManager.FightTheme();
         transitionAnim.SetTrigger("Start");
     }
 }

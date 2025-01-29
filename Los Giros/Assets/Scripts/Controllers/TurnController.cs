@@ -293,6 +293,8 @@ public class TurnController : MonoBehaviour
                 // Configurar propiedades de la carta
                 var cartaData = baseDatosCartas.baseDatos[random];
                 Carta carta = go.GetComponent<Carta>();
+              
+
                 carta.id = cartaData.id;
                 carta.GetComponent<SpriteRenderer>().sprite = cartaData.spriteCarta;
                 carta.moveDistanceX = moveDistanceX;
@@ -302,7 +304,8 @@ public class TurnController : MonoBehaviour
                 carta.damage = cartaData.daño;
                 carta.healAmount = cartaData.curacion;
                 carta.isDodge = cartaData.esEsquiva;
-                carta.nombreCarta = cartaData.infoES;
+                carta.nombreCartaEN = cartaData.infoEN;
+                carta.nombreCartaES = cartaData.infoES;
                 carta.actionType = cartaData.actionType;
                 if (carta.actionType == ActionType.SpecialAttack)
                     carta.specialAttackType = cartaData.specialAttackType;
@@ -314,6 +317,10 @@ public class TurnController : MonoBehaviour
             }
         }
     }
+
+    //Metodo para localizar el nombre de las cartas
+
+    
 
     // Metodo para seleccionar un indice basado en pesos
     private int GetWeightedRandomIndex(List<float> weights)

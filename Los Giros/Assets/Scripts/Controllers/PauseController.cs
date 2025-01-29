@@ -7,6 +7,7 @@ public class PauseController : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenuCanvas;
     [SerializeField] GameObject mainMenuCanvas;
+    [SerializeField] AudioManager audioManager;
 
     void Awake()
     {
@@ -47,6 +48,7 @@ public class PauseController : MonoBehaviour
         pauseMenuCanvas.SetActive(false);
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex - 1);
         mainMenuCanvas.SetActive(true);
+        audioManager.MainTheme();
     }
 
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class Carta : MonoBehaviour
 {
@@ -8,20 +10,31 @@ public class Carta : MonoBehaviour
     [HideInInspector] public float moveDistanceX, moveDuration, rotateDuration;
     // public bool isPlayable = false;
     [SerializeField] private TMP_Text txtNombre;
-    [HideInInspector] public string nombreCarta;
+    [HideInInspector] public string nombreCartaES, nombreCartaEN;
     public ActionType actionType;
     public SpecialAttackType specialAttackType;
     [SerializeField] private AudioClip audioClip, audioClipSonidoCarta;
     [HideInInspector] public bool isSelected = false, isDodge;
     private ShowAnimation showAnimation;
     private TurnController turnController;
+    private Locale locale;
 
     private void Start()
     {
         showAnimation = FindObjectOfType<ShowAnimation>();
         turnController = FindObjectOfType<TurnController>();
-        txtNombre.text = nombreCarta;
         StartCoroutine(AnimPlacement(moveDistanceX, moveDuration, rotateDuration));
+        
+    }
+
+    private void Update()
+    {
+        locale = LocalizationSettings.SelectedLocale;
+        if (locale != null)
+            if (locale.Identifier == "en")
+                txtNombre.text = nombreCartaEN;
+            else if (locale.Identifier == "es")
+                txtNombre.text = nombreCartaES;
     }
 
     public void DoAction()
@@ -49,7 +62,8 @@ public class Carta : MonoBehaviour
                 Debug.Log("ESQUIVA");
                 break;
             default:
-                Debug.LogWarning($"{name} intento ejecutar una accion no permitida: {actionType}");
+                Debug.LogWarning($"{name} " +
+                    $"intento ejecutar una accion no permitida: {actionType}");
                 break;
         }
     }

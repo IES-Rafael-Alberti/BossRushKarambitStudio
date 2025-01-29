@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("---AUDIO CLIP---")]
     [SerializeField] AudioClip background;
+    [SerializeField] AudioClip battleTheme;
     [SerializeField] AudioClip death;
     [SerializeField] AudioClip shoot;
     [SerializeField] AudioClip doubleShoot;
@@ -16,7 +18,19 @@ public class AudioManager : MonoBehaviour
 
     public static AudioManager instance;
 
-    private void Start()
+    public void Start()
+    {
+        musicSource.clip = background;
+        musicSource.Play();
+    }
+
+    public void FightTheme()
+    {
+        musicSource.clip = battleTheme;
+        musicSource.Play();
+    }
+
+    public void MainTheme()
     {
         musicSource.clip = background;
         musicSource.Play();

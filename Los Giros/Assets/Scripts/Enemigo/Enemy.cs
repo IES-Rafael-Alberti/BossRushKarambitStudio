@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public EnemyAction actionChosen;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
+    private Animator animator;
     [HideInInspector] public int currentHealth, currentAmmo, damageMultiplier;
     private TurnController turnController;
 
@@ -26,6 +27,7 @@ public class Enemy : MonoBehaviour
         player = FindObjectOfType<Player>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
         currentHealth = maxHealth;
         currentAmmo = initialAmmo;
     }
@@ -170,6 +172,7 @@ public class Enemy : MonoBehaviour
     #region ATACAR
     private void Attack()
     {
+        animator.SetTrigger("Attack");
         // Generar un valor aleatorio para determinar si el disparo acierta
         float hitChance = Random.Range(0f, 1f);
 
@@ -191,6 +194,7 @@ public class Enemy : MonoBehaviour
 
     private void SpecialAttack()
     {
+        animator.SetTrigger("Attack");
         switch (specialAttack)
         {
             case EnemySpecialAttack.DoubleShot:
@@ -310,6 +314,7 @@ public class Enemy : MonoBehaviour
     #region CURAR
     public void Heal(int healAmount)
     {
+        animator.SetTrigger("Heal");
         currentHealth += healAmount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
@@ -347,6 +352,7 @@ public class Enemy : MonoBehaviour
     #region RECARGAR
     private void Reload()
     {
+        animator.SetTrigger("Reload");
         currentAmmo += reloadAmount;
         if (currentAmmo > maxAmmo)
             currentAmmo = maxAmmo;

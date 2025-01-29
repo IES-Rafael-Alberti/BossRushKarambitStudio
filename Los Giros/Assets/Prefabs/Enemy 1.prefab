@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4372903362230927476}
   - component: {fileID: 3785252439302979764}
   - component: {fileID: 3032530032934653464}
+  - component: {fileID: 2089000920934775266}
   m_Layer: 0
   m_Name: Enemy 1
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.3595, y: 2.3595, z: 2.3595}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: eb3c11406e81c6e4cabde7681a75a256, type: 3}
+  m_Sprite: {fileID: 1964274728, guid: 2a6cb3c57382c4a4e912ec340ef71fd4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,12 +103,11 @@ MonoBehaviour:
   allowedActions: 00000000030000000100000005000000
   specialAttack: 0
   maxAmmo: 6
-  initialAmmo: 0
+  initialAmmo: 1
   reloadAmount: 1
-  posterTag: Poster1
   maxHealth: 20
-  damage: 2
-  healAmount: 1
+  damage: 1
+  healAmount: 0
   accuracy: 0.75
   playerDodgeProbability: 0.4
   rifleAccuracy: 0.9
@@ -131,3 +131,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   flickerMaterial: {fileID: 2100000, guid: 74a6b6a389061e24c9c9a76b842ccdee, type: 2}
+--- !u!95 &2089000920934775266
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8043513078498755837}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 44faae1f077bf314b9654cb4c369f299, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

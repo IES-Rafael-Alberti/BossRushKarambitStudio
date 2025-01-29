@@ -24,7 +24,7 @@ MonoBehaviour:
     actionType: 0
     specialAttackType: 0
   - id: 1
-    curacion: 1
+    curacion: 25
     "da\xF1o": 0
     proteccion: 0
     esEsquiva: 0

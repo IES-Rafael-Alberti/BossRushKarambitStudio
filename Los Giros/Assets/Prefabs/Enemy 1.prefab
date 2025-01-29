@@ -100,15 +100,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   allowedActions: 00000000030000000100000005000000
-  specialAttack: 0
-  maxAmmo: 6
-  initialAmmo: 0
+  specialAttack: 1
+  maxAmmo: 5
+  initialAmmo: 1
   reloadAmount: 1
+<<<<<<< Updated upstream
   maxHealth: 20
   damage: 2
+=======
+  maxHealth: 150
+  damage: 40
+>>>>>>> Stashed changes
   healAmount: 1
-  accuracy: 0.75
-  playerDodgeProbability: 0.4
+  accuracy: 0.8
+  playerDodgeProbability: 0.7
   rifleAccuracy: 0.9
   audioClipDamaged: {fileID: 0}
   actionChosen: 0

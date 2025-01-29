@@ -1524,6 +1524,7 @@ GameObject:
   - component: {fileID: 462645664}
   - component: {fileID: 462645665}
   - component: {fileID: 462645666}
+  - component: {fileID: 462645667}
   m_Layer: 0
   m_Name: PuntoAnimacion
   m_TagString: Untagged
@@ -1635,6 +1636,22 @@ MonoBehaviour:
   targetY: 0
   moveDuration: 0.3
   delayBeforeHide: 0.5
+  impulseSource: {fileID: 0}
+--- !u!114 &462645667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462645662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d7276a6cef8ed41812502c7fbfde58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualCamera: {fileID: 859285984}
+  shakeIntensity: 2
+  shakeDuration: 0.5
 --- !u!1 &482155933
 GameObject:
   m_ObjectHideFlags: 0
@@ -3425,7 +3442,6 @@ GameObject:
   - component: {fileID: 963194229}
   - component: {fileID: 963194230}
   - component: {fileID: 963194231}
-  - component: {fileID: 963194232}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3602,27 +3618,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_MaxRayIntersections: 0
---- !u!95 &963194232
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f2cb691fbb83e9e4b9ac6992122b18fa, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &988195458
 GameObject:
   m_ObjectHideFlags: 0
@@ -4899,6 +4894,7 @@ GameObject:
   - component: {fileID: 1432229846}
   - component: {fileID: 1432229844}
   - component: {fileID: 1432229847}
+  - component: {fileID: 1432229848}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -5008,6 +5004,23 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_ApplyBeforeBody: 0
+--- !u!114 &1432229848
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432229842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 0
+  m_FrequencyGain: 2
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &1446842538
 GameObject:
   m_ObjectHideFlags: 0
@@ -7002,7 +7015,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
       propertyPath: maxHealth
-      value: 2
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7141866482277149303, guid: 08410561d5ffba843ac6931a3d356b2a, type: 3}
       propertyPath: initialAmmo

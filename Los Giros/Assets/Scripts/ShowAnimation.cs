@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Cinemachine;
 
 public class ShowAnimation : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ShowAnimation : MonoBehaviour
     private string triggerName = "";
     [SerializeField] private float initialY, targetY, moveDuration;
     [SerializeField] private float delayBeforeHide = 1f; // Tiempo de retraso antes de esconder
+    [SerializeField] private CinemachineImpulseSource impulseSource;
     private float transformY;
 
     private void Start()
@@ -53,8 +55,6 @@ public class ShowAnimation : MonoBehaviour
     // Metodo para mostrar
     private void ShowAnim(float initialY, float targetY)
     {
-        
-
         if (!string.IsNullOrEmpty(triggerName))
         {
             animator.SetTrigger(triggerName); // Activa el trigger

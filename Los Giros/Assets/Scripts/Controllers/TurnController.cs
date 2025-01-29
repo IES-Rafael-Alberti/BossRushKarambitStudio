@@ -231,7 +231,7 @@ public class TurnController : MonoBehaviour
     {
         PlayCard(); // Juega la carta seleccionada
         DetectOutcome();
-        yield return new WaitForSeconds(2f); // Tiempo antes de girar para elegir nuevamente carta
+        yield return new WaitForSeconds(3f); // Tiempo antes de girar para elegir nuevamente carta
         cameraScript.Rotate180DegreesY();
         DestroyCards();
     }
@@ -293,7 +293,6 @@ public class TurnController : MonoBehaviour
                 // Configurar propiedades de la carta
                 var cartaData = baseDatosCartas.baseDatos[random];
                 Carta carta = go.GetComponent<Carta>();
-              
 
                 carta.id = cartaData.id;
                 carta.GetComponent<SpriteRenderer>().sprite = cartaData.spriteCarta;
@@ -317,10 +316,6 @@ public class TurnController : MonoBehaviour
             }
         }
     }
-
-    //Metodo para localizar el nombre de las cartas
-
-    
 
     // Metodo para seleccionar un indice basado en pesos
     private int GetWeightedRandomIndex(List<float> weights)
@@ -422,7 +417,6 @@ public class TurnController : MonoBehaviour
     private IEnumerator EndGame()
     {
         // Logica acabar juego
-        // SceneManager.LoadScene("MainMenu");
         yield return new WaitForSeconds(1.5f);
         victoryPanel.SetActive(false);
         cameraScript.Rotate45DegreesX(-45);
@@ -443,9 +437,15 @@ public class TurnController : MonoBehaviour
             {
                 GameObject go = Instantiate(e, world);
                 if (e.GetComponent<Enemy>().ID == 1)
+                {
                     e.GetComponent<Enemy>().posterWanted = posterWanted1;
+                    playerDeck.Add(new(5));
+                }
                 else
+                {
                     e.GetComponent<Enemy>().posterWanted = posterWanted2;
+                    playerDeck.Add(new(6));
+                }
                 e.GetComponent<Enemy>().posterWanted.SetActive(true);
                 go.transform.localPosition = enemy.transform.localPosition;
                 Destroy(enemy.gameObject, 0.1f);

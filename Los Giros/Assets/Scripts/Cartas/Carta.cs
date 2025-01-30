@@ -44,34 +44,26 @@ public class Carta : MonoBehaviour
         {
             case ActionType.Shot:
                 Shot();
-                Debug.Log("DISPARO");
                 break;
             case ActionType.Heal:
                 Heal(healAmount);
-                Debug.Log("CURACION");
                 break;
             case ActionType.Reload:
                 Reload();
-                Debug.Log("RECARGA");
                 break;
             case ActionType.SpecialAttack:
                 SpecialAttack();
-                Debug.Log("DISPARO ESPECIAL");
                 break;
             case ActionType.Dodge:
                 Dodge();
-                Debug.Log("ESQUIVA");
                 break;
             default:
-                Debug.LogWarning($"{name} " +
-                    $"intento ejecutar una accion no permitida: {actionType}");
                 break;
         }
     }
 
     private void Shot()
     {
-        // Debug.Log("SE DISPARA AL ENEMIGO");
         Enemy enemy = FindObjectOfType<Enemy>();
         Player player = FindObjectOfType<Player>();
         showAnimation.InitMove("Shot");
@@ -84,23 +76,13 @@ public class Carta : MonoBehaviour
             {
                 // Si acierta, realiza el ataque
                 StartCoroutine(AnimAttack(() => enemy.ReceiveDamage(damage)));
-                Debug.Log("¡Ataque exitoso! El enemigo recibio daño.");
                 player.Heal(healAmount);
                 turnController.UpdatePlayerHealthUI();
-            }
-            else
-            {
-                // Si falla, muestra un mensaje de fallo
-                StartCoroutine(AnimAttack(() => Debug.Log("El ataque del jugador fallo.")));
             }
 
             // Reducir la municion independientemente de si acierta o falla
             player.currentAmmo -= 1;
             turnController.UpdateUIBullets();
-        }
-        else
-        {
-            Debug.LogWarning("El jugador intento disparar sin municion");
         }
     }
 

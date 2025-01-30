@@ -187,7 +187,6 @@ public class TurnController : MonoBehaviour
                 foreach (Carta card in cardsOnHand)
                 {
                     card.damage *= 2;
-                    Debug.Log("Damage: " + card.damage);
                 }
                 enemy.damageMultiplier *= 2;
                 break;
@@ -204,7 +203,6 @@ public class TurnController : MonoBehaviour
                 foreach (Carta card in cardsOnHand)
                 {
                     card.damage *= 10;
-                    Debug.Log("Damage: " + card.damage);
                 }
                 enemy.damageMultiplier *= 10;
                 break;
@@ -377,7 +375,6 @@ public class TurnController : MonoBehaviour
     public void DetectWin()
     {
         isBattleActive = false;
-        Debug.Log("¡Jugador, has derrotado al enemigo!");
         StopAllCoroutines();
         cameraScript.Rotate45DegreesX(45);
         StartCoroutine(ShowVictoryPanel());
@@ -386,7 +383,6 @@ public class TurnController : MonoBehaviour
     public void DetectLose()
     {
         isBattleActive = false;
-        Debug.Log("¡Jugador, has sido derrotado!");
         StopAllCoroutines();
         cameraScript.Rotate45DegreesX(45);
         StartCoroutine(ShowDefeatPanel());

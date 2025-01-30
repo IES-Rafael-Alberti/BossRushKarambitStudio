@@ -14,6 +14,7 @@ public class Carta : MonoBehaviour
     public ActionType actionType;
     public SpecialAttackType specialAttackType;
     [SerializeField] private AudioClip audioClip, audioClipSonidoCarta;
+    [SerializeField] private Material normalMaterial, doubleShotMaterial, rifleShotMaterial, dynamiteMaterial;
     [HideInInspector] public bool isSelected = false, isDodge;
     private ShowAnimation showAnimation;
     private TurnController turnController;
@@ -24,7 +25,7 @@ public class Carta : MonoBehaviour
         showAnimation = FindObjectOfType<ShowAnimation>();
         turnController = FindObjectOfType<TurnController>();
         StartCoroutine(AnimPlacement(moveDistanceX, moveDuration, rotateDuration));
-        
+        ApplySpecialEffect();
     }
 
     private void Update()
@@ -293,6 +294,21 @@ public class Carta : MonoBehaviour
 
         // Asegurarse de que la rotacion final sea exacta
         transform.rotation = endRotation;
+    }
+
+    private void ApplySpecialEffect()
+    {
+        if (actionType == ActionType.SpecialAttack)
+        {
+            if (specialAttackType == SpecialAttackType.DoubleShot)
+                GetComponent<SpriteRenderer>().material = doubleShotMaterial;
+            else if (specialAttackType == SpecialAttackType.RifleShot)
+                GetComponent<SpriteRenderer>().material = rifleShotMaterial;
+            else
+                GetComponent<SpriteRenderer>().material = dynamiteMaterial;
+        }
+        else
+            GetComponent<SpriteRenderer>().material = normalMaterial;
     }
 
 }

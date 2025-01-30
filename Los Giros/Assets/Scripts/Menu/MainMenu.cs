@@ -10,9 +10,10 @@ public class MainMenu : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    //Play Button
+    public void Play()
     {
-        
+        //Load the Game Scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 }

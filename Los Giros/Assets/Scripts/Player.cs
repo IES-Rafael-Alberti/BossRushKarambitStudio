@@ -12,10 +12,12 @@ public class Player : MonoBehaviour
     [HideInInspector] public int currentHealth, currentAmmo;
     [HideInInspector] public bool isDodging;
     private TurnController turnController;
+    private PlayerSounds playerSounds;
 
     void Start()
     {
         turnController = FindObjectOfType<TurnController>();
+        playerSounds = FindObjectOfType<PlayerSounds>();
         currentHealth = maxHealth;
         currentAmmo = initialAmmo;
     }
@@ -58,6 +60,9 @@ public class Player : MonoBehaviour
 
         // Mover hacia abajo
         float elapsedTime = 0f;
+
+        playerSounds.PlayDodgeSound();
+
         while (elapsedTime < dodgeDuration)
         {
             transform.position = Vector3.Lerp(originalPosition, dodgePosition, elapsedTime / dodgeDuration);

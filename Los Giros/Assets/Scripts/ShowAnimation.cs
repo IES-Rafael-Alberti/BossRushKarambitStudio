@@ -10,7 +10,6 @@ public class ShowAnimation : MonoBehaviour
     private string triggerName = "";
     [SerializeField] private float initialY, targetY, moveDuration;
     [SerializeField] private float delayBeforeHide = 1f; // Tiempo de retraso antes de esconder
-    [SerializeField] private CinemachineImpulseSource impulseSource;
     private float transformY;
 
     private void Start()

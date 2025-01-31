@@ -363,11 +363,16 @@ MonoBehaviour:
   moveDuration: 0
   rotateDuration: 0
   txtNombre: {fileID: 2157033351365874229}
-  nombreCarta: 
+  nombreCartaES: 
+  nombreCartaEN: 
   actionType: 0
   specialAttackType: 0
   audioClip: {fileID: 0}
   audioClipSonidoCarta: {fileID: 0}
+  normalMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  doubleShotMaterial: {fileID: 2100000, guid: 11bf936e087b36042a925360c0321298, type: 2}
+  rifleShotMaterial: {fileID: 2100000, guid: 7a7c6167926558b44b71e742490c5263, type: 2}
+  dynamiteMaterial: {fileID: 2100000, guid: f2a9c076eeba5204a9510d356d2057c8, type: 2}
   isSelected: 0
   isDodge: 0
 --- !u!114 &3222690860723269912

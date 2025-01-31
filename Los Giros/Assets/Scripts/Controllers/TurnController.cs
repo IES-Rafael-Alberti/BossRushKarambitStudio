@@ -273,7 +273,7 @@ public class TurnController : MonoBehaviour
     private IEnumerator DrawCard()
     {
         float ajustePosicionZ = -0.1f; // Ajuste para que se vean las cartas por encima de la baraja al robarlas
-        float moveDistanceX = 1.1f;
+        float moveDistanceX = 1.3f;
 
         // Reiniciar los pesos al inicio del turno
         List<float> cardWeights = ResetCardWeights();

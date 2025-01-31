@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/LanguageSelection.unity
     guid: 9b12d0aa38932ce40bdcbf890e7de0d0
   - enabled: 1
-    path: Assets/Scenes/MainMenuAntonioCano.unity
-    guid: 3a034b6e0faba414da7b75da086801c0
+    path: Assets/Scenes/MainMenuFinal.unity
+    guid: 2e61aabbfb5459b46bdef91e0eac68ca
   - enabled: 1
     path: Assets/Scenes/GameMV.unity
     guid: 4b2ea012eca24f54d98341219db8b358

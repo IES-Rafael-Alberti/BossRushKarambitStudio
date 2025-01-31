@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class MainMenuA : MonoBehaviour
 {
     public static MainMenu instance;
     [SerializeField] Animator transitionAnim;

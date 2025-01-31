@@ -517,8 +517,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 7047279436241633863}
   sfxSource: {fileID: 5354463838264387252}
-  background: {fileID: 8300000, guid: 5706ec08b471cbf4183fd343a35b141f, type: 3}
-  battleTheme: {fileID: 8300000, guid: 5e3c733d4cd40cc4abb014b36b2b7fd0, type: 3}
+  background: {fileID: 8300000, guid: d6f91ce915f21ce459ef460d37994d62, type: 3}
+  battleTheme: {fileID: 8300000, guid: 7502267767b21cf48896f3b6f01b9942, type: 3}
   death: {fileID: 0}
   shoot: {fileID: 0}
   doubleShoot: {fileID: 0}

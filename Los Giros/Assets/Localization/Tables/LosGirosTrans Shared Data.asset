@@ -16,7 +16,7 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 8e9a632c389156a41a518bb74e233af3
   m_Entries:
   - m_Id: 101161455616
-    m_Key: MMStart
+    m_Key: MMPlay
     m_Metadata:
       m_Items: []
   - m_Id: 154177458176

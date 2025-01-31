@@ -98,19 +98,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e86ed57b6f6adf4892228c59447c796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 1
+  ID: 0
   allowedActions: 00000000030000000100000005000000
-  specialAttack: 1
-  maxAmmo: 6
-  initialAmmo: 0
+  specialAttack: 2
+  maxAmmo: 2
+  initialAmmo: 1
   reloadAmount: 1
-  maxHealth: 2
+<<<<<<< Updated upstream
+  maxHealth: 20
   damage: 2
   healAmount: 1
   accuracy: 0.75
   playerDodgeProbability: 0.4
   rifleAccuracy: 0.9
+=======
+  maxHealth: 200
+  damage: 60
+  healAmount: 25
+  accuracy: 0.7
+  playerDodgeProbability: 0.15
+  rifleAccuracy: 0.908
   posterWanted: {fileID: 0}
+>>>>>>> Stashed changes
   audioClipDamaged: {fileID: 0}
   actionChosen: 0
   currentHealth: 0

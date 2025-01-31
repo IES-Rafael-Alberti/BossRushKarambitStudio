@@ -10,7 +10,6 @@ EditorBuildSettings:
     guid: 9b12d0aa38932ce40bdcbf890e7de0d0
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
-    path: Assets/Scenes/MainMenuJoseP.unity
     guid: ba4cf9d989ced1d46a6896832e38e3be
   - enabled: 1
     path: Assets/Scenes/GameMV.unity

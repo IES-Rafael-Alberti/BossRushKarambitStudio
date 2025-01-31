@@ -273,7 +273,7 @@ public class TurnController : MonoBehaviour
     private IEnumerator DrawCard()
     {
         float ajustePosicionZ = -0.1f; // Ajuste para que se vean las cartas por encima de la baraja al robarlas
-        float moveDistanceX = 1.1f;
+        float moveDistanceX = 1.5f;
 
         // Reiniciar los pesos al inicio del turno
         List<float> cardWeights = ResetCardWeights();
@@ -293,9 +293,9 @@ public class TurnController : MonoBehaviour
                 Carta carta = go.GetComponent<Carta>();
 
                 carta.id = cartaData.id;
-                // carta.GetComponent<SpriteRenderer>().sprite = cartaData.spriteCarta;
+                carta.GetComponent<SpriteRenderer>().sprite = cartaData.spriteCarta;
                 carta.moveDistanceX = moveDistanceX;
-                moveDistanceX += 1f;
+                moveDistanceX += 1.3f;
                 carta.moveDuration = moveDuration;
                 carta.rotateDuration = rotateDuration;
                 carta.damage = cartaData.daño;

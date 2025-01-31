@@ -17,11 +17,12 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 46d199c6424baf144b9e5c3eafd0bda1
   m_SerializeEntries:
-  - m_GUID: f5f7af4ce329ebc4fabfd1e65b09036e
-    m_Address: StringTable_es
+  - m_GUID: a0c13015687d25e46b8dc3d65b277d25
+    m_Address: LosGirosTrans_es
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-es
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: f87139520656a9544a6f634e135b822d, type: 2}

@@ -6,16 +6,19 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int ID;
-    [SerializeField] private List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal }; // Acciones permitidas para este enemigo
+    [SerializeField] private List<EnemyAction> allowedActions = new() { EnemyAction.Attack, EnemyAction.Reload, EnemyAction.Heal, EnemyAction.Dodge }; // Acciones permitidas para este enemigo
     [SerializeField] private EnemySpecialAttack specialAttack;
     [SerializeField] private int maxAmmo, initialAmmo, reloadAmount;
     public int maxHealth, damage, healAmount;
     [Range(0f, 1f)] public float accuracy, playerDodgeProbability, rifleAccuracy;
-    [SerializeField] private AudioClip audioClipDamaged;
+    [HideInInspector] public GameObject posterWanted;
+    [SerializeField] private AudioSource sfx;
+    [SerializeField] private AudioClip audioClipDamaged, attackAudio, healAudio, reloadAudio, dodgeAudio, doubleShotAudio, rifleShotAudio, dynamiteAudio, deathAudio;
     private Player player;
     [HideInInspector] public EnemyAction actionChosen;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
+    private Animator animator;
     [HideInInspector] public int currentHealth, currentAmmo, damageMultiplier;
     private TurnController turnController;
 
@@ -25,6 +28,7 @@ public class Enemy : MonoBehaviour
         player = FindObjectOfType<Player>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
         currentHealth = maxHealth;
         currentAmmo = initialAmmo;
     }
@@ -158,6 +162,9 @@ public class Enemy : MonoBehaviour
             case EnemyAction.Reload:
                 Reload();
                 break;
+            case EnemyAction.Dodge:
+                Dodge();
+                break;
             case EnemyAction.SpecialAttack:
                 SpecialAttack();
                 break;
@@ -169,6 +176,8 @@ public class Enemy : MonoBehaviour
     #region ATACAR
     private void Attack()
     {
+        animator.SetTrigger("Attack");
+        sfx.PlayOneShot(attackAudio);
         // Generar un valor aleatorio para determinar si el disparo acierta
         float hitChance = Random.Range(0f, 1f);
 
@@ -190,6 +199,7 @@ public class Enemy : MonoBehaviour
 
     private void SpecialAttack()
     {
+        animator.SetTrigger("Attack");
         switch (specialAttack)
         {
             case EnemySpecialAttack.DoubleShot:
@@ -208,6 +218,8 @@ public class Enemy : MonoBehaviour
 
     private void DoubleShot()
     {
+        sfx.PlayOneShot(doubleShotAudio);
+
         for (int i = 0; i < 2; i++)
         {
             // Generar un valor aleatorio para determinar si el disparo acierta
@@ -229,6 +241,8 @@ public class Enemy : MonoBehaviour
 
     private void RifleShot()
     {
+        sfx.PlayOneShot(rifleShotAudio);
+
         // Generar un valor aleatorio para determinar si el disparo acierta
         float hitChance = Random.Range(0f, 1f);
 
@@ -247,6 +261,9 @@ public class Enemy : MonoBehaviour
 
     private void Dynamite()
     {
+
+        sfx.PlayOneShot(dynamiteAudio);
+
         // Generar un valor aleatorio para determinar si la dinamita acierta
         float hitChance = Random.Range(0f, 1f);
 
@@ -309,6 +326,8 @@ public class Enemy : MonoBehaviour
     #region CURAR
     public void Heal(int healAmount)
     {
+        animator.SetTrigger("Heal");
+        sfx.PlayOneShot(healAudio);
         currentHealth += healAmount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
@@ -320,7 +339,7 @@ public class Enemy : MonoBehaviour
     #region RECIBIR DAÑO
     public void ReceiveDamage(int damage)
     {
-        // audioSource.PlayOneShot(audioClipDamaged);
+        sfx.PlayOneShot(audioClipDamaged);
         currentHealth -= damage;
         StartCoroutine(Damaged());
         turnController.UpdateEnemyHealthUI();
@@ -332,7 +351,7 @@ public class Enemy : MonoBehaviour
     {
         turnController.DetectOutcome(); // Detectar el resultado del duelo
         // Hacerlo IEnumerator, meterle animacion, desactivar collider y destruir
-        Destroy(gameObject);
+        // Destroy(gameObject);
     }
 
     private IEnumerator Damaged()
@@ -346,11 +365,23 @@ public class Enemy : MonoBehaviour
     #region RECARGAR
     private void Reload()
     {
+        animator.SetTrigger("Reload");
+        sfx.PlayOneShot(reloadAudio);
         currentAmmo += reloadAmount;
         if (currentAmmo > maxAmmo)
             currentAmmo = maxAmmo;
 
         Debug.LogWarning("Munición actual del enemigo: " + currentAmmo);
+    }
+    #endregion
+
+    #region ESQUIVAR
+    private void Dodge()
+    {
+        animator.SetTrigger("Dodge");
+        sfx.PlayOneShot(dodgeAudio);
+
+        Debug.LogWarning("Esquivo, esquivo, esquivo...");
     }
     #endregion
 }

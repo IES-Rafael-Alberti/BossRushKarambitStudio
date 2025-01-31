@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Cinemachine;
 
 public class ShowAnimation : MonoBehaviour
 {
@@ -53,8 +54,6 @@ public class ShowAnimation : MonoBehaviour
     // Metodo para mostrar
     private void ShowAnim(float initialY, float targetY)
     {
-        
-
         if (!string.IsNullOrEmpty(triggerName))
         {
             animator.SetTrigger(triggerName); // Activa el trigger

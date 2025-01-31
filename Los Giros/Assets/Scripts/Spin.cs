@@ -26,7 +26,7 @@ public class Spin : MonoBehaviour
             case SpinBoost.X3Damage:
                 spriteIcon = iconSprites[1];
                 break;
-            case SpinBoost.X2Action:
+            case SpinBoost.X10Damage:
                 spriteIcon = iconSprites[2];
                 break;
             case SpinBoost.HealingBullets:
@@ -104,7 +104,7 @@ public enum SpinBoost
 {
     X2Damage,
     X3Damage,
-    X2Action,
+    X10Damage,
     HealingBullets,
 
 }

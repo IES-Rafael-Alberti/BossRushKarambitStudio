@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuA : MonoBehaviour
 {
-    public static MainMenu instance;
+    public static MainMenuA instance;
     [SerializeField] Animator transitionAnim;
 
     public void StartGame()

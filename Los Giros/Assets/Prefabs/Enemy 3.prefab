@@ -204,7 +204,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: eb3c11406e81c6e4cabde7681a75a256, type: 3}
+  m_Sprite: {fileID: -1411083263, guid: 22e89bd49c6abc144af415c10ec6a548, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -246,7 +246,9 @@ MonoBehaviour:
   healAudio: {fileID: 0}
   reloadAudio: {fileID: 0}
   dodgeAudio: {fileID: 0}
-  specialAttackAudio: {fileID: 0}
+  doubleShotAudio: {fileID: 0}
+  rifleShotAudio: {fileID: 0}
+  dynamiteAudio: {fileID: 0}
   deathAudio: {fileID: 0}
   actionChosen: 0
   currentHealth: 0

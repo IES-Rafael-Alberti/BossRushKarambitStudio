@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 29edc24c3a244b24a80f6949c998834c
+guid: d3d64c1eb4d67e148bcfc78b1b96c47d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,64 +97,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Dinamita_Joe_Reload_0
+      name: Sheriff_Sam_Shooting_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 128
-        height: 128
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6be52ccd04b26a7409867eafe0ab2c77
-      internalID: -1785358992
+      spriteID: e2c92b7e732f2bc4da69c7c9746d8354
+      internalID: -321434489
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dinamita_Joe_Reload_1
+      name: Sheriff_Sam_Shooting_1
       rect:
         serializedVersion: 2
         x: 128
         y: 0
         width: 128
-        height: 128
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 711fbf1c93d25a5418f6551ccd6e1b2e
-      internalID: -1161550157
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Dinamita_Joe_Reload_2
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 0
-        width: 128
-        height: 128
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: df560302cfd4ea5459b21e56604c9b0a
-      internalID: 522801122
+      spriteID: f0eb382fe35e09340b9783e337ace18e
+      internalID: 864757926
       vertices: []
       indices: 
       edges: []
@@ -162,7 +141,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 21f110b9eeaf68c4cb928e4ef9ad3ad8
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -170,9 +149,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Dinamita_Joe_Reload_0: -1785358992
-      Dinamita_Joe_Reload_1: -1161550157
-      Dinamita_Joe_Reload_2: 522801122
+      Sheriff_Sam_Shooting_0: -321434489
+      Sheriff_Sam_Shooting_1: 864757926
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

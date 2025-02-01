@@ -363,11 +363,16 @@ MonoBehaviour:
   moveDuration: 0
   rotateDuration: 0
   txtNombre: {fileID: 2157033351365874229}
-  nombreCarta: 
+  nombreCartaES: 
+  nombreCartaEN: 
   actionType: 0
   specialAttackType: 0
   audioClip: {fileID: 0}
   audioClipSonidoCarta: {fileID: 0}
+  normalMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  doubleShotMaterial: {fileID: 0}
+  rifleShotMaterial: {fileID: 0}
+  dynamiteMaterial: {fileID: 0}
   isSelected: 0
   isDodge: 0
 --- !u!114 &3222690860723269912

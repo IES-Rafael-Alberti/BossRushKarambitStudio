@@ -425,6 +425,7 @@ public class TurnController : MonoBehaviour
 
     private IEnumerator NextEnemy()
     {
+        // int ajustePosicionX = 0;
         // Logica para avanzar al siguiente enemigo
         Enemy enemy = FindObjectOfType<Enemy>();
         foreach (GameObject e in listEnemies)
@@ -443,7 +444,7 @@ public class TurnController : MonoBehaviour
                     playerDeck.Add(new(6));
                 }
                 e.GetComponent<Enemy>().posterWanted.SetActive(true);
-                go.transform.localPosition = enemy.transform.localPosition;
+                go.transform.localPosition = enemy.transform.localPosition + new Vector3(0.6f, 0, 0);
                 Destroy(enemy.gameObject, 0.1f);
             }
         }

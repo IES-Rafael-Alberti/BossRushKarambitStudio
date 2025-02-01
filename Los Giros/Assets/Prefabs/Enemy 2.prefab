@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 4372903362230927476}
   - component: {fileID: 3785252439302979764}
   - component: {fileID: 3032530032934653464}
+  - component: {fileID: -884735941264297987}
   m_Layer: 0
   m_Name: Enemy 2
   m_TagString: Untagged
@@ -157,8 +158,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 276845066414504984}
   m_Father: {fileID: 0}
@@ -268,3 +269,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   flickerMaterial: {fileID: 2100000, guid: 74a6b6a389061e24c9c9a76b842ccdee, type: 2}
+--- !u!95 &-884735941264297987
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8043513078498755837}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f1c7e176dd187174ea3951cf860b8cb1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

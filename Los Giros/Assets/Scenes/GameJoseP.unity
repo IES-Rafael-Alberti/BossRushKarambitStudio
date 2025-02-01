@@ -2014,7 +2014,7 @@ Transform:
   m_GameObject: {fileID: 462645662}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.9, y: -1.5, z: 2.6}
+  m_LocalPosition: {x: 0, y: -1.5, z: 2.6}
   m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2087,7 +2087,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 4.00391, y: 4}
+  m_Size: {x: 4.0078278, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -2137,13 +2137,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audios:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 856dd7f75b9bf924788e98877bb28a9f, type: 3}
+  - {fileID: 8300000, guid: 3096d2b320a448f439c9f97cbb402492, type: 3}
+  - {fileID: 8300000, guid: 68bcba1e6de769b4bb9f7f99e7ee7668, type: 3}
+  - {fileID: 8300000, guid: e5875e152b68b7f4196106f69aa8a2e9, type: 3}
+  - {fileID: 8300000, guid: 14fc7a121d537764981d88468f10dd16, type: 3}
+  - {fileID: 8300000, guid: 36903e80cc4caf44896ed4425e5219d4, type: 3}
+  - {fileID: 8300000, guid: 63f1b5781af3b4848a4706604650743d, type: 3}
 --- !u!82 &462645669
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10395,13 +10395,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1844414962}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: 0.7129305, z: -0, w: 0.70123476}
   m_LocalPosition: {x: 550.84, y: 5.1899986, z: 235.39258}
   m_LocalScale: {x: 2.6, y: 2.6, z: 2.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 613687670}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90.948, z: 0}
 --- !u!212 &1844414964
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12136,41 +12136,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 624204041}
     m_Modifications:
-    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
-      propertyPath: damage
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
-      propertyPath: maxHealth
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
-      propertyPath: healAmount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
-      propertyPath: initialAmmo
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
-      propertyPath: rifleAccuracy
-      value: 0.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785252439302979764, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
-      propertyPath: playerDodgeProbability
-      value: 0.4
-      objectReference: {fileID: 0}
     - target: {fileID: 5976868946371282611, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -110.98
+      value: -110.04
       objectReference: {fileID: 0}
     - target: {fileID: 5976868946371282611, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -65.61
+      value: -65.24
       objectReference: {fileID: 0}
     - target: {fileID: 5976868946371282611, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.3
+      value: 18.83
       objectReference: {fileID: 0}
     - target: {fileID: 5976868946371282611, guid: 332bd74a4e9b1b14c8ada5e4330c653d, type: 3}
       propertyPath: m_LocalRotation.w

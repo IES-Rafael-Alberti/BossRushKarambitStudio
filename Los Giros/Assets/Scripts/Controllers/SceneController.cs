@@ -14,7 +14,6 @@ public class SceneController: MonoBehaviour
     public void StartGame()
     {
         StartCoroutine(LoadLevel());
-        mainMenuCanvas.SetActive(false);
     }
 
     public void LoadScene(string sceneName)
@@ -26,6 +25,7 @@ public class SceneController: MonoBehaviour
     {
         transitionAnim.SetTrigger("End");
         yield return new WaitForSeconds(1);
+        mainMenuCanvas.SetActive(false);
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
         audioManager.FightTheme();
         transitionAnim.SetTrigger("Start");

@@ -230,13 +230,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 2
   allowedActions: 00000000030000000100000005000000
-  specialAttack: 2
+  specialAttack: 0
   maxAmmo: 6
   initialAmmo: 0
   reloadAmount: 1
-  maxHealth: 2
-  damage: 2
-  healAmount: 1
+  maxHealth: 50
+  damage: 8
+  healAmount: 5
   accuracy: 0.75
   playerDodgeProbability: 0.4
   rifleAccuracy: 0.9

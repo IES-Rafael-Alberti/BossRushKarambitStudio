@@ -8,7 +8,7 @@ public class Plant : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, 7f);
+        Destroy(gameObject, 15f);
     }
 
     private void Update()

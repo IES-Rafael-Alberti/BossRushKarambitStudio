@@ -167,7 +167,7 @@ public class TurnController : MonoBehaviour
         // Esperar a que finalice la duracion del giro de la ruleta
         Spin spin = spinGO.GetComponentInChildren<Spin>();
         yield return new WaitForSeconds(spin.spinDuration + 0.1f);
-        iconBoost.GetComponent<Image>().sprite = spin.spriteIcon;
+        iconBoost.GetComponent<TMP_Text>().text = spin.textBoost;
         iconBoost.SetActive(true);
         yield return new WaitForSeconds(0.15f);
 
@@ -310,6 +310,7 @@ public class TurnController : MonoBehaviour
                 {
                     go.transform.localScale = new(0.36f, 0.26f, 0.8f);
                     go.transform.GetChild(1).transform.localScale = new(1f, 1f, 1f);
+                    go.transform.GetChild(0).transform.localScale = new(1f, 1f, 1f);
                 }
 
                 // Reducir peso de la carta seleccionada
@@ -441,12 +442,14 @@ public class TurnController : MonoBehaviour
                 if (e.GetComponent<Enemy>().ID == 1)
                 {
                     e.GetComponent<Enemy>().posterWanted = posterWanted1;
-                    playerDeck.Add(new(5));
+                    playerDeck.Add(new(6));
+                    
                 }
                 else
                 {
                     e.GetComponent<Enemy>().posterWanted = posterWanted2;
-                    playerDeck.Add(new(6));
+                    playerDeck.Add(new(5));
+                    
                 }
                 e.GetComponent<Enemy>().posterWanted.SetActive(true);
                 go.transform.localPosition = enemy.transform.localPosition + new Vector3(0.6f, 0, 0);
@@ -492,7 +495,7 @@ public class TurnController : MonoBehaviour
 
     private void Exit()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MainMenuFinal");
     }
 
     public void UpdateUIBullets()

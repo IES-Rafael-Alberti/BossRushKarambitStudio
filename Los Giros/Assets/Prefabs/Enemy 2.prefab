@@ -231,14 +231,14 @@ MonoBehaviour:
   ID: 1
   allowedActions: 00000000030000000100000005000000
   specialAttack: 1
-  maxAmmo: 6
+  maxAmmo: 4
   initialAmmo: 0
   reloadAmount: 1
-  maxHealth: 2
-  damage: 2
-  healAmount: 1
-  accuracy: 0.75
-  playerDodgeProbability: 0.4
+  maxHealth: 30
+  damage: 5
+  healAmount: 5
+  accuracy: 0.9
+  playerDodgeProbability: 0.8
   rifleAccuracy: 0.9
   posterWanted: {fileID: 0}
   sfx: {fileID: 3286668432559409014}

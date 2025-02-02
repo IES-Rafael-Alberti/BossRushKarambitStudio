@@ -9,9 +9,9 @@ public class Spin : MonoBehaviour
     [SerializeField] private int minRotations = 3;    // Minimo de vueltas completas
     [SerializeField] private int maxRotations = 6;    // Maximo de vueltas completas
     [SerializeField] private GameObject boostIcon;
-    [SerializeField] private List<Sprite> iconSprites;
+    [SerializeField] private List<string> textSpinBoost;
     private bool isSpinning = false;
-    [HideInInspector] public Sprite spriteIcon;
+    [HideInInspector] public string textBoost;
     [HideInInspector] public SpinBoost spinBoost;
 
     public void ChoseBoost()
@@ -21,16 +21,16 @@ public class Spin : MonoBehaviour
         switch (spinBoost)
         {
             case SpinBoost.X2Damage:
-                spriteIcon = iconSprites[0];
+                textBoost = textSpinBoost[0];
                 break;
             case SpinBoost.X3Damage:
-                spriteIcon = iconSprites[1];
+                textBoost = textSpinBoost[1];
                 break;
             case SpinBoost.X10Damage:
-                spriteIcon = iconSprites[2];
+                textBoost = textSpinBoost[2];
                 break;
             case SpinBoost.HealingBullets:
-                spriteIcon = iconSprites[3];
+                textBoost = textSpinBoost[3];
                 break;
             /*case SpinBoost.X2Damage:
                 break;
@@ -41,8 +41,6 @@ public class Spin : MonoBehaviour
             default:
                 break;
         }
-
-        Debug.LogError("boost: " + spinBoost);
     }
 
     // Metodo para iniciar el giro

@@ -2879,14 +2879,8 @@ MonoBehaviour:
   minRotations: 3
   maxRotations: 6
   boostIcon: {fileID: 747694644}
-  iconSprites:
-  - {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  - {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  - {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  - {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  - {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  - {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  spriteIcon: {fileID: 0}
+  textSpinBoost: []
+  textBoost: 
   spinBoost: 0
 --- !u!1 &455024759
 GameObject:
@@ -8240,6 +8234,10 @@ PrefabInstance:
     - target: {fileID: 5715074798925160246, guid: 404278194f53bc447afaeee4a873a0de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407679789946064433, guid: 404278194f53bc447afaeee4a873a0de, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -293,7 +293,7 @@ public class TurnController : MonoBehaviour
                 Carta carta = go.GetComponent<Carta>();
 
                 carta.id = cartaData.id;
-                // carta.GetComponent<SpriteRenderer>().sprite = cartaData.spriteCarta;
+                carta.GetComponent<SpriteRenderer>().sprite = cartaData.spriteCarta;
                 carta.moveDistanceX = moveDistanceX;
                 moveDistanceX += 1f;
                 carta.moveDuration = moveDuration;
@@ -306,6 +306,11 @@ public class TurnController : MonoBehaviour
                 carta.actionType = cartaData.actionType;
                 if (carta.actionType == ActionType.SpecialAttack)
                     carta.specialAttackType = cartaData.specialAttackType;
+                else
+                {
+                    go.transform.localScale = new(0.36f, 0.26f, 0.8f);
+                    go.transform.GetChild(1).transform.localScale = new(1f, 1f, 1f);
+                }
 
                 // Reducir peso de la carta seleccionada
                 cardWeights[random] *= 0.5f; // Reducir su probabilidad de aparecer de nuevo

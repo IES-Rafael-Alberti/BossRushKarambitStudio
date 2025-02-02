@@ -5,15 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: ba4cf9d989ced1d46a6896832e38e3be
   - enabled: 0
-    path: Assets/Scenes/Game.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/LanguageSelection.unity
+    guid: 9b12d0aa38932ce40bdcbf890e7de0d0
   - enabled: 1
-    path: Assets/Scenes/GameMV.unity
+    path: Assets/Scenes/MainMenuFinal.unity
+    guid: 2e61aabbfb5459b46bdef91e0eac68ca
+  - enabled: 0
+    path: Assets/Scenes/MainMenuJoseP.unity
+    guid: ba4cf9d989ced1d46a6896832e38e3be
+  - enabled: 1
+    path: Assets/Scenes/GameJoseP.unity
     guid: 4b2ea012eca24f54d98341219db8b358
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 7e9cf15c7d08ed043aaafd98b009a77f, type: 2}
-    com.unity.localization.settings: {fileID: 11400000, guid: 22babf2a991b4b64284aead08b8bf603, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 18204fbebbad667429708f59ddcedcb1, type: 2}

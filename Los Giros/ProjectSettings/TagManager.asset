@@ -6,6 +6,9 @@ TagManager:
   tags:
   - TagCarta
   - Card
+  - Poster1
+  - Poster2
+  - Poster3
   layers:
   - Default
   - TransparentFX

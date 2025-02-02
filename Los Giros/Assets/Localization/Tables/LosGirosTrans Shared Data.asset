@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: LosGirosTrans Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: LosGirosTrans
+  m_TableCollectionNameGuidString: 8e9a632c389156a41a518bb74e233af3
+  m_Entries:
+  - m_Id: 101161455616
+    m_Key: MMPlay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 154177458176
+    m_Key: MMCredits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 391004639232
+    m_Key: MMOptions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11535777878016
+    m_Key: MMBack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12297589313536
+    m_Key: OMusic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12386445643776
+    m_Key: OEffects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13876363087872
+    m_Key: OLanguage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14509291950080
+    m_Key: OEnglish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14568951730176
+    m_Key: OSpanish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18346958475264
+    m_Key: PResume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18501837344768
+    m_Key: PPause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19466124611584
+    m_Key: PMenu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20236702142464
+    m_Key: PConfirmText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20549798547456
+    m_Key: PYes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20654421266432
+    m_Key: PNo
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 5640874623801753642
+  references:
+    version: 2
+    RefIds:
+    - rid: 5640874623801753642
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1738052584554

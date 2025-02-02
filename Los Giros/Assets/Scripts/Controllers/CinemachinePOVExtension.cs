@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class CinemachinePOVExtension : CinemachineExtension
 {
-    public event Action OnRotationComplete, OnTurnComplete; // Evento que se dispara al completar la rotacion
+    public event Action OnRotationCompleteY, OnRotationCompleteX, OnTurnComplete; // Eventos para las rotaciones
     private Vector3 currentRotation; // Almacena la rotacion actual
-    [SerializeField] private float rotationSpeed = 5f; // Velocidad de rotacion para el giro
-    private bool isRotating = false, needAtack = true; // Bandera para saber si esta girando
-    private float targetYRotation; // Angulo objetivo de rotacion en el eje Y
+    [SerializeField] private float rotationSpeed = 5f; // Velocidad de rotacion
+    private bool isRotatingY = false, isRotatingX = false; // Banderas para saber si esta girando en Y o X
+    private bool needAtack = true; // Control del flujo de ataque
+    private float targetYRotation, targetXRotation; // angulos objetivo de rotacion en los ejes Y y X
 
     protected override void Awake()
     {
@@ -19,41 +20,64 @@ public class CinemachinePOVExtension : CinemachineExtension
     {
         if (vcam.Follow && stage == CinemachineCore.Stage.Aim)
         {
-            if (isRotating)
+            // Rotacion en el eje Y
+            if (isRotatingY)
             {
-                // Interpola suavemente hacia el angulo objetivo
                 currentRotation.y = Mathf.Lerp(currentRotation.y, targetYRotation, rotationSpeed * deltaTime);
 
-                // Si la rotacion esta suficientemente cerca del objetivo, deten el giro
                 if (Mathf.Abs(currentRotation.y - targetYRotation) < 0.1f)
                 {
                     currentRotation.y = targetYRotation;
-                    isRotating = false;
+                    isRotatingY = false;
+
                     if (needAtack)
                     {
                         needAtack = !needAtack;
-                        OnRotationComplete?.Invoke(); // Notificar que la rotacion ha terminado
+                        OnRotationCompleteY?.Invoke(); // Notificar que la rotacion en Y ha terminado
                     }
                     else
                     {
                         needAtack = !needAtack;
-                        OnTurnComplete?.Invoke();
+                        OnTurnComplete?.Invoke(); // Notificar que el turno ha terminado
                     }
                 }
             }
 
-            // Aplica la rotacion actual al estado de la camara
-            state.RawOrientation = Quaternion.Euler(0f, currentRotation.y, 0f);
+            // Rotacion en el eje X
+            if (isRotatingX)
+            {
+                currentRotation.x = Mathf.Lerp(currentRotation.x, targetXRotation, rotationSpeed * deltaTime);
+
+                if (Mathf.Abs(currentRotation.x - targetXRotation) < 0.1f)
+                {
+                    currentRotation.x = targetXRotation;
+                    isRotatingX = false;
+                    OnRotationCompleteX?.Invoke(); // Notificar que la rotacion en X ha terminado
+                }
+            }
+
+            // Aplicar la rotacion actual al estado de la camara
+            state.RawOrientation = Quaternion.Euler(currentRotation.x, currentRotation.y, 0f);
         }
     }
 
-    // Funcion para iniciar el giro de 180 grados
-    public void Rotate180Degrees()
+    // Funcion para iniciar el giro de 180 grados en el eje Y
+    public void Rotate180DegreesY()
     {
-        if (!isRotating)
+        if (!isRotatingY && !isRotatingX)
         {
-            isRotating = true;
-            targetYRotation = (currentRotation.y + 180f) % 360f; // Calcula el angulo objetivo
+            isRotatingY = true;
+            targetYRotation = (currentRotation.y + 180f) % 360f; // Calcular el angulo objetivo
+        }
+    }
+
+    // Funcion para iniciar el giro en grados en el eje X
+    public void Rotate45DegreesX(int angle)
+    {
+        if (!isRotatingX && !isRotatingY)
+        {
+            isRotatingX = true;
+            targetXRotation = (currentRotation.x - angle) % 360f; // Calcular el angulo objetivo
         }
     }
 }

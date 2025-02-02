@@ -129,7 +129,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1def799e350f4064baa001416551af85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
-  maxAmmo: 0
+  maxHealth: 100
+  maxAmmo: 6
+  initialAmmo: 1
+  accuracy: 0.75
+  enemyDodgeProbability: 0.4
+  rifleAccuracy: 0.9
+  dodgeDistance: 1
+  dodgeDuration: 0.2
+  dodgeWaitTime: 0.1
+  returnDuration: 0.2
   currentHealth: 0
   currentAmmo: 0
+  isDodging: 0

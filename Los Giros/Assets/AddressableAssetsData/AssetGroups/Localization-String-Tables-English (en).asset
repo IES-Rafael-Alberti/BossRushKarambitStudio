@@ -17,8 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: be5a26f7c79fa484b98f487bbf53b4aa
   m_SerializeEntries:
-  - m_GUID: ef0ffde24b0107f4ba62528d266e6a53
-    m_Address: StringTable_en
+  - m_GUID: 91d7b00e177c99248b25e63cf1c03874
+    m_Address: LosGirosTrans_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

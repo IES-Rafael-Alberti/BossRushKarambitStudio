@@ -6,6 +6,11 @@ public class Plant : MonoBehaviour
     [SerializeField] private float rotationSpeed; // Velocidad de rotacion en Z
     [HideInInspector] public bool moveRight; // Controla la direccion de movimiento
 
+    private void Start()
+    {
+        Destroy(gameObject, 7f);
+    }
+
     private void Update()
     {
         // Direccion del movimiento en X

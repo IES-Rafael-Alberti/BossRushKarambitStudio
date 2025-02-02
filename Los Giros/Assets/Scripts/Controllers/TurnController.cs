@@ -356,14 +356,14 @@ public class TurnController : MonoBehaviour
 
     public void UpdatePlayerHealthUI()
     {
-        txtPlayerHealth.text = "Health: " + player.currentHealth;
+        txtPlayerHealth.text = player.currentHealth.ToString();
         sliderPlayerHealth.value = player.currentHealth;
     }
 
     public void UpdateEnemyHealthUI()
     {
         Enemy e = FindObjectOfType<Enemy>();
-        txtEnemyHealth.text = "Health: " + e.currentHealth;
+        txtEnemyHealth.text = e.currentHealth.ToString();
         sliderEnemyHealth.maxValue = e.maxHealth;
         sliderEnemyHealth.value = e.currentHealth;
     }
